@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ink.charter</groupId>
+        <artifactId>charter-domain-admin</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>charter-domain-admin-api</artifactId>
+    <packaging>jar</packaging>
+
+    <description>个人网站中控后台domain层api模块</description>
+
+    <dependencies>
+        <!-- TODO 这个模块特殊：因为一些系统entity在 log 等模块有使用到，后续看看能否提出到这里来 -->
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-core</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+
+</project>

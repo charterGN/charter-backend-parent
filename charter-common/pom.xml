@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ink.charter</groupId>
+        <artifactId>charter-backend-parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>charter-common</artifactId>
+    <packaging>pom</packaging>
+
+    <description>
+        基础设施模块：
+        1.不依赖任何业务模块或领域模块
+        2.只提供技术支持，不包含业务逻辑
+    </description>
+
+    <modules>
+        <module>charter-common-core</module>
+        <module>charter-common-security</module>
+        <module>charter-common-file</module>
+        <module>charter-common-log</module>
+        <module>charter-common-rabbitmq</module>
+        <module>charter-common-redis</module>
+        <module>charter-common-web</module>
+        <module>charter-common-mybatis</module>
+        <module>charter-common-job</module>
+    </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.fastjson2</groupId>
+            <artifactId>fastjson2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+        </dependency>
+        <!-- Jackson JSR310 模块，支持Java 8时间类型 -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

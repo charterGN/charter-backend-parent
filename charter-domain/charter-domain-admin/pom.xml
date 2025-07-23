@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ink.charter</groupId>
+        <artifactId>charter-domain</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>charter-domain-admin</artifactId>
+    <packaging>pom</packaging>
+
+    <description>个人网站中控后台domain层，存放后台数据模型</description>
+    <modules>
+        <module>charter-domain-admin-api</module>
+        <module>charter-domain-admin-core</module>
+    </modules>
+
+</project>

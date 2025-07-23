@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ink.charter</groupId>
+        <artifactId>charter-backend-parent</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>charter-domain</artifactId>
+    <packaging>pom</packaging>
+    <description>
+        领域API模块(charter-domain-xxx-api)：
+            1.不依赖任何其他模块
+            2.只包含接口定义和领域模型
+        领域实现模块(charter-domain-xxx-core)：
+            1.依赖对应的领域API模块(charter-domain-xxx-api)
+            2.可以依赖基础设施模块(charter-common-xxx)
+            3.可以依赖其他领域的API模块，但不能依赖其他领域的实现模块
+    </description>
+    <modules>
+        <module>charter-domain-admin</module>
+    </modules>
+
+    <dependencies>
+        <!-- ==================通用工具依赖================== -->
+        <!-- lombok依赖 -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!-- knife4j -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

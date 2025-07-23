@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ink.charter</groupId>
+    <artifactId>charter-backend-parent</artifactId>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+
+    <name>charter-backend-parent</name>
+    <description>charter-backend-parent</description>
+
+    <developers>
+        <developer>
+            <name>charter</name>
+            <url>https://www.charter.ink</url>
+            <email>2088694379@qq.com</email>
+        </developer>
+    </developers>
+
+    <!-- 子模块 -->
+    <modules>
+        <module>charter-dependencies</module>
+        <module>charter-common</module>
+        <module>charter-server</module>
+        <module>charter-app</module>
+        <module>charter-domain</module>
+    </modules>
+
+    <!-- 指定父亲工程 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.3.6</version>
+        <relativePath/>
+    </parent>
+
+    <properties>
+        <!-- 项目版本 -->
+        <revision>1.0.0</revision>
+        <java.version>17</java.version>
+        <!-- spring相关（供打包插件使用，需与dependencies里版本一致） -->
+        <spring.boot.version>3.3.6</spring.boot.version>
+
+        <!-- 通用工具依赖（供打包插件使用，需与dependencies里版本一致） -->
+        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok.version>1.18.30</lombok.version>
+    </properties>
+
+    <!-- 引入依赖版本管理 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>ink.charter</groupId>
+                <artifactId>charter-dependencies</artifactId>
+                <version>${revision}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <!-- flatten maven plugin，用于解决revision变量问题 -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>flatten-maven-plugin</artifactId>
+                <configuration>
+                    <updatePomFile>true</updatePomFile>
+                    <flattenMode>resolveCiFriendliesOnly</flattenMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>flatten</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>flatten</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>flatten.clean</id>
+                        <phase>clean</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

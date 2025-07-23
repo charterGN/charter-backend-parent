@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: charter-server
+  profiles:
+    active: local
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: "GMT+8"
+    serialization:
+      write-dates-as-timestamps: false # 时间格式化不转换为时间戳

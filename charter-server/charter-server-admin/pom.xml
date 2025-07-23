@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>ink.charter</groupId>
+        <artifactId>charter-server</artifactId>
+        <version>${revision}</version>
+    </parent>
+
+    <artifactId>charter-server-admin</artifactId>
+    <packaging>jar</packaging>
+
+    <description>个人网站中控后台管理服务</description>
+
+    <dependencies>
+        <!-- ==================本项目领域api模块相关依赖================== -->
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-domain-admin-api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+        <!-- ==================本项目通用模块相关依赖================== -->
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-file</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-job</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-log</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-mybatis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-rabbitmq</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-security</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-web</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
+
+</project>
