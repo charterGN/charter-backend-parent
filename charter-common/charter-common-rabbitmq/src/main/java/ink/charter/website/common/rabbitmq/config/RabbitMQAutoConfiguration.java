@@ -26,7 +26,7 @@ import org.springframework.context.annotation.Import;
 @Slf4j
 @AutoConfiguration
 @ConditionalOnClass(RabbitTemplate.class)
-@ConditionalOnProperty(prefix = "spring.rabbitmq", name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnProperty(prefix = "charter.rabbitmq", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Import({RabbitMQConfig.class})
 public class RabbitMQAutoConfiguration {
 

@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api-admin/auth")
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "认证管理", description = "用户登录、登出、Token刷新等认证相关接口")

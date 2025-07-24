@@ -40,11 +40,6 @@
         </dependency>
         <dependency>
             <groupId>ink.charter</groupId>
-            <artifactId>charter-common-mybatis</artifactId>
-            <version>${revision}</version>
-        </dependency>
-        <dependency>
-            <groupId>ink.charter</groupId>
             <artifactId>charter-common-rabbitmq</artifactId>
             <version>${revision}</version>
         </dependency>

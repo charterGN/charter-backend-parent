@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/api-admin/admin/session")
+@RequestMapping("/admin/session")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "用户会话管理", description = "用户会话管理相关接口")
