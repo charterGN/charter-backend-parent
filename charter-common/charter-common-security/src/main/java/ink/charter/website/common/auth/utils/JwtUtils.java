@@ -10,6 +10,8 @@ import org.springframework.util.StringUtils;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -207,7 +209,16 @@ public class JwtUtils {
      * @return 签名密钥
      */
     private SecretKey getSignKey() {
-        byte[] keyBytes = authProperties.getJwt().getSecret().getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes);
+        SecretKey secretKey;
+        try {
+            String secret = authProperties.getJwt().getSecret();
+            byte[] keyBytes =  MessageDigest.getInstance("SHA-256")
+                .digest(secret.getBytes(StandardCharsets.UTF_8));
+            secretKey = Keys.hmacShaKeyFor(keyBytes);
+        } catch (NoSuchAlgorithmException e) {
+            log.error("获取签名密钥失败，将使用JWT推荐的方式生成安全密钥", e);
+            secretKey = Jwts.SIG.HS256.key().build();
+        }
+        return secretKey;
     }
 }

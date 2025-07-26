@@ -1,6 +1,6 @@
 package ink.charter.website.server.admin.controller;
 
-import ink.charter.website.common.core.common.enums.ResCodeEnum;
+import ink.charter.website.common.core.utils.CryptoUtils;
 import ink.charter.website.server.admin.converter.AuthConverter;
 import ink.charter.website.server.admin.dto.auth.LoginRequestDTO;
 import ink.charter.website.server.admin.dto.auth.RefreshTokenRequestDTO;
@@ -55,6 +55,13 @@ public class AuthController {
         description = "用户登录系统"
     )
     public Result<LoginResponseVO> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletRequest httpRequest) {
+        // TODO 解密密码
+        String password = CryptoUtils.decryptPassword(loginRequestDTO.getPassword(), "secretCharterKey");
+
+        if (!StringUtils.hasLength(password)) {
+            return Result.error("密码不能为空");
+        }
+
         // 获取客户端信息
         String clientIp = LogUtils.getClientIp(httpRequest);
         String userAgent = LogUtils.getUserAgent(httpRequest);
@@ -62,7 +69,7 @@ public class AuthController {
         // 执行登录
         Result<LoginResponse> loginResult = authService.login(
             loginRequestDTO.getUsernameOrEmail(),
-            loginRequestDTO.getPassword(),
+            password,
             clientIp,
             userAgent
         );

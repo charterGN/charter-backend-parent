@@ -113,6 +113,27 @@ public final class CryptoUtils {
     // ==================== AES加密解密 ====================
 
     /**
+     * AES解密密码
+     *
+     * @param encryptedPassword 前端加密后的密码（Base64编码）
+     * @param secretKey 密钥
+     * @return 解密后的原始密码
+     */
+    public static String decryptPassword(String encryptedPassword, String secretKey) {
+        try {
+            SecretKeySpec secretKeySpec = new SecretKeySpec(secretKey.getBytes(), AES_ALGORITHM);
+            Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);
+            cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
+
+            byte[] decryptedBytes = cipher.doFinal(Base64.getDecoder().decode(encryptedPassword));
+            return new String(decryptedBytes);
+        } catch (Exception e) {
+            log.error("密码解密失败", e);
+            return null;
+        }
+    }
+
+    /**
      * 生成AES密钥
      *
      * @return Base64编码的AES密钥
