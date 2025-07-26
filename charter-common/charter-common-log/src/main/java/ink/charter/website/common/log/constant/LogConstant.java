@@ -14,9 +14,9 @@ public class LogConstant {
      */
     public static class OptStatus {
         /** 操作失败 */
-        public static final Integer FAIL = 0;
+        public static final Integer FAIL = 1;
         /** 操作成功 */
-        public static final Integer SUCCESS = 1;
+        public static final Integer SUCCESS = 0;
     }
 
     /**
