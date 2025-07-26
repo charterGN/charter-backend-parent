@@ -1,5 +1,6 @@
 package ink.charter.website.server.admin.controller;
 
+import ink.charter.website.common.core.common.enums.ResCodeEnum;
 import ink.charter.website.server.admin.converter.AuthConverter;
 import ink.charter.website.server.admin.dto.auth.LoginRequestDTO;
 import ink.charter.website.server.admin.dto.auth.RefreshTokenRequestDTO;
@@ -51,33 +52,26 @@ public class AuthController {
     @OperationLog(
         module = LogConstant.OptModule.AUTH,
         type = LogConstant.OptType.LOGIN,
-        description = "用户登录系统",
-        recordResponse = false
+        description = "用户登录系统"
     )
-    public Result<LoginResponseVO> login(@RequestBody LoginRequestDTO request, HttpServletRequest httpRequest) {
-        try {
-            // 获取客户端信息
-            String clientIp = LogUtils.getClientIp(httpRequest);
-            String userAgent = LogUtils.getUserAgent(httpRequest);
-            
-            // 执行登录
-            Result<LoginResponse> loginResult = authService.login(
-                request.getUsernameOrEmail(), 
-                request.getPassword(), 
-                clientIp, 
-                userAgent
-            );
-            
-            if (loginResult.isSuccess()) {
-                LoginResponseVO responseVO = authConverter.toLoginResponseVO(loginResult.getData());
-                return Result.success("登录成功", responseVO);
-            } else {
-                return Result.error(loginResult.getMessage());
-            }
-            
-        } catch (Exception e) {
-            log.error("登录失败: {}", e.getMessage(), e);
-            return Result.error("登录失败，请稍后重试");
+    public Result<LoginResponseVO> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletRequest httpRequest) {
+        // 获取客户端信息
+        String clientIp = LogUtils.getClientIp(httpRequest);
+        String userAgent = LogUtils.getUserAgent(httpRequest);
+
+        // 执行登录
+        Result<LoginResponse> loginResult = authService.login(
+            loginRequestDTO.getUsernameOrEmail(),
+            loginRequestDTO.getPassword(),
+            clientIp,
+            userAgent
+        );
+
+        if (loginResult.isSuccess()) {
+            LoginResponseVO responseVO = authConverter.toLoginResponseVO(loginResult.getData());
+            return Result.success("登录成功", responseVO);
+        } else {
+            return Result.error(loginResult.getMessage());
         }
     }
 
@@ -93,24 +87,18 @@ public class AuthController {
         recordParams = false
     )
     public Result<Void> logout(HttpServletRequest request) {
-        try {
-            // 从请求头获取Token
-            String token = getTokenFromRequest(request);
-            
-            if (StringUtils.hasText(token)) {
-                boolean success = authService.logout(token);
-                if (success) {
-                    return Result.success("登出成功");
-                } else {
-                    return Result.error("登出失败");
-                }
+        // 从请求头获取Token
+        String token = getTokenFromRequest(request);
+
+        if (StringUtils.hasText(token)) {
+            boolean success = authService.logout(token);
+            if (success) {
+                return Result.success("登出成功");
             } else {
-                return Result.error("未找到有效的Token");
+                return Result.error("登出失败");
             }
-            
-        } catch (Exception e) {
-            log.error("登出失败: {}", e.getMessage(), e);
-            return Result.error("登出失败，请稍后重试");
+        } else {
+            return Result.error("未找到有效的Token");
         }
     }
 
@@ -126,20 +114,14 @@ public class AuthController {
         recordParams = false,
         recordResponse = false
     )
-    public Result<LoginResponseVO> refreshToken(@RequestBody RefreshTokenRequestDTO request) {
-        try {
-            Result<LoginResponse> result = authService.refreshToken(request.getRefreshToken());
-            
-            if (result.isSuccess()) {
-                LoginResponseVO responseVO = authConverter.toLoginResponseVO(result.getData());
-                return Result.success("Token刷新成功", responseVO);
-            } else {
-                return Result.error(result.getMessage());
-            }
-            
-        } catch (Exception e) {
-            log.error("刷新Token失败: {}", e.getMessage(), e);
-            return Result.error("Token刷新失败，请稍后重试");
+    public Result<LoginResponseVO> refreshToken(@RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) {
+        Result<LoginResponse> result = authService.refreshToken(refreshTokenRequestDTO.getRefreshToken());
+
+        if (result.isSuccess()) {
+            LoginResponseVO responseVO = authConverter.toLoginResponseVO(result.getData());
+            return Result.success("Token刷新成功", responseVO);
+        } else {
+            return Result.error(result.getMessage());
         }
     }
 
@@ -156,27 +138,21 @@ public class AuthController {
         recordResponse = false
     )
     public Result<TokenValidationVO> validateToken(HttpServletRequest request) {
-        try {
-            String token = getTokenFromRequest(request);
-            
-            if (StringUtils.hasText(token)) {
-                boolean valid = authService.validateToken(token);
-                if (valid) {
-                    // 获取当前用户信息
-                    Long userId = SecurityUtils.getCurrentUserId();
-                    String username = SecurityUtils.getCurrentUsername();
-                    TokenValidationVO validationVO = TokenValidationVO.valid(userId, username, null, false);
-                    return Result.success("Token有效", validationVO);
-                } else {
-                    return Result.success("Token无效", TokenValidationVO.invalid());
-                }
+        String token = getTokenFromRequest(request);
+
+        if (StringUtils.hasText(token)) {
+            boolean valid = authService.validateToken(token);
+            if (valid) {
+                // 获取当前用户信息
+                Long userId = SecurityUtils.getCurrentUserId();
+                String username = SecurityUtils.getCurrentUsername();
+                TokenValidationVO validationVO = TokenValidationVO.valid(userId, username, null, false);
+                return Result.success("Token有效", validationVO);
             } else {
-                return Result.success("未找到Token", TokenValidationVO.invalid());
+                return Result.success("Token无效", TokenValidationVO.invalid());
             }
-            
-        } catch (Exception e) {
-            log.error("验证Token失败: {}", e.getMessage(), e);
-            return Result.error("Token验证失败");
+        } else {
+            return Result.success("未找到Token", TokenValidationVO.invalid());
         }
     }
 
@@ -192,20 +168,14 @@ public class AuthController {
         recordParams = false
     )
     public Result<UserInfoVO> getCurrentUser() {
-        try {
-            // 从SecurityContext获取当前用户信息
-            LoginUser loginUser = SecurityUtils.getCurrentUser();
-            
-            if (loginUser != null) {
-                UserInfoVO userInfoVO = authConverter.toUserInfoVO(loginUser);
-                return Result.success("获取用户信息成功", userInfoVO);
-            } else {
-                return Result.error("用户未登录");
-            }
-            
-        } catch (Exception e) {
-            log.error("获取当前用户信息失败: {}", e.getMessage(), e);
-            return Result.error("获取用户信息失败");
+        // 从SecurityContext获取当前用户信息
+        LoginUser loginUser = SecurityUtils.getCurrentUser();
+
+        if (loginUser != null) {
+            UserInfoVO userInfoVO = authConverter.toUserInfoVO(loginUser);
+            return Result.success("获取用户信息成功", userInfoVO);
+        } else {
+            return Result.error("用户未登录");
         }
     }
 
@@ -220,18 +190,12 @@ public class AuthController {
         description = "踢出用户"
     )
     public Result<Void> kickOutUser(@Parameter(description = "用户ID") @RequestParam Long userId) {
-        try {
-            boolean success = authService.kickOutUser(userId);
-            
-            if (success) {
-                return Result.success("用户已被踢出");
-            } else {
-                return Result.error("踢出用户失败");
-            }
-            
-        } catch (Exception e) {
-            log.error("踢出用户失败: {}", e.getMessage(), e);
-            return Result.error("踢出用户失败，请稍后重试");
+        boolean success = authService.kickOutUser(userId);
+
+        if (success) {
+            return Result.success("用户已被踢出");
+        } else {
+            return Result.error("踢出用户失败");
         }
     }
 

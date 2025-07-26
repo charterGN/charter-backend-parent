@@ -46,20 +46,14 @@ public class UserController {
         description = "创建新用户"
     )
     public Result<UserVO> createUser(@RequestBody CreateUserDTO createUserDTO) {
-        try {
-            SysUserEntity user = userConverter.toEntity(createUserDTO);
-            boolean success = userService.createUser(user);
-            
-            if (success) {
-                UserVO userVO = userConverter.toVO(user);
-                return Result.success("用户创建成功", userVO);
-            } else {
-                return Result.error("用户创建失败");
-            }
-            
-        } catch (Exception e) {
-            log.error("创建用户失败: {}", e.getMessage(), e);
-            return Result.error("用户创建失败，请稍后重试");
+        SysUserEntity user = userConverter.toEntity(createUserDTO);
+        boolean success = userService.createUser(user);
+
+        if (success) {
+            UserVO userVO = userConverter.toVO(user);
+            return Result.success("用户创建成功", userVO);
+        } else {
+            return Result.error("用户创建失败");
         }
     }
 
@@ -74,27 +68,21 @@ public class UserController {
         description = "更新用户信息"
     )
     public Result<UserVO> updateUser(@RequestBody UpdateUserDTO updateUserDTO) {
-        try {
-            Long userId = updateUserDTO.getUserId();
-            SysUserEntity existingUser = userService.getUserById(userId);
-            if (existingUser == null) {
-                return Result.error("用户不存在");
-            }
-            
-            SysUserEntity user = userConverter.toEntity(updateUserDTO);
-            boolean success = userService.updateUser(user);
-            
-            if (success) {
-                SysUserEntity updatedUser = userService.getUserById(userId);
-                UserVO userVO = userConverter.toVO(updatedUser);
-                return Result.success("用户信息更新成功", userVO);
-            } else {
-                return Result.error("用户信息更新失败");
-            }
-            
-        } catch (Exception e) {
-            log.error("更新用户信息失败: {}", e.getMessage(), e);
-            return Result.error("用户信息更新失败，请稍后重试");
+        Long userId = updateUserDTO.getUserId();
+        SysUserEntity existingUser = userService.getUserById(userId);
+        if (existingUser == null) {
+            return Result.error("用户不存在");
+        }
+
+        SysUserEntity user = userConverter.toEntity(updateUserDTO);
+        boolean success = userService.updateUser(user);
+
+        if (success) {
+            SysUserEntity updatedUser = userService.getUserById(userId);
+            UserVO userVO = userConverter.toVO(updatedUser);
+            return Result.success("用户信息更新成功", userVO);
+        } else {
+            return Result.error("用户信息更新失败");
         }
     }
 
@@ -109,23 +97,17 @@ public class UserController {
         description = "删除用户"
     )
     public Result<Void> deleteUser(@Parameter(description = "用户ID", required = true) @RequestParam Long userId) {
-        try {
-            SysUserEntity existingUser = userService.getUserById(userId);
-            if (existingUser == null) {
-                return Result.error("用户不存在");
-            }
-            
-            boolean success = userService.deleteUser(userId);
-            
-            if (success) {
-                return Result.success("用户删除成功");
-            } else {
-                return Result.error("用户删除失败");
-            }
-            
-        } catch (Exception e) {
-            log.error("删除用户失败: {}", e.getMessage(), e);
-            return Result.error("用户删除失败，请稍后重试");
+        SysUserEntity existingUser = userService.getUserById(userId);
+        if (existingUser == null) {
+            return Result.error("用户不存在");
+        }
+
+        boolean success = userService.deleteUser(userId);
+
+        if (success) {
+            return Result.success("用户删除成功");
+        } else {
+            return Result.error("用户删除失败");
         }
     }
 
@@ -141,19 +123,13 @@ public class UserController {
         recordParams = false
     )
     public Result<UserVO> getUserById(@Parameter(description = "用户ID", required = true) @RequestParam Long userId) {
-        try {
-            SysUserEntity user = userService.getUserById(userId);
-            
-            if (user != null) {
-                UserVO userVO = userConverter.toVO(user);
-                return Result.success("获取用户信息成功", userVO);
-            } else {
-                return Result.error("用户不存在");
-            }
-            
-        } catch (Exception e) {
-            log.error("获取用户信息失败: {}", e.getMessage(), e);
-            return Result.error("获取用户信息失败，请稍后重试");
+        SysUserEntity user = userService.getUserById(userId);
+
+        if (user != null) {
+            UserVO userVO = userConverter.toVO(user);
+            return Result.success("获取用户信息成功", userVO);
+        } else {
+            return Result.error("用户不存在");
         }
     }
 
@@ -169,19 +145,13 @@ public class UserController {
         recordParams = false
     )
     public Result<UserVO> getUserByUsername(@Parameter(description = "用户名", required = true) @RequestParam String username) {
-        try {
-            SysUserEntity user = userService.getUserByUsername(username);
-            
-            if (user != null) {
-                UserVO userVO = userConverter.toVO(user);
-                return Result.success("获取用户信息成功", userVO);
-            } else {
-                return Result.error("用户不存在");
-            }
-            
-        } catch (Exception e) {
-            log.error("获取用户信息失败: {}", e.getMessage(), e);
-            return Result.error("获取用户信息失败，请稍后重试");
+        SysUserEntity user = userService.getUserByUsername(username);
+
+        if (user != null) {
+            UserVO userVO = userConverter.toVO(user);
+            return Result.success("获取用户信息成功", userVO);
+        } else {
+            return Result.error("用户不存在");
         }
     }
 
@@ -197,21 +167,15 @@ public class UserController {
         recordParams = false
     )
     public Result<UserPermissionsVO> getUserPermissions(@Parameter(description = "用户ID", required = true) @RequestParam Long userId) {
-        try {
-            SysUserEntity user = userService.getUserById(userId);
-            if (user == null) {
-                return Result.error("用户不存在");
-            }
-
-            Set<String> roles = userService.getUserRoles(userId);
-            Set<String> permissions = userService.getUserPermissions(userId);
-            UserPermissionsVO permissionsVO = userConverter.toPermissionsVO(user, roles, permissions);
-            return Result.success("获取用户权限成功", permissionsVO);
-            
-        } catch (Exception e) {
-            log.error("获取用户权限失败: {}", e.getMessage(), e);
-            return Result.error("获取用户权限失败，请稍后重试");
+        SysUserEntity user = userService.getUserById(userId);
+        if (user == null) {
+            return Result.error("用户不存在");
         }
+
+        Set<String> roles = userService.getUserRoles(userId);
+        Set<String> permissions = userService.getUserPermissions(userId);
+        UserPermissionsVO permissionsVO = userConverter.toPermissionsVO(user, roles, permissions);
+        return Result.success("获取用户权限成功", permissionsVO);
     }
 
     /**
@@ -225,30 +189,24 @@ public class UserController {
         description = "修改用户密码"
     )
     public Result<Void> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
-        try {
-            SysUserEntity user = userService.getUserById(changePasswordDTO.getUserId());
-            if (user == null) {
-                return Result.error("用户不存在");
-            }
-            
-            // 验证旧密码
-            if (!userService.validatePassword(user, changePasswordDTO.getOldPassword())) {
-                return Result.error("原密码错误");
-            }
-            
-            // 更新密码
-            user.setPassword(changePasswordDTO.getNewPassword());
-            boolean success = userService.updateUser(user);
-            
-            if (success) {
-                return Result.success("密码修改成功");
-            } else {
-                return Result.error("密码修改失败");
-            }
-            
-        } catch (Exception e) {
-            log.error("修改用户密码失败: {}", e.getMessage(), e);
-            return Result.error("密码修改失败，请稍后重试");
+        SysUserEntity user = userService.getUserById(changePasswordDTO.getUserId());
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+
+        // 验证旧密码
+        if (!userService.validatePassword(user, changePasswordDTO.getOldPassword())) {
+            return Result.error("原密码错误");
+        }
+
+        // 更新密码
+        user.setPassword(changePasswordDTO.getNewPassword());
+        boolean success = userService.updateUser(user);
+
+        if (success) {
+            return Result.success("密码修改成功");
+        } else {
+            return Result.error("密码修改失败");
         }
     }
 
@@ -263,25 +221,19 @@ public class UserController {
         description = "修改用户状态"
     )
     public Result<Void> changeUserStatus(@RequestBody ChangeUserStatusDTO changeUserStatusDTO) {
-        try {
-            SysUserEntity user = userService.getUserById(changeUserStatusDTO.getUserId());
-            if (user == null) {
-                return Result.error("用户不存在");
-            }
-            
-            user.setStatus(changeUserStatusDTO.getStatus());
-            boolean success = userService.updateUser(user);
-            
-            if (success) {
-                String message = changeUserStatusDTO.getStatus() == 1 ? "用户启用成功" : "用户禁用成功";
-                return Result.success(message);
-            } else {
-                return Result.error("用户状态修改失败");
-            }
-            
-        } catch (Exception e) {
-            log.error("修改用户状态失败: {}", e.getMessage(), e);
-            return Result.error("用户状态修改失败，请稍后重试");
+        SysUserEntity user = userService.getUserById(changeUserStatusDTO.getUserId());
+        if (user == null) {
+            return Result.error("用户不存在");
+        }
+
+        user.setStatus(changeUserStatusDTO.getStatus());
+        boolean success = userService.updateUser(user);
+
+        if (success) {
+            String message = changeUserStatusDTO.getStatus() == 1 ? "用户启用成功" : "用户禁用成功";
+            return Result.success(message);
+        } else {
+            return Result.error("用户状态修改失败");
         }
     }
 }

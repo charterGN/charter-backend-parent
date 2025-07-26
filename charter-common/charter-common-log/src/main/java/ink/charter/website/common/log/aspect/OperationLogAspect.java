@@ -6,7 +6,10 @@ import ink.charter.website.common.log.constant.LogConstant;
 import ink.charter.website.common.log.service.OperationLogService;
 import ink.charter.website.common.log.utils.LogUtils;
 import ink.charter.website.common.core.entity.sys.SysOptLogEntity;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
@@ -65,7 +68,7 @@ public class OperationLogAspect {
         HttpServletRequest request = getHttpServletRequest();
         
         // 构建日志实体
-        SysOptLogEntity logEntity = buildLogEntity(joinPoint, operationLog, request, startTime);
+        SysOptLogEntity logEntity = buildLogEntity(joinPoint, operationLog, request);
         
         Object result = null;
         Throwable exception = null;
@@ -127,7 +130,7 @@ public class OperationLogAspect {
      * 构建日志实体
      */
     private SysOptLogEntity buildLogEntity(JoinPoint joinPoint, OperationLog operationLog, 
-                                          HttpServletRequest request, long startTime) {
+                                          HttpServletRequest request) {
         SysOptLogEntity logEntity = new SysOptLogEntity();
         
         // 设置操作时间
@@ -215,7 +218,14 @@ public class OperationLogAspect {
         
         if (paramNames != null && paramValues != null) {
             for (int i = 0; i < paramNames.length && i < paramValues.length; i++) {
-                params.put(paramNames[i], paramValues[i]);
+                Object paramValue = paramValues[i];
+
+                // 过滤掉Servlet API相关的参数，因为其不可序列化
+                if (paramValue instanceof ServletRequest || paramValue instanceof ServletResponse) {
+                    continue;
+                }
+                
+                params.put(paramNames[i], paramValue);
             }
         }
         

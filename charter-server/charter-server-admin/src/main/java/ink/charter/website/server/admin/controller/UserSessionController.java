@@ -41,15 +41,9 @@ public class UserSessionController {
     @GetMapping("/user/active")
     @Operation(summary = "获取用户活跃会话", description = "获取指定用户的所有活跃会话")
     public Result<List<UserSessionVO>> getActiveSessionsByUserId(@Parameter(description = "用户ID", required = true) @RequestParam Long userId) {
-        try {
-            List<SysUserSessionEntity> sessions = userSessionService.getActiveSessionsByUserId(userId);
-            List<UserSessionVO> sessionVOs = userSessionConverter.toVOList(sessions);
-            return Result.success("获取用户活跃会话成功", sessionVOs);
-            
-        } catch (Exception e) {
-            log.error("获取用户活跃会话失败: {}", e.getMessage(), e);
-            return Result.error("获取用户活跃会话失败，请稍后重试");
-        }
+        List<SysUserSessionEntity> sessions = userSessionService.getActiveSessionsByUserId(userId);
+        List<UserSessionVO> sessionVOs = userSessionConverter.toVOList(sessions);
+        return Result.success("获取用户活跃会话成功", sessionVOs);
     }
 
     /**
@@ -58,15 +52,9 @@ public class UserSessionController {
     @GetMapping("/user/all")
     @Operation(summary = "获取用户所有会话", description = "获取指定用户的所有会话（包括已失效的）")
     public Result<List<UserSessionVO>> getSessionsByUserId(@Parameter(description = "用户ID", required = true) @RequestParam Long userId) {
-        try {
-            List<SysUserSessionEntity> sessions = userSessionService.getSessionsByUserId(userId);
-            List<UserSessionVO> sessionVOs = userSessionConverter.toVOList(sessions);
-            return Result.success("获取用户会话列表成功", sessionVOs);
-            
-        } catch (Exception e) {
-            log.error("获取用户会话列表失败: {}", e.getMessage(), e);
-            return Result.error("获取用户会话列表失败，请稍后重试");
-        }
+        List<SysUserSessionEntity> sessions = userSessionService.getSessionsByUserId(userId);
+        List<UserSessionVO> sessionVOs = userSessionConverter.toVOList(sessions);
+        return Result.success("获取用户会话列表成功", sessionVOs);
     }
 
     /**
@@ -75,19 +63,13 @@ public class UserSessionController {
     @GetMapping("/token")
     @Operation(summary = "获取会话信息", description = "根据会话Token获取会话详细信息")
     public Result<UserSessionVO> getSessionByToken(@Parameter(description = "会话Token", required = true) @RequestParam String sessionToken) {
-        try {
-            SysUserSessionEntity session = userSessionService.getSessionByToken(sessionToken);
-            
-            if (session != null) {
-                UserSessionVO sessionVO = userSessionConverter.toVO(session);
-                return Result.success("获取会话信息成功", sessionVO);
-            } else {
-                return Result.error("会话不存在");
-            }
-            
-        } catch (Exception e) {
-            log.error("获取会话信息失败: {}", e.getMessage(), e);
-            return Result.error("获取会话信息失败，请稍后重试");
+        SysUserSessionEntity session = userSessionService.getSessionByToken(sessionToken);
+
+        if (session != null) {
+            UserSessionVO sessionVO = userSessionConverter.toVO(session);
+            return Result.success("获取会话信息成功", sessionVO);
+        } else {
+            return Result.error("会话不存在");
         }
     }
 
@@ -102,19 +84,13 @@ public class UserSessionController {
         description = "使会话失效"
     )
     public Result<Void> invalidateSession(@Parameter(description = "会话Token", required = true) @RequestParam String sessionToken) {
-        try {
-            SysUserSessionEntity session = userSessionService.getSessionByToken(sessionToken);
-            if (session == null) {
-                return Result.error("会话不存在");
-            }
-            
-            userSessionService.invalidateSession(sessionToken);
-            return Result.success("会话已失效");
-            
-        } catch (Exception e) {
-            log.error("使会话失效失败: {}", e.getMessage(), e);
-            return Result.error("使会话失效失败，请稍后重试");
+        SysUserSessionEntity session = userSessionService.getSessionByToken(sessionToken);
+        if (session == null) {
+            return Result.error("会话不存在");
         }
+
+        userSessionService.invalidateSession(sessionToken);
+        return Result.success("会话已失效");
     }
 
     /**
@@ -128,14 +104,8 @@ public class UserSessionController {
         description = "使用户所有会话失效"
     )
     public Result<Void> invalidateUserSessions(@Parameter(description = "用户ID", required = true) @RequestParam Long userId) {
-        try {
-            userSessionService.invalidateUserSessions(userId);
-            return Result.success("用户所有会话已失效");
-            
-        } catch (Exception e) {
-            log.error("使用户所有会话失效失败: {}", e.getMessage(), e);
-            return Result.error("使用户所有会话失效失败，请稍后重试");
-        }
+        userSessionService.invalidateUserSessions(userId);
+        return Result.success("用户所有会话已失效");
     }
 
     /**
@@ -150,14 +120,8 @@ public class UserSessionController {
     )
     public Result<Void> invalidateOtherUserSessions(@Parameter(description = "用户ID", required = true) @RequestParam Long userId,
                                                     @Parameter(description = "当前会话Token", required = true) @RequestParam String currentSessionToken) {
-        try {
-            userSessionService.invalidateOtherUserSessions(userId, currentSessionToken);
-            return Result.success("用户其他会话已失效");
-            
-        } catch (Exception e) {
-            log.error("使用户其他会话失效失败: {}", e.getMessage(), e);
-            return Result.error("使用户其他会话失效失败，请稍后重试");
-        }
+        userSessionService.invalidateOtherUserSessions(userId, currentSessionToken);
+        return Result.success("用户其他会话已失效");
     }
 
     /**
@@ -166,15 +130,9 @@ public class UserSessionController {
     @GetMapping("/user/count")
     @Operation(summary = "统计用户活跃会话数量", description = "统计指定用户的活跃会话数量")
     public Result<SessionCountVO> countActiveSessionsByUserId(@Parameter(description = "用户ID", required = true) @RequestParam Long userId) {
-        try {
-            int count = userSessionService.countActiveSessionsByUserId(userId);
-            SessionCountVO countVO = SessionCountVO.of(userId, count);
-            return Result.success("统计用户活跃会话数量成功", countVO);
-            
-        } catch (Exception e) {
-            log.error("统计用户活跃会话数量失败: {}", e.getMessage(), e);
-            return Result.error("统计用户活跃会话数量失败，请稍后重试");
-        }
+        int count = userSessionService.countActiveSessionsByUserId(userId);
+        SessionCountVO countVO = SessionCountVO.of(userId, count);
+        return Result.success("统计用户活跃会话数量成功", countVO);
     }
 
     /**
@@ -188,13 +146,7 @@ public class UserSessionController {
         description = "清理过期会话"
     )
     public Result<Void> cleanExpiredSessions() {
-        try {
-            userSessionService.cleanExpiredSessions();
-            return Result.success("过期会话清理完成");
-            
-        } catch (Exception e) {
-            log.error("清理过期会话失败: {}", e.getMessage(), e);
-            return Result.error("清理过期会话失败，请稍后重试");
-        }
+        userSessionService.cleanExpiredSessions();
+        return Result.success("过期会话清理完成");
     }
 }
