@@ -39,7 +39,7 @@ public class ApiPrefixProperties {
      */
     public ApiPrefixProperties() {
         // 设置默认的模块前缀配置
-        modules.put("*.server.admin.controller", "/api-admin");
+        modules.put("*.server.admin.*.controller", "/api-admin");
         modules.put("*.server.home.controller", "/api-home");
         modules.put("*.server.blog.controller", "/api-blog");
     }

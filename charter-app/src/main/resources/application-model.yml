@@ -89,11 +89,13 @@ springdoc:
     - group: '网站后台中控相关接口'
       paths-to-match: '/api-admin/**'
       packages-to-scan:
-        - ink.charter.website.server.admin.controller
+        - ink.charter.website.server.admin.sys.controller
+        - ink.charter.website.server.admin.blog.controller
+        - ink.charter.website.server.admin.home.controller
     - group: '首页相关接口'
       paths-to-match: '/api-home/**'
       packages-to-scan:
-        - ink.charter.website.home.controller
+        - ink.charter.website.server.home.controller
 
 # Knife4j的增强配置
 knife4j:
@@ -132,7 +134,7 @@ charter:
       enabled: true # 是否启用API前缀配置
       default-prefix: /api # 默认API前缀
   #      modules: # 模块特定的API前缀配置（下述三个已在默认配置中加上，不需要重复添加配置，放在这里只是做模板）
-  #        "*.server.admin.controller": /api-admin # 管理后台API前缀
+  #        "*.server.admin.*.controller": /api-admin # 管理后台API前缀
   #        "*.server.home.controller": /api-home # 首页API前缀
   #        "*.server.blog.controller": /api-blog # 博客API前缀
 
