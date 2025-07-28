@@ -55,7 +55,7 @@ public final class QueryWrappers {
      * @return 标准的Lambda查询包装器
      */
     public static <T> LambdaQueryWrapper<T> standardLambdaQuery(Class<T> entityClass) {
-        return new LambdaQueryWrapper<>();
+        return new LambdaQueryWrapper<>(entityClass);
     }
 
     /**
@@ -97,6 +97,6 @@ public final class QueryWrappers {
      * @return 标准的Lambda更新包装器
      */
     public static <T> LambdaUpdateWrapper<T> standardLambdaUpdate(Class<T> entityClass) {
-        return new LambdaUpdateWrapper<>();
+        return new LambdaUpdateWrapper<>(entityClass);
     }
 }
