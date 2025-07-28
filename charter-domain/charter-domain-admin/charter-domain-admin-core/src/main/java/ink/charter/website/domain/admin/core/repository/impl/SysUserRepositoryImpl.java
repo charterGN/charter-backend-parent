@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -63,6 +64,14 @@ public class SysUserRepositoryImpl implements SysUserRepository {
             return Set.of();
         }
         return sysUserMapper.selectUserRoles(userId);
+    }
+
+    @Override
+    public List<Long> getRoleIdsByUserId(Long userId) {
+        if (userId == null) {
+            return List.of();
+        }
+        return sysUserMapper.selectUserRoleIds(userId);
     }
 
     @Override

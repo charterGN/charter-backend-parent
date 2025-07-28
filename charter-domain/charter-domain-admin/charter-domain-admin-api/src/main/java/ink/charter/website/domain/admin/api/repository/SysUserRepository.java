@@ -2,6 +2,7 @@ package ink.charter.website.domain.admin.api.repository;
 
 import ink.charter.website.common.core.entity.sys.SysUserEntity;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -58,6 +59,14 @@ public interface SysUserRepository {
      * @return 角色列表
      */
     Set<String> getUserRoles(Long userId);
+
+    /**
+     * 根据用户ID获取角色ID列表
+     *
+     * @param userId 用户ID
+     * @return 角色ID列表
+     */
+    List<Long> getRoleIdsByUserId(Long userId);
 
     /**
      * 更新用户登录信息

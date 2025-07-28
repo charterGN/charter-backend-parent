@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -90,6 +91,23 @@ public interface SysUserMapper extends BaseMapper<SysUserEntity> {
             AND sr.status = 1
             """)
     Set<String> selectUserRoles(@Param("userId") Long userId);
+
+    /**
+     * 查询用户的角色ID列表
+     *
+     * @param userId 用户ID
+     * @return 角色ID列表
+     */
+    @Select("""
+            SELECT DISTINCT sur.role_id
+            FROM sys_user_role sur
+            LEFT JOIN sys_role sr ON sur.role_id = sr.id
+            WHERE sur.user_id = #{userId} 
+            AND sur.is_deleted = 0 
+            AND sr.is_deleted = 0 
+            AND sr.status = 1
+            """)
+    List<Long> selectUserRoleIds(@Param("userId") Long userId);
 
     /**
      * 更新用户登录信息

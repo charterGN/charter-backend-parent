@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -53,6 +54,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Set<String> getUserRoles(Long userId) {
         return sysUserRepository.getUserRoles(userId);
+    }
+
+    @Override
+    public List<Long> getRoleIdsByUserId(Long userId) {
+        return sysUserRepository.getRoleIdsByUserId(userId);
     }
 
     @Override

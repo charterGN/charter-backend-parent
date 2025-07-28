@@ -1,5 +1,7 @@
 package ink.charter.website.server.admin.sys.vo.session;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -16,9 +18,11 @@ import java.time.LocalDateTime;
 public class UserSessionVO {
 
     @Schema(description = "会话ID", example = "1")
+    @JsonSerialize(using = ToStringSerializer.class) // 将Long类型序列化为String，避免前端精度丢失
     private Long sessionId;
 
     @Schema(description = "用户ID", example = "1")
+    @JsonSerialize(using = ToStringSerializer.class) // 将Long类型序列化为String，避免前端精度丢失
     private Long userId;
 
     @Schema(description = "用户名", example = "admin")
