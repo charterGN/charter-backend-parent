@@ -1,4 +1,4 @@
-package ink.charter.website.common.core.wrapper;
+package ink.charter.website.common.mybatis.wrapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;

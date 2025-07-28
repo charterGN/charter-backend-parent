@@ -3,12 +3,9 @@ package ink.charter.website.common.log.service.impl;
 import ink.charter.website.common.log.mapper.SysOptLogMapper;
 import ink.charter.website.common.log.service.OperationLogService;
 import ink.charter.website.common.core.entity.sys.SysOptLogEntity;
-import ink.charter.website.common.core.wrapper.EnhancedLambdaQueryWrapper;
-import ink.charter.website.common.core.wrapper.QueryWrappers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 

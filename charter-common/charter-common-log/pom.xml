@@ -26,6 +26,11 @@
             <artifactId>charter-common-security</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-mybatis</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <!--============================================-->
         <dependency>

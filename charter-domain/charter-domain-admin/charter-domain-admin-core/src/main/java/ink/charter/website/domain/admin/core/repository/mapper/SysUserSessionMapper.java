@@ -2,7 +2,7 @@ package ink.charter.website.domain.admin.core.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
-import ink.charter.website.common.core.wrapper.QueryWrappers;
+import ink.charter.website.common.mybatis.wrapper.QueryWrappers;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.time.LocalDateTime;

@@ -107,8 +107,8 @@
  * 
  * @author charter
  * @create 2025/07/19
- * @see ink.charter.website.common.core.wrapper.EnhancedLambdaQueryWrapper
- * @see ink.charter.website.common.core.wrapper.EnhancedLambdaUpdateWrapper
- * @see ink.charter.website.common.core.wrapper.QueryWrappers
+ * @see ink.charter.website.common.mybatis.wrapper.EnhancedLambdaQueryWrapper
+ * @see ink.charter.website.common.mybatis.wrapper.EnhancedLambdaUpdateWrapper
+ * @see ink.charter.website.common.mybatis.wrapper.QueryWrappers
  */
-package ink.charter.website.common.core.wrapper;
+package ink.charter.website.common.mybatis.wrapper;

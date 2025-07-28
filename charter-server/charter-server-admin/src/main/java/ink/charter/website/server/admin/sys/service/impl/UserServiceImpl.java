@@ -2,6 +2,7 @@ package ink.charter.website.server.admin.sys.service.impl;
 
 import ink.charter.website.common.auth.utils.SecurityUtils;
 import ink.charter.website.common.core.entity.sys.SysUserEntity;
+import ink.charter.website.common.core.enums.StatusEnum;
 import ink.charter.website.domain.admin.api.repository.SysUserRepository;
 import ink.charter.website.server.admin.sys.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -74,8 +75,8 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return false;
         }
-        // 检查用户状态：1-正常，0-禁用
-        return Integer.valueOf(1).equals(user.getStatus());
+        // 检查用户状态：1-启用，0-禁用
+        return StatusEnum.ENABLED.getCode().equals(user.getStatus());
     }
 
     @Override
