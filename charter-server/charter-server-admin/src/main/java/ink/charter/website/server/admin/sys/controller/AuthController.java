@@ -1,5 +1,6 @@
 package ink.charter.website.server.admin.sys.controller;
 
+import ink.charter.website.common.auth.config.AuthProperties;
 import ink.charter.website.common.core.utils.CryptoUtils;
 import ink.charter.website.server.admin.sys.converter.AuthConverter;
 import ink.charter.website.server.admin.sys.dto.auth.LoginRequestDTO;
@@ -43,6 +44,7 @@ public class AuthController {
 
     private final AuthService authService;
     private final AuthConverter authConverter;
+    private final AuthProperties authProperties;
 
     /**
      * 用户登录
@@ -55,8 +57,8 @@ public class AuthController {
         description = "用户登录系统"
     )
     public Result<LoginResponseVO> login(@RequestBody LoginRequestDTO loginRequestDTO, HttpServletRequest httpRequest) {
-        // TODO 解密密码
-        String password = CryptoUtils.decryptPassword(loginRequestDTO.getPassword(), "secretCharterKey");
+        // 解密密码
+        String password = CryptoUtils.decryptPassword(loginRequestDTO.getPassword(), authProperties.getCrypto().getSecretKey());
 
         if (!StringUtils.hasLength(password)) {
             return Result.error("密码不能为空");

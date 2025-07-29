@@ -31,6 +31,11 @@ public class AuthProperties {
     private Login login = new Login();
 
     /**
+     * 加密配置
+     */
+    private Crypto crypto = new Crypto();
+
+    /**
      * 会话配置
      */
     private Session session = new Session();
@@ -97,5 +102,13 @@ public class AuthProperties {
          * 会话超时检查间隔（秒）
          */
         private Long timeoutCheckInterval = 300L; // 5分钟
+    }
+
+    @Data
+    public static class Crypto {
+        /**
+         * 密码解密密钥
+         */
+        private String secretKey = "secretCharterKey";
     }
 }
