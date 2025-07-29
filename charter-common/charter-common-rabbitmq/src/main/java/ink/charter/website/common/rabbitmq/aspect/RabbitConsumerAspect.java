@@ -19,7 +19,6 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
-import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -43,7 +42,6 @@ public class RabbitConsumerAspect implements InitializingBean {
 
     private final RabbitMQService rabbitMQService;
     private final RabbitAdmin rabbitAdmin;
-    private final RetryTemplate retryTemplate;
     private final ExpressionParser parser = new SpelExpressionParser();
 
     @Override
