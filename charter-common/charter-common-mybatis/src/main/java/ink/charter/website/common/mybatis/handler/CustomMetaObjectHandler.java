@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  * 用于自动填充创建时间、更新时间、逻辑删除等字段
  *
  * @author charter
- * @create 2025/01/15
+ * @create 2025/07/21
  */
 @Slf4j
 @Component

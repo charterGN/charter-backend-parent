@@ -11,7 +11,7 @@ import java.util.Map;
  * API前缀配置属性
  *
  * @author charter
- * @create 2025/01/17
+ * @create 2025/07/27
  */
 @Data
 @ConfigurationProperties(prefix = "charter.web.api")

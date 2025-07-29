@@ -1,6 +1,7 @@
 package ink.charter.website.common.web.config;
 
 import ink.charter.website.common.web.exception.GlobalExceptionHandler;
+import ink.charter.website.common.web.listener.ApplicationStartupListener;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -14,7 +15,7 @@ import org.springframework.web.servlet.DispatcherServlet;
  * 用于自动配置Web相关的组件
  *
  * @author charter
- * @create 2025/01/20
+ * @create 2025/07/17
  */
 @Slf4j
 @AutoConfiguration
@@ -30,6 +31,16 @@ public class WebAutoConfiguration {
     public GlobalExceptionHandler globalExceptionHandler() {
         log.info("[WebAutoConfiguration] 初始化全局异常处理器");
         return new GlobalExceptionHandler();
+    }
+
+    /**
+     * 应用启动监听器
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public ApplicationStartupListener applicationStartupListener() {
+        log.info("[WebAutoConfiguration] 初始化应用启动监听器");
+        return new ApplicationStartupListener();
     }
 
     static {
