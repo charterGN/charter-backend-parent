@@ -7,6 +7,7 @@ import ink.charter.website.server.admin.sys.converter.MenuConverter;
 import ink.charter.website.server.admin.sys.service.MenuService;
 import ink.charter.website.server.admin.sys.service.UserService;
 import ink.charter.website.server.admin.sys.vo.menu.DynamicMenuVO;
+import ink.charter.website.server.admin.sys.vo.menu.MenuVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -79,8 +80,9 @@ public class MenuServiceImpl implements MenuService {
      * @return 菜单列表
      */
     @Override
-    public List<SysMenuEntity> listMenuNormal() {
-        return sysMenuRepository.listNormalMenus();
+    public List<MenuVO> listMenuNormal() {
+        List<SysMenuEntity> menuList = sysMenuRepository.listNormalMenus();
+        return menuConverter.convertToMenuVOList(menuList);
     }
 
     /**

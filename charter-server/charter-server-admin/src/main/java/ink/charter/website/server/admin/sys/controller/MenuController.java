@@ -4,6 +4,7 @@ import ink.charter.website.common.core.common.Result;
 import ink.charter.website.common.core.entity.sys.SysMenuEntity;
 import ink.charter.website.server.admin.sys.service.MenuService;
 import ink.charter.website.server.admin.sys.vo.menu.DynamicMenuVO;
+import ink.charter.website.server.admin.sys.vo.menu.MenuVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -51,8 +52,8 @@ public class MenuController {
      */
     @GetMapping("/listMenuNormal")
     @Operation(summary = "获取所有正常菜单列表", description = "获取所有状态正常的菜单列表")
-    public Result<List<SysMenuEntity>> listMenuNormal() {
-        List<SysMenuEntity> menuList = menuService.listMenuNormal();
+    public Result<List<MenuVO>> listMenuNormal() {
+        List<MenuVO> menuList = menuService.listMenuNormal();
         return Result.success(menuList);
     }
 

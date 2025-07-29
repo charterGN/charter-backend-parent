@@ -2,11 +2,12 @@ package ink.charter.website.server.admin.sys.converter;
 
 import ink.charter.website.common.core.entity.sys.SysMenuEntity;
 import ink.charter.website.server.admin.sys.vo.menu.DynamicMenuVO;
-import org.springframework.stereotype.Component;
+import ink.charter.website.server.admin.sys.vo.menu.MenuVO;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.factory.Mappers;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * 菜单转换器
@@ -14,8 +15,10 @@ import java.util.stream.Collectors;
  * @author charter
  * @create 2025/07/28
  */
-@Component
-public class MenuConverter {
+@Mapper(componentModel = "spring")
+public interface MenuConverter {
+
+    MenuConverter INSTANCE = Mappers.getMapper(MenuConverter.class);
 
     /**
      * 将实体类转换为VO对象
@@ -23,36 +26,16 @@ public class MenuConverter {
      * @param entity 实体类
      * @return VO对象
      */
-    public DynamicMenuVO convertToVO(SysMenuEntity entity) {
-        if (entity == null) {
-            return null;
-        }
-        
-        DynamicMenuVO vo = new DynamicMenuVO();
-        vo.setMenuId(entity.getId());
-        vo.setMenuName(entity.getMenuName());
-        vo.setParentId(entity.getParentId());
-        vo.setMenuType(String.valueOf(entity.getMenuType()));
-        vo.setPath(entity.getPath());
-        vo.setName(entity.getMenuCode());
-        vo.setComponent(entity.getComponent());
-        vo.setIcon(entity.getIcon());
-        vo.setIsHide(entity.getVisible() == 1 ? "1" : "0");
-        vo.setIsLink(entity.getExternalLink() == 1 ? "1" : "0");
-        vo.setIsKeepAlive(entity.getCache() == 1 ? "1" : "0");
-        // 默认设置为可显示标签
-        vo.setIsTag("1");
-        // 默认设置为不固定
-        vo.setIsAffix("0");
-        // 如果是目录，设置重定向到第一个子菜单
-        if (entity.getMenuType() == 1) {
-            vo.setRedirect("");
-        } else {
-            vo.setRedirect("");
-        }
-        
-        return vo;
-    }
+    @Mapping(source = "id", target = "menuId")
+    @Mapping(source = "menuCode", target = "name")
+    @Mapping(source = "menuType", target = "menuType", expression = "java(String.valueOf(entity.getMenuType()))")
+    @Mapping(source = "visible", target = "isHide", expression = "java(entity.getVisible() == 1 ? \"1\" : \"0\")")
+    @Mapping(source = "externalLink", target = "isLink", expression = "java(entity.getExternalLink() == 1 ? \"1\" : \"0\")")
+    @Mapping(source = "cache", target = "isKeepAlive", expression = "java(entity.getCache() == 1 ? \"1\" : \"0\")")
+    @Mapping(target = "isTag", constant = "1")
+    @Mapping(target = "isAffix", constant = "0")
+    @Mapping(target = "redirect", constant = "")
+    DynamicMenuVO convertToVO(SysMenuEntity entity);
 
     /**
      * 将实体类列表转换为VO对象列表
@@ -60,13 +43,22 @@ public class MenuConverter {
      * @param entityList 实体类列表
      * @return VO对象列表
      */
-    public List<DynamicMenuVO> convertToVOList(List<SysMenuEntity> entityList) {
-        if (entityList == null || entityList.isEmpty()) {
-            return new ArrayList<>();
-        }
-        
-        return entityList.stream()
-                .map(this::convertToVO)
-                .collect(Collectors.toList());
-    }
+    List<DynamicMenuVO> convertToVOList(List<SysMenuEntity> entityList);
+
+    /**
+     * 将实体类转换为MenuVO对象
+     *
+     * @param entity 实体类
+     * @return MenuVO对象
+     */
+    @Mapping(source = "id", target = "menuId")
+    MenuVO convertToMenuVO(SysMenuEntity entity);
+
+    /**
+     * 将实体类列表转换为MenuVO对象列表
+     *
+     * @param entityList 实体类列表
+     * @return MenuVO对象列表
+     */
+    List<MenuVO> convertToMenuVOList(List<SysMenuEntity> entityList);
 }

@@ -1,7 +1,7 @@
 package ink.charter.website.server.admin.sys.service;
 
-import ink.charter.website.common.core.entity.sys.SysMenuEntity;
 import ink.charter.website.server.admin.sys.vo.menu.DynamicMenuVO;
+import ink.charter.website.server.admin.sys.vo.menu.MenuVO;
 
 import java.util.List;
 
@@ -26,7 +26,7 @@ public interface MenuService {
      *
      * @return 菜单列表
      */
-    List<SysMenuEntity> listMenuNormal();
+    List<MenuVO> listMenuNormal();
 
     /**
      * 根据角色ID获取菜单ID列表
