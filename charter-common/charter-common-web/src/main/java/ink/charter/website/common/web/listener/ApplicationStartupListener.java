@@ -81,7 +81,7 @@ public class ApplicationStartupListener implements ApplicationListener<Applicati
         System.out.println("   └─ 📚 接口文档: \u001B[36m" + swaggerUrl + "\u001B[0m");
         System.out.println();
         
-        System.out.println("\u001B[35m✨ Ready to Navigate the Digital Seas! ✨\u001B[0m");
+        System.out.println("\u001B[35m✨ 心有星海，自羡鱼游! ✨\u001B[0m");
         System.out.println("\u001B[90m" + "=".repeat(60) + "\u001B[0m");
         System.out.println();
     }
