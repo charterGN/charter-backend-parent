@@ -201,6 +201,30 @@ CREATE TABLE `sys_opt_log` (
   KEY `idx_opt_status` (`opt_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统操作日志表';
 
+-- 文件信息表
+CREATE TABLE `sys_files` (
+  `id` BIGINT NOT NULL COMMENT '文件ID',
+  `file_name` VARCHAR(255) NOT NULL COMMENT '文件名称',
+  `file_size` BIGINT NOT NULL COMMENT '文件大小（字节）',
+  `file_md5` VARCHAR(32) NOT NULL COMMENT '文件MD5值',
+  `file_path` VARCHAR(500) NOT NULL COMMENT '文件存储路径',
+  `file_type` VARCHAR(255) COMMENT '文件类型',
+  `upload_user_id` BIGINT COMMENT '上传用户ID',
+  `upload_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '上传时间',
+  `last_access_time` DATETIME COMMENT '最后一次访问时间',
+  `status` TINYINT NOT NULL DEFAULT 1 COMMENT '文件状态（0不可用 1可用）',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_file_md5` (`file_md5`),
+  KEY `idx_upload_user_id` (`upload_user_id`),
+  KEY `idx_file_type` (`file_type`),
+  KEY `idx_status` (`status`),
+  KEY `idx_upload_time` (`upload_time`),
+  KEY `idx_create_time` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统文件信息表';
+
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ========================================

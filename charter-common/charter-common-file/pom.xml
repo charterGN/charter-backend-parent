@@ -21,6 +21,18 @@
             <artifactId>charter-common-core</artifactId>
             <version>${revision}</version>
         </dependency>
+        <!-- MyBatis Plus 支持 -->
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-mybatis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <!-- Security 支持 -->
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-security</artifactId>
+            <version>${revision}</version>
+        </dependency>
 
         <!--============================================-->
         <dependency>

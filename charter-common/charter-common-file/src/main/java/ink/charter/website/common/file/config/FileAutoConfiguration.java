@@ -1,5 +1,8 @@
 package ink.charter.website.common.file.config;
 
+import ink.charter.website.common.file.mapper.SysFilesMapper;
+import ink.charter.website.common.file.service.FileService;
+import ink.charter.website.common.file.service.impl.FileServiceImpl;
 import ink.charter.website.common.file.strategy.UploadStrategy;
 import ink.charter.website.common.file.strategy.context.UploadStrategyContext;
 import ink.charter.website.common.file.strategy.impl.OssUploadStrategyImpl;
@@ -54,5 +57,15 @@ public class FileAutoConfiguration {
     public UploadStrategyContext uploadStrategyContext() {
         log.info("初始化上传策略上下文");
         return new UploadStrategyContext();
+    }
+
+    /**
+     * 注册文件服务
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    public FileService fileService(SysFilesMapper sysFilesMapper, UploadStrategyContext uploadStrategyContext) {
+        log.info("初始化文件服务");
+        return new FileServiceImpl(sysFilesMapper, uploadStrategyContext);
     }
 }
