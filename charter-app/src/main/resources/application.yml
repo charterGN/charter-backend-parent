@@ -1,6 +1,6 @@
 spring:
   application:
-    name: charter-server
+    name: charter-app
   profiles:
     active: local
   jackson:
