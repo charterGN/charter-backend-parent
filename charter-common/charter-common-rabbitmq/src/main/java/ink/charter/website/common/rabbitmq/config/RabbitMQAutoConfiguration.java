@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.retry.support.RetryTemplate;
 
 /**
  * RabbitMQ自动配置类
@@ -67,8 +68,8 @@ public class RabbitMQAutoConfiguration {
     @Bean
     @ConditionalOnMissingBean
     @ConditionalOnProperty(prefix = "charter.rabbitmq.consumer", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public RabbitConsumerAspect rabbitConsumerAspect(RabbitMQService rabbitMQService, RabbitAdmin rabbitAdmin) {
+    public RabbitConsumerAspect rabbitConsumerAspect(RabbitMQService rabbitMQService, RabbitAdmin rabbitAdmin, RetryTemplate retryTemplate) {
         log.info("初始化RabbitMQ消费者切面");
-        return new RabbitConsumerAspect(rabbitMQService, rabbitAdmin);
+        return new RabbitConsumerAspect(rabbitMQService, rabbitAdmin, retryTemplate);
     }
 }

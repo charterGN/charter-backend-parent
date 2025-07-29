@@ -9,8 +9,8 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.amqp.ImmediateRequeueAmqpException;
 import org.springframework.amqp.core.*;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.annotation.Order;
@@ -19,6 +19,7 @@ import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.retry.support.RetryTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
@@ -42,6 +43,7 @@ public class RabbitConsumerAspect implements InitializingBean {
 
     private final RabbitMQService rabbitMQService;
     private final RabbitAdmin rabbitAdmin;
+    private final RetryTemplate retryTemplate;
     private final ExpressionParser parser = new SpelExpressionParser();
 
     @Override
@@ -246,7 +248,7 @@ public class RabbitConsumerAspect implements InitializingBean {
         switch (rabbitConsumer.failureStrategy()) {
             case RETRY_AND_DLX:
                 log.error("消息消费失败，将重试后发送到死信队列: method={}", methodName, e);
-                // 这里可以实现重试逻辑
+                handleRetryAndDlx(joinPoint, rabbitConsumer, methodName, e);
                 break;
                 
             case DIRECT_DLX:
@@ -260,12 +262,12 @@ public class RabbitConsumerAspect implements InitializingBean {
                 
             case REQUEUE:
                 log.error("消息消费失败，重新入队: method={}", methodName, e);
-                // 这里可以实现重新入队逻辑
+                handleRequeue(rabbitConsumer, methodName, e);
                 break;
                 
             case CUSTOM:
                 log.error("消息消费失败，需要自定义处理: method={}", methodName, e);
-                // 这里可以扩展自定义处理逻辑
+                handleCustomFailure(joinPoint, rabbitConsumer, methodName, e);
                 break;
                 
             default:
@@ -280,6 +282,21 @@ public class RabbitConsumerAspect implements InitializingBean {
      */
     private void sendToDeadLetterQueue(Object[] args, RabbitConsumer rabbitConsumer, String methodName, String errorMessage) {
         try {
+            // 获取原始消息内容
+            Object messageContent = null;
+            if (args != null && args.length > 0) {
+                messageContent = args[0]; // 通常第一个参数是消息内容
+            }
+            
+            // 构建死信消息
+            Map<String, Object> dlxMessage = new HashMap<>();
+            dlxMessage.put("originalMessage", messageContent);
+            dlxMessage.put("originalQueue", rabbitConsumer.queue());
+            dlxMessage.put("failureReason", errorMessage);
+            dlxMessage.put("failureTime", System.currentTimeMillis());
+            dlxMessage.put("consumerMethod", methodName);
+            
+            // 构建消息头
             Map<String, Object> headers = new HashMap<>();
             headers.put("originalQueue", rabbitConsumer.queue());
             headers.put("originalMethod", methodName);
@@ -287,12 +304,13 @@ public class RabbitConsumerAspect implements InitializingBean {
             headers.put("failureTime", System.currentTimeMillis());
             headers.put(RabbitMQConstant.HEADER_RETRY_COUNT, 0);
             
-            rabbitMQService.send(rabbitConsumer.dlxExchange(), rabbitConsumer.dlxRoutingKey(), args, headers);
+            // 发送到死信队列
+            rabbitMQService.send(rabbitConsumer.dlxExchange(), rabbitConsumer.dlxRoutingKey(), dlxMessage, headers);
             
-            log.info("消息已发送到死信队列: dlxExchange={}, dlxRoutingKey={}", 
-                    rabbitConsumer.dlxExchange(), rabbitConsumer.dlxRoutingKey());
+            log.info("消息已发送到死信队列: dlxExchange={}, dlxRoutingKey={}, originalQueue={}", 
+                    rabbitConsumer.dlxExchange(), rabbitConsumer.dlxRoutingKey(), rabbitConsumer.queue());
         } catch (Exception e) {
-            log.error("发送到死信队列失败: method={}", methodName, e);
+            log.error("发送到死信队列失败: method={}, error={}", methodName, e.getMessage(), e);
         }
     }
 
@@ -349,5 +367,101 @@ public class RabbitConsumerAspect implements InitializingBean {
         context.setVariable("timestamp", System.currentTimeMillis());
         
         return context;
+    }
+
+    /**
+     * 处理重试后发送到死信队列策略
+     */
+    private void handleRetryAndDlx(ProceedingJoinPoint joinPoint, RabbitConsumer rabbitConsumer, String methodName, Exception originalException) {
+        int maxRetries = rabbitConsumer.retryCount() > 0 ? rabbitConsumer.retryCount() : RabbitMQConstant.DEFAULT_RETRY_COUNT;
+        long retryInterval = rabbitConsumer.retryInterval() > 0 ? rabbitConsumer.retryInterval() : 1000L;
+        
+        Exception lastException = originalException;
+        
+        for (int currentRetry = 1; currentRetry <= maxRetries; currentRetry++) {
+            try {
+                // 等待重试间隔
+                if (retryInterval > 0) {
+                    Thread.sleep(retryInterval);
+                }
+                
+                log.info("开始第{}次重试消息消费: method={}, maxRetries={}", currentRetry, methodName, maxRetries);
+                
+                // 重新执行原方法
+                joinPoint.proceed();
+                
+                log.info("消息消费重试成功: method={}, retryCount={}", methodName, currentRetry);
+                return; // 重试成功，直接返回
+                
+            } catch (Throwable throwable) {
+                lastException = throwable instanceof Exception ? (Exception) throwable : new RuntimeException(throwable);
+                log.warn("消息消费第{}次重试失败: method={}, error={}", currentRetry, methodName, throwable.getMessage());
+                
+                // 如果不是最后一次重试，继续下一次重试
+                if (currentRetry < maxRetries) {
+                    continue;
+                }
+            }
+        }
+        
+        // 所有重试都失败，发送到死信队列
+        log.error("消息消费重试全部失败，发送到死信队列: method={}, totalRetries={}", methodName, maxRetries, lastException);
+        sendToDeadLetterQueue(joinPoint.getArgs(), rabbitConsumer, methodName, 
+                "重试" + maxRetries + "次失败: " + lastException.getMessage() + ", 原始异常: " + originalException.getMessage());
+    }
+
+    /**
+     * 处理重新入队策略
+     */
+    private void handleRequeue(RabbitConsumer rabbitConsumer, String methodName, Exception e) {
+        try {
+            // 检查重试次数，避免无限重新入队
+            int maxRetries = rabbitConsumer.retryCount() > 0 ? rabbitConsumer.retryCount() : RabbitMQConstant.DEFAULT_RETRY_COUNT;
+            
+            // 这里可以通过消息头来跟踪重试次数，但由于在切面中无法直接访问消息头，
+            // 我们抛出ImmediateRequeueAmqpException来触发重新入队
+            log.warn("消息将重新入队: method={}, maxRetries={}", methodName, maxRetries);
+            
+            // 抛出ImmediateRequeueAmqpException异常，Spring AMQP会自动处理重新入队
+            throw new ImmediateRequeueAmqpException("消息消费失败，重新入队: " + e.getMessage(), e);
+            
+        } catch (ImmediateRequeueAmqpException requeueException) {
+            // 重新抛出，让Spring AMQP处理
+            throw requeueException;
+        } catch (Exception handleException) {
+            log.error("处理重新入队失败: method={}", methodName, handleException);
+            throw new RuntimeException("重新入队处理失败", handleException);
+        }
+    }
+
+    /**
+     * TODO 处理自定义失败策略
+     */
+    private void handleCustomFailure(ProceedingJoinPoint joinPoint, RabbitConsumer rabbitConsumer, String methodName, Exception e) {
+        // 这里可以扩展自定义处理逻辑
+        // 例如：发送通知、记录特殊日志、调用外部服务等
+        
+        log.warn("执行自定义失败处理策略: method={}", methodName);
+        
+        try {
+            // 可以根据异常类型进行不同处理
+            if (e instanceof IllegalArgumentException) {
+                log.error("参数异常，丢弃消息: method={}", methodName, e);
+                // 参数异常直接丢弃，不重试
+                return;
+            } else if (e instanceof RuntimeException) {
+                log.error("运行时异常，发送到死信队列: method={}", methodName, e);
+                sendToDeadLetterQueue(joinPoint.getArgs(), rabbitConsumer, methodName, e.getMessage());
+            } else {
+                log.error("未知异常类型，默认发送到死信队列: method={}", methodName, e);
+                sendToDeadLetterQueue(joinPoint.getArgs(), rabbitConsumer, methodName, e.getMessage());
+            }
+            
+            // 可以在这里添加更多自定义逻辑
+            // 例如：发送邮件通知、调用监控接口等
+            
+        } catch (Exception customException) {
+            log.error("自定义失败处理执行异常: method={}", methodName, customException);
+        }
     }
 }

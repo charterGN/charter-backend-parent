@@ -248,7 +248,7 @@ public class RabbitProducerAspect {
                 
             case CUSTOM:
                 log.error("消息发送失败，需要自定义处理: method={}", methodName, e);
-                // 这里可以扩展自定义处理逻辑
+                handleCustomFailure(joinPoint, rabbitProducer, methodName, e);
                 break;
                 
             default:
@@ -309,5 +309,20 @@ public class RabbitProducerAspect {
         context.setVariable("timestamp", System.currentTimeMillis());
         
         return context;
+    }
+
+    /**
+     * TODO 处理自定义失败策略
+     */
+    private void handleCustomFailure(ProceedingJoinPoint joinPoint, RabbitProducer rabbitProducer, String methodName, Exception e) {
+        log.warn("执行自定义失败处理策略: method={}", methodName);
+
+        try {
+            // 可以在这里添加自定义逻辑
+            // 例如：发送邮件通知、调用监控接口等
+
+        } catch (Exception customException) {
+            log.error("自定义失败处理执行异常: method={}", methodName, customException);
+        }
     }
 }
