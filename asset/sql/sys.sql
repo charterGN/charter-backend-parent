@@ -201,6 +201,10 @@ CREATE TABLE `sys_opt_log` (
   KEY `idx_opt_status` (`opt_status`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统操作日志表';
 
+-- ========================================
+-- 文件表
+-- ========================================
+
 -- 文件信息表
 CREATE TABLE `sys_files` (
   `id` BIGINT NOT NULL COMMENT '文件ID',
