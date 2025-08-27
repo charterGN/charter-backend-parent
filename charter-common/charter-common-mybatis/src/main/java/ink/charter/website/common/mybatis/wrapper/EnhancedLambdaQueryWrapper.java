@@ -368,14 +368,38 @@ public class EnhancedLambdaQueryWrapper<T> extends LambdaQueryWrapper<T> {
     }
 
     @Override
+    public EnhancedLambdaQueryWrapper<T> orderByAsc(boolean condition, SFunction<T, ?> column) {
+        super.orderByAsc(condition, column);
+        return this;
+    }
+
+    @Override
     public EnhancedLambdaQueryWrapper<T> orderByAsc(SFunction<T, ?> column) {
         super.orderByAsc(column);
         return this;
     }
 
     @Override
+    public EnhancedLambdaQueryWrapper<T> orderByDesc(boolean condition, SFunction<T, ?> column) {
+        super.orderByDesc(condition, column);
+        return this;
+    }
+
+    @Override
     public EnhancedLambdaQueryWrapper<T> orderByDesc(SFunction<T, ?> column) {
         super.orderByDesc(column);
+        return this;
+    }
+
+    @Override
+    public EnhancedLambdaQueryWrapper<T> groupBy(boolean condition, SFunction<T, ?> column) {
+        super.groupBy(condition, column);
+        return this;
+    }
+
+    @Override
+    public EnhancedLambdaQueryWrapper<T> groupBy(SFunction<T, ?> column) {
+        super.groupBy(column);
         return this;
     }
 }
