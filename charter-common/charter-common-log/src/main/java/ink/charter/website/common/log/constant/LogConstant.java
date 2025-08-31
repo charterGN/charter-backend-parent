@@ -41,6 +41,8 @@ public class LogConstant {
         public static final String LOGOUT = "登出";
         /** 授权 */
         public static final String GRANT = "授权";
+        /** 执行 */
+        public static final String EXECUTE = "执行";
         /** 其他 */
         public static final String OTHER = "其他";
     }
@@ -63,6 +65,8 @@ public class LogConstant {
         public static final String SYSTEM = "系统管理";
         /** 日志管理 */
         public static final String LOG = "日志管理";
+        /** 定时任务管理 */
+        public static final String JOB = "定时任务管理";
         /** 其他 */
         public static final String OTHER = "其他";
     }
