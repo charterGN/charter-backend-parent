@@ -51,13 +51,13 @@ public class DynamicMenuVO implements Serializable {
     @Schema(description = "是否外链（0否 1是）")
     private String isLink;
 
-    @Schema(description = "是否缓存（0不缓存 1缓存）")
+    @Schema(description = "是否缓存（0缓存 1不缓存）")
     private String isKeepAlive;
 
-    @Schema(description = "是否标签显示（0不显示 1显示）")
+    @Schema(description = "是否标签显示（0显示 1不显示）")
     private String isTag;
 
-    @Schema(description = "是否固定（0不固定 1固定）")
+    @Schema(description = "是否固定（0固定 1不固定）")
     private String isAffix;
 
     @Schema(description = "重定向路径")

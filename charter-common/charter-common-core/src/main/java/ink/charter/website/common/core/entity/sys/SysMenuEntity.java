@@ -50,7 +50,7 @@ public class SysMenuEntity extends BaseEntity {
     @Schema(description = "是否显示（0隐藏 1显示）")
     private Integer visible;
 
-    @Schema(description = "是否缓存（0不缓存 1缓存）")
+    @Schema(description = "是否缓存（0缓存 1不缓存）")
     private Integer cache;
 
     @Schema(description = "是否外链（0否 1是）")

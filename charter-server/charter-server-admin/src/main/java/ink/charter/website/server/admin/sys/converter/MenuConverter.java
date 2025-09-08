@@ -32,8 +32,8 @@ public interface MenuConverter {
     @Mapping(target = "isHide", expression = "java(entity.getVisible() == 1 ? \"1\" : \"0\")")
     @Mapping(target = "isLink", expression = "java(entity.getExternalLink() == 1 ? \"1\" : \"0\")")
     @Mapping(target = "isKeepAlive", expression = "java(entity.getCache() == 1 ? \"1\" : \"0\")")
-    @Mapping(target = "isTag", constant = "1")
-    @Mapping(target = "isAffix", constant = "0")
+    @Mapping(target = "isTag", constant = "0")
+    @Mapping(target = "isAffix", constant = "1")
     @Mapping(target = "redirect", constant = "")
     DynamicMenuVO convertToVO(SysMenuEntity entity);
 

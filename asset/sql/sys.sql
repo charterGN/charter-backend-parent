@@ -66,7 +66,7 @@ CREATE TABLE `sys_menu` (
   `sort_order` INT DEFAULT 0 COMMENT '排序',
   `status` TINYINT NOT NULL DEFAULT 1 COMMENT '状态（0禁用 1启用）',
   `visible` TINYINT NOT NULL DEFAULT 1 COMMENT '是否显示（0隐藏 1显示）',
-  `cache` TINYINT DEFAULT 0 COMMENT '是否缓存（0不缓存 1缓存）',
+  `cache` TINYINT DEFAULT 0 COMMENT '是否缓存（0缓存 1不缓存）',
   `external_link` TINYINT DEFAULT 0 COMMENT '是否外链（0否 1是）',
   `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
