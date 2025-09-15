@@ -277,6 +277,48 @@ CREATE TABLE `sys_job_log` (
   KEY `idx_job_name_group` (`job_name`, `job_group`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='任务执行日志表';
 
+-- ========================================
+-- 字典管理相关表
+-- ========================================
+
+-- 字典类型表
+CREATE TABLE `sys_dict_type` (
+  `id` BIGINT NOT NULL COMMENT '字典类型ID',
+  `dict_name` VARCHAR(100) NOT NULL COMMENT '字典名称',
+  `dict_type` VARCHAR(100) NOT NULL COMMENT '字典类型',
+  `status` TINYINT NOT NULL DEFAULT 1 COMMENT '状态（0禁用 1启用）',
+  `remark` VARCHAR(500) COMMENT '备注',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_dict_type` (`dict_type`),
+  KEY `idx_status` (`status`),
+  KEY `idx_create_time` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典类型表';
+
+-- 字典数据表
+CREATE TABLE `sys_dict_data` (
+  `id` BIGINT NOT NULL COMMENT '字典数据ID',
+  `dict_type` VARCHAR(100) NOT NULL COMMENT '字典类型',
+  `dict_label` VARCHAR(100) NOT NULL COMMENT '字典标签',
+  `dict_value` VARCHAR(100) NOT NULL COMMENT '字典键值',
+  `dict_tag` VARCHAR(50) COMMENT '标签类型',
+  `dict_color` VARCHAR(50) COMMENT '标签颜色',
+  `status` TINYINT NOT NULL DEFAULT 1 COMMENT '状态（0禁用 1启用）',
+  `sort_order` INT DEFAULT 0 COMMENT '排序',
+  `remark` VARCHAR(500) COMMENT '备注',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
+  PRIMARY KEY (`id`),
+  KEY `idx_dict_type` (`dict_type`),
+  KEY `idx_dict_value` (`dict_value`),
+  KEY `idx_status` (`status`),
+  KEY `idx_sort_order` (`sort_order`),
+  KEY `idx_create_time` (`create_time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典数据表';
+
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- ========================================
