@@ -61,6 +61,8 @@ public class LogConstant {
         public static final String MENU = "菜单管理";
         /** 资源管理 */
         public static final String RESOURCE = "资源管理";
+        /** 字典管理 */
+        public static final String DICT = "字典管理";
         /** 系统管理 */
         public static final String SYSTEM = "系统管理";
         /** 日志管理 */
