@@ -1,4 +1,4 @@
-package ink.charter.website.server.admin.sys.vo.menu;
+package ink.charter.website.domain.admin.api.vo.menu;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;

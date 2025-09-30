@@ -2,9 +2,9 @@ package ink.charter.website.server.admin.sys.controller;
 
 import ink.charter.website.server.admin.sys.service.DictTypeService;
 import ink.charter.website.server.admin.sys.converter.DictTypeConverter;
-import ink.charter.website.server.admin.sys.dto.dict.CreateDictTypeDTO;
-import ink.charter.website.server.admin.sys.dto.dict.UpdateDictTypeDTO;
-import ink.charter.website.server.admin.sys.vo.dict.DictTypeVO;
+import ink.charter.website.domain.admin.api.dto.dict.CreateDictTypeDTO;
+import ink.charter.website.domain.admin.api.dto.dict.UpdateDictTypeDTO;
+import ink.charter.website.domain.admin.api.vo.dict.DictTypeVO;
 import ink.charter.website.common.log.annotation.OperationLog;
 import ink.charter.website.common.log.constant.LogConstant;
 import ink.charter.website.common.core.common.Result;

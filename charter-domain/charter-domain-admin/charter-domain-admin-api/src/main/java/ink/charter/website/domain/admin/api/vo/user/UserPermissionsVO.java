@@ -1,4 +1,4 @@
-package ink.charter.website.server.admin.sys.vo.user;
+package ink.charter.website.domain.admin.api.vo.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

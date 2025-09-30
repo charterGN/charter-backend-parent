@@ -1,6 +1,9 @@
 package ink.charter.website.server.admin.sys.service;
 
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysUserEntity;
+import ink.charter.website.domain.admin.api.dto.user.PageUserDTO;
+import ink.charter.website.domain.admin.api.vo.user.UserVO;
 
 import java.util.List;
 import java.util.Set;
@@ -12,6 +15,13 @@ import java.util.Set;
  * @create 2025/07/17
  */
 public interface UserService {
+
+    /**
+     * 分页查询用户列表
+     * @param pageRequest 分页查询请求参数
+     * @return 分页用户列表
+     */
+    PageResult<UserVO> pageUsers(PageUserDTO pageRequest);
 
     /**
      * 根据用户名查询用户

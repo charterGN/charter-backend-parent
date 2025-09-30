@@ -1,10 +1,14 @@
 package ink.charter.website.server.admin.sys.service.impl;
 
 import ink.charter.website.common.auth.utils.SecurityUtils;
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysUserEntity;
 import ink.charter.website.common.core.enums.StatusEnum;
 import ink.charter.website.domain.admin.api.repository.SysUserRepository;
+import ink.charter.website.server.admin.sys.converter.UserConverter;
+import ink.charter.website.domain.admin.api.dto.user.PageUserDTO;
 import ink.charter.website.server.admin.sys.service.UserService;
+import ink.charter.website.domain.admin.api.vo.user.UserVO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +29,17 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
     private final SysUserRepository sysUserRepository;
+    private final UserConverter userConverter;
+
+    @Override
+    public PageResult<UserVO> pageUsers(PageUserDTO pageRequest) {
+        PageResult<SysUserEntity> pageResult = sysUserRepository.pageUsers(pageRequest);
+        if (pageResult.hasData()) {
+            List<SysUserEntity> records = pageResult.getRecords();
+            return PageResult.of(userConverter.toVOList(records), pageResult.getTotal());
+        }
+        return PageResult.empty();
+    }
 
     @Override
     public SysUserEntity getUserByUsername(String username) {

@@ -2,8 +2,8 @@ package ink.charter.website.server.admin.sys.controller;
 
 import ink.charter.website.server.admin.sys.service.UserSessionService;
 import ink.charter.website.server.admin.sys.converter.UserSessionConverter;
-import ink.charter.website.server.admin.sys.vo.session.SessionCountVO;
-import ink.charter.website.server.admin.sys.vo.session.UserSessionVO;
+import ink.charter.website.domain.admin.api.vo.session.SessionCountVO;
+import ink.charter.website.domain.admin.api.vo.session.UserSessionVO;
 import ink.charter.website.common.log.annotation.OperationLog;
 import ink.charter.website.common.log.constant.LogConstant;
 import ink.charter.website.common.core.common.Result;

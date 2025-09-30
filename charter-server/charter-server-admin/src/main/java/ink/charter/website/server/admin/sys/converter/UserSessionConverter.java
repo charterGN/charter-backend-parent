@@ -1,6 +1,6 @@
 package ink.charter.website.server.admin.sys.converter;
 
-import ink.charter.website.server.admin.sys.vo.session.UserSessionVO;
+import ink.charter.website.domain.admin.api.vo.session.UserSessionVO;
 import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

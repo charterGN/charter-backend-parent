@@ -1,8 +1,8 @@
 package ink.charter.website.server.admin.sys.converter;
 
 import ink.charter.website.common.core.entity.sys.SysMenuEntity;
-import ink.charter.website.server.admin.sys.vo.menu.DynamicMenuVO;
-import ink.charter.website.server.admin.sys.vo.menu.MenuVO;
+import ink.charter.website.domain.admin.api.vo.menu.DynamicMenuVO;
+import ink.charter.website.domain.admin.api.vo.menu.MenuVO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;

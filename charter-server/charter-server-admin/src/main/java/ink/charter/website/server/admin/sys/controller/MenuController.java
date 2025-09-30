@@ -1,10 +1,9 @@
 package ink.charter.website.server.admin.sys.controller;
 
 import ink.charter.website.common.core.common.Result;
-import ink.charter.website.common.core.entity.sys.SysMenuEntity;
 import ink.charter.website.server.admin.sys.service.MenuService;
-import ink.charter.website.server.admin.sys.vo.menu.DynamicMenuVO;
-import ink.charter.website.server.admin.sys.vo.menu.MenuVO;
+import ink.charter.website.domain.admin.api.vo.menu.DynamicMenuVO;
+import ink.charter.website.domain.admin.api.vo.menu.MenuVO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

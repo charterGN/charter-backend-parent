@@ -1,4 +1,4 @@
-package ink.charter.website.server.admin.sys.dto.dict;
+package ink.charter.website.domain.admin.api.dto.dict;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -6,18 +6,14 @@ import lombok.Data;
 import jakarta.validation.constraints.*;
 
 /**
- * 更新字典类型请求DTO
+ * 创建字典类型请求DTO
  *
  * @author charter
  * @create 2025/09/15
  */
 @Data
-@Schema(description = "更新字典类型请求")
-public class UpdateDictTypeDTO {
-
-    @NotNull(message = "字典类型ID不能为空")
-    @Schema(description = "字典类型ID", example = "1", requiredMode = Schema.RequiredMode.REQUIRED)
-    private Long id;
+@Schema(description = "创建字典类型请求")
+public class CreateDictTypeDTO {
 
     @NotBlank(message = "字典名称不能为空")
     @Size(max = 100, message = "字典名称长度不能超过100个字符")

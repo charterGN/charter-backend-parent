@@ -1,14 +1,15 @@
 package ink.charter.website.server.admin.sys.converter;
 
-import ink.charter.website.server.admin.sys.dto.user.CreateUserDTO;
-import ink.charter.website.server.admin.sys.dto.user.UpdateUserDTO;
-import ink.charter.website.server.admin.sys.vo.user.UserPermissionsVO;
-import ink.charter.website.server.admin.sys.vo.user.UserVO;
+import ink.charter.website.domain.admin.api.dto.user.CreateUserDTO;
+import ink.charter.website.domain.admin.api.dto.user.UpdateUserDTO;
+import ink.charter.website.domain.admin.api.vo.user.UserPermissionsVO;
+import ink.charter.website.domain.admin.api.vo.user.UserVO;
 import ink.charter.website.common.core.entity.sys.SysUserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -52,6 +53,12 @@ public interface UserConverter {
      */
     @Mapping(target = "userId", source = "id")
     UserVO toVO(SysUserEntity entity);
+
+    /**
+     * SysUserEntity批量转换为UserVO
+     */
+    @Mapping(target = "userId", source = "id")
+    List<UserVO> toVOList(List<SysUserEntity> entities);
 
     /**
      * 转换为用户权限VO

@@ -1,8 +1,12 @@
 package ink.charter.website.domain.admin.core.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ink.charter.website.common.core.common.PageRequest;
 import ink.charter.website.common.core.entity.sys.SysUserEntity;
 import ink.charter.website.common.mybatis.wrapper.QueryWrappers;
+import ink.charter.website.domain.admin.api.dto.user.PageUserDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -18,6 +22,17 @@ import java.util.Set;
  */
 @Mapper
 public interface SysUserMapper extends BaseMapper<SysUserEntity> {
+
+    default IPage<SysUserEntity> pageUsers(PageUserDTO pageRequest) {
+        PageRequest page = pageRequest.getPageRequest();
+        return selectPage(new Page<>(page.getPageNo(), page.getPageSize()), QueryWrappers.<SysUserEntity>lambdaQuery()
+            .likeIfPresent(SysUserEntity::getUsername, pageRequest.getUsername())
+            .likeIfPresent(SysUserEntity::getNickname, pageRequest.getNickname())
+            .likeIfPresent(SysUserEntity::getPhone, pageRequest.getPhone())
+            .geIfPresent(SysUserEntity::getLastLoginTime, pageRequest.getLoginStartTime())
+            .leIfPresent(SysUserEntity::getLastLoginTime, pageRequest.getLoginEndTime())
+            .orderByDesc(SysUserEntity::getCreateTime));
+    }
 
     /**
      * 根据用户名查询用户

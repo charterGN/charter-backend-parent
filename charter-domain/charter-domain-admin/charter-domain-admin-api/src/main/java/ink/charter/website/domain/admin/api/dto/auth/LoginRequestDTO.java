@@ -1,4 +1,4 @@
-package ink.charter.website.server.admin.sys.dto.auth;
+package ink.charter.website.domain.admin.api.dto.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

@@ -1,8 +1,8 @@
 package ink.charter.website.server.admin.sys.converter;
 
-import ink.charter.website.server.admin.sys.dto.dict.CreateDictTypeDTO;
-import ink.charter.website.server.admin.sys.dto.dict.UpdateDictTypeDTO;
-import ink.charter.website.server.admin.sys.vo.dict.DictTypeVO;
+import ink.charter.website.domain.admin.api.dto.dict.CreateDictTypeDTO;
+import ink.charter.website.domain.admin.api.dto.dict.UpdateDictTypeDTO;
+import ink.charter.website.domain.admin.api.vo.dict.DictTypeVO;
 import ink.charter.website.common.core.entity.sys.SysDictTypeEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

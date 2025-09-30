@@ -1,7 +1,7 @@
 package ink.charter.website.server.admin.sys.converter;
 
-import ink.charter.website.server.admin.sys.vo.auth.LoginResponseVO;
-import ink.charter.website.server.admin.sys.vo.auth.UserInfoVO;
+import ink.charter.website.domain.admin.api.vo.auth.LoginResponseVO;
+import ink.charter.website.domain.admin.api.vo.auth.UserInfoVO;
 import ink.charter.website.common.auth.model.LoginResponse;
 import ink.charter.website.common.auth.model.LoginUser;
 import org.mapstruct.Mapper;

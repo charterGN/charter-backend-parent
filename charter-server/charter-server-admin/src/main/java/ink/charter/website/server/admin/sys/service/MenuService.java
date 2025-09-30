@@ -1,7 +1,7 @@
 package ink.charter.website.server.admin.sys.service;
 
-import ink.charter.website.server.admin.sys.vo.menu.DynamicMenuVO;
-import ink.charter.website.server.admin.sys.vo.menu.MenuVO;
+import ink.charter.website.domain.admin.api.vo.menu.DynamicMenuVO;
+import ink.charter.website.domain.admin.api.vo.menu.MenuVO;
 
 import java.util.List;
 

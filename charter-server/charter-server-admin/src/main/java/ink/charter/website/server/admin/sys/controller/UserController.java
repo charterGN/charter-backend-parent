@@ -1,13 +1,11 @@
 package ink.charter.website.server.admin.sys.controller;
 
+import ink.charter.website.common.core.common.PageResult;
+import ink.charter.website.domain.admin.api.dto.user.*;
 import ink.charter.website.server.admin.sys.service.UserService;
 import ink.charter.website.server.admin.sys.converter.UserConverter;
-import ink.charter.website.server.admin.sys.dto.user.ChangePasswordDTO;
-import ink.charter.website.server.admin.sys.dto.user.ChangeUserStatusDTO;
-import ink.charter.website.server.admin.sys.dto.user.CreateUserDTO;
-import ink.charter.website.server.admin.sys.dto.user.UpdateUserDTO;
-import ink.charter.website.server.admin.sys.vo.user.UserPermissionsVO;
-import ink.charter.website.server.admin.sys.vo.user.UserVO;
+import ink.charter.website.domain.admin.api.vo.user.UserPermissionsVO;
+import ink.charter.website.domain.admin.api.vo.user.UserVO;
 import ink.charter.website.common.log.annotation.OperationLog;
 import ink.charter.website.common.log.constant.LogConstant;
 import ink.charter.website.common.core.common.Result;
@@ -38,6 +36,15 @@ public class UserController {
 
     private final UserService userService;
     private final UserConverter userConverter;
+
+    /**
+     * 分页查询用户列表
+     */
+    @PostMapping("/page")
+    @Operation(summary = "分页查询用户列表", description = "分页查询用户列表")
+    public Result<PageResult<UserVO>> pageUsers(@RequestBody PageUserDTO pageRequest) {
+        return Result.success("查询成功", userService.pageUsers(pageRequest));
+    }
 
     /**
      * 创建用户

@@ -1,7 +1,10 @@
 package ink.charter.website.domain.admin.core.repository.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import ink.charter.website.common.auth.utils.SecurityUtils;
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysUserEntity;
+import ink.charter.website.domain.admin.api.dto.user.PageUserDTO;
 import ink.charter.website.domain.admin.api.repository.SysUserRepository;
 import ink.charter.website.domain.admin.core.repository.mapper.SysUserMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,12 @@ import java.util.Set;
 public class SysUserRepositoryImpl implements SysUserRepository {
 
     private final SysUserMapper sysUserMapper;
+
+    @Override
+    public PageResult<SysUserEntity> pageUsers(PageUserDTO pageRequest) {
+        IPage<SysUserEntity> entityIPage = sysUserMapper.pageUsers(pageRequest);
+        return PageResult.of(entityIPage.getRecords(), entityIPage.getTotal());
+    }
 
     @Override
     public SysUserEntity getUserByUsername(String username) {

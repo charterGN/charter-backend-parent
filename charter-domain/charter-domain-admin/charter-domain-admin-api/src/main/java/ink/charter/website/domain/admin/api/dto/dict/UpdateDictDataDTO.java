@@ -1,4 +1,4 @@
-package ink.charter.website.server.admin.sys.dto.dict;
+package ink.charter.website.domain.admin.api.dto.dict;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
