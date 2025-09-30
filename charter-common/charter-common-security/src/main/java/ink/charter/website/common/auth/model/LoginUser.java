@@ -210,4 +210,40 @@ public class LoginUser implements UserDetails {
         }
         return false;
     }
+
+    /**
+     * 检查用户是否拥有所有指定角色
+     *
+     * @param roles 角色列表
+     * @return 是否拥有所有角色
+     */
+    public boolean hasAllRoles(String... roles) {
+        if (this.roles == null || roles == null) {
+            return false;
+        }
+        for (String role : roles) {
+            if (!this.roles.contains(role)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 检查用户是否拥有所有指定权限
+     *
+     * @param permissions 权限列表
+     * @return 是否拥有所有权限
+     */
+    public boolean hasAllPermissions(String... permissions) {
+        if (this.permissions == null || permissions == null) {
+            return false;
+        }
+        for (String permission : permissions) {
+            if (!this.permissions.contains(permission)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

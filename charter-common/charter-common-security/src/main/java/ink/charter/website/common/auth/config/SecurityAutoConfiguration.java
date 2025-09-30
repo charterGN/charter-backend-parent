@@ -3,9 +3,12 @@ package ink.charter.website.common.auth.config;
 import ink.charter.website.common.auth.filter.JwtAuthenticationFilter;
 import ink.charter.website.common.auth.handler.AccessDeniedHandlerImpl;
 import ink.charter.website.common.auth.handler.AuthenticationEntryPointImpl;
+import ink.charter.website.common.auth.interceptor.ResourcePermissionInterceptor;
 import ink.charter.website.common.auth.service.AuthService;
+import ink.charter.website.common.auth.service.ResourcePermissionService;
 import ink.charter.website.common.auth.service.TokenService;
 import ink.charter.website.common.auth.service.impl.AuthServiceImpl;
+import ink.charter.website.common.auth.service.impl.ResourcePermissionServiceImpl;
 import ink.charter.website.common.auth.service.impl.TokenServiceImpl;
 import ink.charter.website.common.auth.service.impl.UserDetailsServiceImpl;
 import ink.charter.website.common.auth.utils.JwtUtils;
@@ -36,7 +39,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 @ConditionalOnClass(name = "org.springframework.security.config.annotation.web.configuration.EnableWebSecurity")
-@Import({SecurityConfig.class})
+@Import({SecurityConfig.class, ResourcePermissionConfig.class})
 public class SecurityAutoConfiguration {
 
     /**
@@ -131,5 +134,27 @@ public class SecurityAutoConfiguration {
     public JwtAuthenticationFilter jwtAuthenticationFilter(TokenService tokenService) {
         log.info("初始化JWT认证过滤器");
         return new JwtAuthenticationFilter(tokenService);
+    }
+
+    /**
+     * 注册资源权限服务实现
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = "charter.auth", name = "resource-permission-enabled", havingValue = "true", matchIfMissing = true)
+    public ResourcePermissionService resourcePermissionService() {
+        log.info("初始化资源权限服务");
+        return new ResourcePermissionServiceImpl();
+    }
+
+    /**
+     * 注册资源权限拦截器
+     */
+    @Bean
+    @ConditionalOnMissingBean
+    @ConditionalOnProperty(prefix = "charter.auth", name = "resource-permission-enabled", havingValue = "true", matchIfMissing = true)
+    public ResourcePermissionInterceptor resourcePermissionInterceptor(ResourcePermissionService resourcePermissionService) {
+        log.info("初始化资源权限拦截器");
+        return new ResourcePermissionInterceptor(resourcePermissionService);
     }
 }

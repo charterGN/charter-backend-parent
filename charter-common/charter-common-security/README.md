@@ -1,237 +1,236 @@
-# Charter 认证模块 (common-security)
+# Charter Common Security
 
-## 概述
+Charter项目的通用安全认证模块，提供完整的用户认证、授权和权限控制功能。
 
-本模块提供了完整的用户认证和授权功能，基于 Spring Security 和 JWT 实现，支持用户登录、登出、令牌刷新、会话管理等功能。
-
-## 主要功能
+## 功能特性
 
 ### 1. 用户认证
-- 支持用户名/邮箱 + 密码登录
-- 密码加密存储（BCrypt + 盐值）
-- 登录失败次数限制和账户锁定
-- 单点登录控制
+- JWT令牌认证
+- 用户登录/登出
+- 密码加密存储
+- 用户状态管理
 
-### 2. JWT 令牌管理
-- 访问令牌（Access Token）和刷新令牌（Refresh Token）
-- 令牌自动续期
-- 令牌黑名单机制
-- 令牌过期检测和清理
+### 2. JWT令牌管理
+- 令牌生成与验证
+- 令牌刷新机制
+- 令牌黑名单管理
+- 自动过期处理
 
 ### 3. 会话管理
-- 用户会话跟踪
+- Redis会话存储
+- 会话超时控制
 - 多设备登录管理
-- 会话失效和踢出功能
-- 会话过期自动清理
+- 会话状态同步
 
 ### 4. 权限控制
-- 基于角色的访问控制（RBAC）
-- 方法级权限注解支持
-- 资源权限管理
-- 动态权限验证
+- **RBAC权限模型**：基于角色的访问控制
+- **方法级注解**：支持`@PreAuthorize`、`@PostAuthorize`等Spring Security注解
+- **资源权限管理**：细粒度的资源访问控制
+- **动态权限验证**：支持运行时权限检查
+
+### 5. 资源权限控制组件（新增）
+- **注解式权限控制**：
+  - `@RequireResource`：资源权限注解
+  - `@RequirePermission`：通用权限注解
+- **权限服务**：
+  - `ResourcePermissionService`：资源权限验证服务
+  - 支持单个、任意、全部资源权限检查
+  - 基于URL和HTTP方法的权限验证
+  - Redis缓存优化
+- **权限拦截器**：
+  - `ResourcePermissionInterceptor`：自动权限验证拦截器
+  - 支持方法级、类级、URL级权限控制
+- **工具类**：
+  - `ResourcePermissionUtils`：便捷的权限检查工具
+  - 支持编程式权限验证
 
 ## 核心组件
 
-### 服务层
-- `AuthService`: 认证服务接口
-- `TokenService`: 令牌管理服务接口
-- `AuthServiceImpl`: 认证服务实现
-- `TokenServiceImpl`: 令牌管理服务实现
-- `UserDetailsServiceImpl`: Spring Security 用户详情服务
+### 认证相关
+- `LoginUser`：登录用户信息模型
+- `AuthService`：认证服务接口
+- `TokenService`：令牌服务接口
+- `UserDetailsServiceImpl`：Spring Security用户详情服务
 
-### 配置类
-- `SecurityConfig`: Spring Security 配置
-- `AuthProperties`: 认证相关配置属性
+### 安全配置
+- `SecurityConfig`：Spring Security核心配置
+- `SecurityAutoConfiguration`：自动配置类
+- `ResourcePermissionConfig`：资源权限配置
 
-### 过滤器
-- `JwtAuthenticationFilter`: JWT 认证过滤器
+### 过滤器和拦截器
+- `JwtAuthenticationFilter`：JWT认证过滤器
+- `ResourcePermissionInterceptor`：资源权限拦截器
 
 ### 异常处理
-- `AuthenticationEntryPointImpl`: 认证失败处理器
-- `AccessDeniedHandlerImpl`: 访问拒绝处理器
+- `AuthenticationEntryPointImpl`：认证入口点
+- `AccessDeniedHandlerImpl`：访问拒绝处理器
+- `ResourcePermissionException`：资源权限异常
 
 ### 工具类
-- `SecurityUtils`: 安全工具类
-- `JwtUtils`: JWT 工具类
+- `SecurityUtils`：安全工具类
+- `JwtUtils`：JWT工具类
+- `ResourcePermissionUtils`：资源权限工具类
 
-### 模型类
-- `LoginUser`: 登录用户信息模型
+## 使用方式
 
-## 配置说明
+### 1. 基本配置
 
-在 `application.yml` 中添加以下配置：
+在`application.yml`中配置：
 
 ```yaml
 charter:
   auth:
+    enabled: true
     jwt:
-      # JWT 密钥
-      secret: your-jwt-secret-key-here
-      # 访问令牌过期时间（秒）
-      access-token-expire: 7200
-      # 刷新令牌过期时间（秒）
-      refresh-token-expire: 604800
-      # 令牌即将过期阈值（秒）
-      expire-threshold: 1800
-    login:
-      # 是否启用单点登录
-      single-login: false
-      # 登录失败最大次数
-      max-fail-count: 5
-      # 账户锁定时间（秒）
-      lock-time: 1800
-    session:
-      # 会话超时时间（秒）
-      timeout: 7200
-      # 最大并发会话数
-      max-sessions: 10
+      secret: your-jwt-secret
+      expiration: 86400000  # 24小时
+    redis:
+      enabled: true
+  security:
+    resource-permission:
+      enabled: true  # 启用资源权限控制
 ```
 
-## 使用示例
+### 2. 注解使用
 
-### 1. 用户登录
-
+#### 资源权限注解
 ```java
 @RestController
-@RequestMapping("/api-admin/auth")
-public class AuthController {
+@RequireResource("user:manage")  // 类级别权限控制
+public class UserController {
     
-    @Autowired
-    private AuthService authService;
+    @GetMapping("/list")
+    @RequireResource("user:list")  // 方法级别权限控制
+    public Result<List<User>> list() {
+        // ...
+    }
     
-    @PostMapping("/login")
-    public Result<LoginResponse> login(@RequestBody LoginRequest request, HttpServletRequest httpRequest) {
-        String ip = IpUtils.getClientIp(httpRequest);
-        String userAgent = httpRequest.getHeader("User-Agent");
-        
-        Result<LoginResponse> result = authService.login(
-            request.getUsername(), 
-            request.getPassword(), 
-            ip, 
-            userAgent
-        );
-        
-        return result;
+    @PostMapping("/save")
+    @RequireResource(value = {"user:add", "user:edit"}, requireAll = false)  // 任意一个权限
+    public Result<Void> save(@RequestBody User user) {
+        // ...
+    }
+    
+    @DeleteMapping("/{id}")
+    @RequireResource(value = {"user:delete", "admin:manage"}, requireAll = true)  // 需要所有权限
+    public Result<Void> delete(@PathVariable Long id) {
+        // ...
     }
 }
 ```
 
-### 2. 获取当前用户信息
-
+#### 通用权限注解
 ```java
-@GetMapping("/current-user")
-public Result<UserInfo> getCurrentUser() {
-    Long userId = SecurityUtils.getCurrentUserId();
-    String username = SecurityUtils.getCurrentUsername();
+@RestController
+public class AdminController {
     
-    UserInfo userInfo = new UserInfo(userId, username);
-    return Result.success(userInfo);
+    @GetMapping("/dashboard")
+    @RequirePermission(
+        roles = {"admin", "manager"}, 
+        resources = {"dashboard:view"},
+        requireBoth = false  // 满足角色或资源权限任意一种
+    )
+    public Result<DashboardData> dashboard() {
+        // ...
+    }
+    
+    @PostMapping("/system/config")
+    @RequirePermission(
+        roles = {"admin"}, 
+        resources = {"system:config"},
+        requireBoth = true  // 同时需要角色和资源权限
+    )
+    public Result<Void> updateConfig(@RequestBody SystemConfig config) {
+        // ...
+    }
 }
 ```
 
-### 3. 权限验证
+### 3. 编程式权限检查
 
 ```java
-@PreAuthorize("hasRole('ADMIN')")
-@GetMapping("/admin/users")
-public Result<List<User>> getUsers() {
-    // 只有管理员角色可以访问
-    return Result.success(userService.getAllUsers());
-}
-
-@PreAuthorize("hasPermission('user:delete')")
-@PostMapping("/users/{id}")
-public Result<Void> deleteUser(@PathVariable Long id) {
-    // 需要用户删除权限
-    userService.deleteUser(id);
-    return Result.success();
+@Service
+public class UserService {
+    
+    public void deleteUser(Long userId) {
+        // 检查权限
+        ResourcePermissionUtils.requireResourcePermission("user:delete");
+        
+        // 或者检查多个权限
+        ResourcePermissionUtils.requireAnyResourcePermission("user:delete", "admin:manage");
+        
+        // 业务逻辑
+        // ...
+    }
+    
+    public List<User> getUserList() {
+        // 条件检查
+        if (ResourcePermissionUtils.hasResourcePermission("user:list")) {
+            return getAllUsers();
+        } else {
+            return getPublicUsers();
+        }
+    }
 }
 ```
 
-### 4. 令牌刷新
+### 4. 权限服务使用
 
 ```java
-@PostMapping("/refresh")
-public Result<LoginResponse> refreshToken(@RequestBody RefreshTokenRequest request) {
-    Result<LoginResponse> result = authService.refreshToken(request.getRefreshToken());
-    return result;
+@Service
+public class BusinessService {
+    
+    @Autowired
+    private ResourcePermissionService resourcePermissionService;
+    
+    public void processData() {
+        LoginUser currentUser = SecurityUtils.getCurrentUser();
+        
+        // 检查用户权限
+        if (resourcePermissionService.hasResourcePermission(currentUser, "data:process")) {
+            // 执行业务逻辑
+        }
+        
+        // 获取用户所有资源权限
+        Set<String> permissions = resourcePermissionService.getUserResourcePermissions(currentUser);
+        
+        // 验证请求权限
+        boolean hasPermission = resourcePermissionService.validateRequestPermission(
+            "/api/users", "GET", currentUser
+        );
+    }
 }
 ```
 
 ## 数据库表结构
 
-### 用户表 (sys_user)
-```sql
-CREATE TABLE `sys_user` (
-  `id` BIGINT NOT NULL COMMENT '用户ID',
-  `username` VARCHAR(50) NOT NULL COMMENT '用户名',
-  `nickname` VARCHAR(50) COMMENT '昵称',
-  `email` VARCHAR(100) COMMENT '邮箱',
-  `phone` VARCHAR(20) COMMENT '手机号',
-  `avatar` VARCHAR(500) COMMENT '头像URL',
-  `password` VARCHAR(255) NOT NULL COMMENT '密码（加密）',
-  `salt` VARCHAR(32) COMMENT '密码盐值',
-  `status` TINYINT NOT NULL DEFAULT 1 COMMENT '状态（0禁用 1启用）',
-  `login_count` INT DEFAULT 0 COMMENT '登录次数',
-  `last_login_time` DATETIME COMMENT '最后登录时间',
-  `last_login_ip` VARCHAR(50) COMMENT '最后登录IP',
-  -- 其他字段...
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_username` (`username`),
-  UNIQUE KEY `uk_email` (`email`)
-);
-```
+资源权限控制依赖以下数据库表：
 
-### 用户会话表 (sys_user_session)
-```sql
-CREATE TABLE `sys_user_session` (
-  `id` BIGINT NOT NULL COMMENT '会话ID',
-  `user_id` BIGINT NOT NULL COMMENT '用户ID',
-  `session_id` VARCHAR(128) NOT NULL COMMENT '会话标识',
-  `token` VARCHAR(500) COMMENT '访问令牌',
-  `refresh_token` VARCHAR(500) COMMENT '刷新令牌',
-  `login_ip` VARCHAR(50) COMMENT '登录IP',
-  `login_address` VARCHAR(200) COMMENT '登录地址',
-  `user_agent` VARCHAR(500) COMMENT '用户代理',
-  `login_time` DATETIME NOT NULL COMMENT '登录时间',
-  `expire_time` DATETIME NOT NULL COMMENT '过期时间',
-  `status` TINYINT NOT NULL DEFAULT 1 COMMENT '状态（0离线 1在线）',
-  -- 其他字段...
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_session_id` (`session_id`),
-  KEY `idx_user_id` (`user_id`),
-  KEY `idx_token` (`token`(100))
-);
-```
+- `sys_user`：用户表
+- `sys_role`：角色表
+- `sys_resource`：资源表
+- `sys_user_role`：用户角色关联表
+- `sys_role_resource`：角色资源关联表
 
-## 安全注意事项
+## 缓存策略
 
-1. **JWT 密钥安全**: 确保 JWT 密钥足够复杂且定期更换
-2. **密码存储**: 使用 BCrypt + 盐值双重加密
-3. **令牌传输**: 建议使用 HTTPS 传输令牌
-4. **会话管理**: 定期清理过期会话和令牌
-5. **权限控制**: 遵循最小权限原则
-6. **日志记录**: 记录所有认证和授权相关操作
+- 用户权限信息缓存：`user:permissions:{userId}`
+- 资源代码缓存：`resource:codes:{url}:{method}`
+- 缓存过期时间：30分钟（可配置）
 
-## 扩展功能
+## 注意事项
 
-- 支持第三方登录（OAuth2）
-- 双因子认证（2FA）
-- 验证码登录
-- 记住我功能
-- 设备指纹识别
+1. 确保数据库表结构正确创建
+2. Redis服务正常运行
+3. 正确配置JWT密钥
+4. 权限注解优先级：方法级 > 类级 > URL级
+5. 资源权限控制可通过配置禁用，不影响现有功能
 
-## 依赖项
+## 扩展说明
 
-- Spring Security
-- Spring Boot
-- JWT (jsonwebtoken)
-- Redis (用于缓存)
-- MyBatis Plus (数据访问)
-- BCrypt (密码加密)
+本模块采用模块化设计，各组件职责清晰，便于扩展和维护：
 
-## 版本历史
-
-- v1.0.0: 初始版本，基础认证功能
-- v1.1.0: 添加会话管理和令牌刷新
-- v1.2.0: 完善权限控制和异常处理
+- 支持自定义权限验证逻辑
+- 支持多种权限存储方式
+- 支持权限缓存策略自定义
+- 支持权限异常处理自定义
