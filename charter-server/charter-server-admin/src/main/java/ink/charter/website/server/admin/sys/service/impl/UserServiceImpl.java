@@ -114,4 +114,9 @@ public class UserServiceImpl implements UserService {
     public boolean deleteUser(Long userId) {
         return sysUserRepository.deleteUser(userId);
     }
+
+    @Override
+    public boolean batchDeleteUsers(List<Long> userIds) {
+        return sysUserRepository.batchDeleteUsers(userIds);
+    }
 }

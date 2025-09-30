@@ -18,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -119,6 +120,33 @@ public class UserController {
             return Result.success("用户删除成功");
         } else {
             return Result.error("用户删除失败");
+        }
+    }
+
+    /**
+     * 批量删除用户
+     */
+    @PostMapping("/batchDelete")
+    @Operation(summary = "批量删除用户", description = "批量删除指定用户")
+    @OperationLog(
+        module = LogConstant.OptModule.USER,
+        type = LogConstant.OptType.DELETE,
+        description = "批量删除用户"
+    )
+    public Result<Void> batchDeleteUsers(@RequestBody List<Long> userIds) {
+        for (Long userId : userIds) {
+            SysUserEntity existingUser = userService.getUserById(userId);
+            if (existingUser == null) {
+                return Result.error("用户不存在");
+            }
+        }
+
+        boolean success = userService.batchDeleteUsers(userIds);
+
+        if (success) {
+            return Result.success("用户批量删除成功");
+        } else {
+            return Result.error("用户批量删除失败");
         }
     }
 

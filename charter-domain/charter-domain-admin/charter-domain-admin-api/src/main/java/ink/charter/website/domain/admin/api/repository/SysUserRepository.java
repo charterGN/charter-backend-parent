@@ -108,4 +108,12 @@ public interface SysUserRepository {
      * @return 是否删除成功
      */
     boolean deleteUser(Long userId);
+
+    /**
+     * 批量删除用户
+     *
+     * @param userIds 用户ID列表
+     * @return 是否删除成功
+     */
+    boolean batchDeleteUsers(List<Long> userIds);
 }

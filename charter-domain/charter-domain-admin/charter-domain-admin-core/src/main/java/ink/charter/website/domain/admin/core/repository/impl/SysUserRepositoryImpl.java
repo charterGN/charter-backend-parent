@@ -151,4 +151,19 @@ public class SysUserRepositoryImpl implements SysUserRepository {
             return false;
         }
     }
+
+    @Override
+    public boolean batchDeleteUsers(List<Long> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return false;
+        }
+
+        try {
+            // 使用MyBatis-Plus的批量逻辑删除功能
+            return sysUserMapper.deleteByIds(userIds) > 0;
+        } catch (Exception e) {
+            log.error("批量删除用户失败: {}", e.getMessage(), e);
+            return false;
+        }
+    }
 }
