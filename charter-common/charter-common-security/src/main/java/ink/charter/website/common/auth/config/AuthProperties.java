@@ -21,11 +21,6 @@ public class AuthProperties {
     private Boolean enabled = true;
 
     /**
-     * 是否启用资源权限控制
-     */
-    private Boolean resourcePermissionEnabled = true;
-
-    /**
      * JWT配置
      */
     private Jwt jwt = new Jwt();
