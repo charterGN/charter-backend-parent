@@ -31,8 +31,8 @@ public class PageResult<T> implements Serializable {
     /**
      * 总页数
      */
-    @Schema(description = "总页数")
-    private Integer total;
+    @Schema(description = "总记录数")
+    private Long total;
 
     /**
      * 构造函数
@@ -44,9 +44,9 @@ public class PageResult<T> implements Serializable {
      * 构造函数
      *
      * @param records 数据列表
-     * @param total 总页数
+     * @param total 总记录数
      */
-    public PageResult(List<T> records, Integer total) {
+    public PageResult(List<T> records, Long total) {
         this.records = records;
         this.total = total;
     }
@@ -55,25 +55,11 @@ public class PageResult<T> implements Serializable {
      * 静态工厂方法 - 创建分页结果
      *
      * @param records 数据列表
-     * @param total 总页数
+     * @param total 总记录数
      * @param <T> 数据类型
      * @return 分页结果
      */
-    public static <T> PageResult<T> of(List<T> records, Integer total) {
-        return new PageResult<>(records, total);
-    }
-
-    /**
-     * 静态工厂方法 - 根据总记录数和页大小计算总页数
-     *
-     * @param records 数据列表
-     * @param totalCount 总记录数
-     * @param pageSize 每页数据大小
-     * @param <T> 数据类型
-     * @return 分页结果
-     */
-    public static <T> PageResult<T> of(List<T> records, Long totalCount, Integer pageSize) {
-        int total = (int) Math.ceil((double) totalCount / pageSize);
+    public static <T> PageResult<T> of(List<T> records, Long total) {
         return new PageResult<>(records, total);
     }
 
@@ -84,7 +70,7 @@ public class PageResult<T> implements Serializable {
      * @return 空的分页结果
      */
     public static <T> PageResult<T> empty() {
-        return new PageResult<>(List.of(), 0);
+        return new PageResult<>(List.of(), 0L);
     }
 
     /**
