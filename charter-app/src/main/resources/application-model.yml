@@ -152,6 +152,17 @@ charter:
     max-response-length: 2000 # 响应数据最大长度
     max-error-length: 500     # 错误信息最大长度
 
+  # 邮件服务配置
+  mail:
+    enabled: true                   # 是否启用邮件服务
+    enable-async: true              # 是否启用异步发送
+    default-from: your-email@163.com # 默认发件人地址
+    default-from-name: Charter      # 默认发件人名称
+    template-prefix: mail/          # 模板路径前缀
+    template-suffix: .html          # 模板文件后缀
+    retry-times: 3                  # 发送失败重试次数
+    retry-interval: 1000            # 重试间隔时间（毫秒）
+
   # RabbitMQ中间件配置
   rabbitmq:
     enabled: true

@@ -28,6 +28,7 @@
         <module>charter-common-web</module>
         <module>charter-common-mybatis</module>
         <module>charter-common-job</module>
+        <module>charter-common-mail</module>
     </modules>
 
     <dependencies>
