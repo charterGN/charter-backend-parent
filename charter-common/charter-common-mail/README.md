@@ -60,7 +60,6 @@ spring:
 charter:
   mail:
     enabled: true                   # 是否启用邮件服务
-    enable-async: true              # 是否启用异步发送
     default-from: your-email@163.com # 默认发件人地址
     default-from-name: Charter Website # 默认发件人名称
     template-prefix: mail/          # 模板路径前缀

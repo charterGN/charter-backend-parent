@@ -12,6 +12,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
+import org.thymeleaf.templateresolver.ITemplateResolver;
+import org.thymeleaf.templateresolver.AbstractConfigurableTemplateResolver;
 
 import java.io.File;
 import java.util.Map;
@@ -43,8 +45,8 @@ public class MailServiceImpl implements MailService {
             message.setTo(to);
             message.setSubject(subject);
             message.setText(content);
-            
-            javaMailSender.send(message);
+
+            executeWithRetry(() -> javaMailSender.send(message), to);
             log.info("简单文本邮件发送成功，收件人: {}", String.join(",", to));
         } catch (Exception e) {
             log.error("简单文本邮件发送失败，收件人: {}", String.join(",", to), e);
@@ -62,13 +64,13 @@ public class MailServiceImpl implements MailService {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            
+
             helper.setFrom(getFromAddress(), mailProperties.getDefaultFromName());
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true);
-            
-            javaMailSender.send(message);
+
+            executeWithRetry(() -> javaMailSender.send(message), to);
             log.info("HTML邮件发送成功，收件人: {}", String.join(",", to));
         } catch (Exception e) {
             log.error("HTML邮件发送失败，收件人: {}", String.join(",", to), e);
@@ -86,12 +88,12 @@ public class MailServiceImpl implements MailService {
         try {
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-            
+
             helper.setFrom(getFromAddress(), mailProperties.getDefaultFromName());
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true);
-            
+
             // 添加附件
             if (attachments != null && attachments.length > 0) {
                 for (File attachment : attachments) {
@@ -100,9 +102,9 @@ public class MailServiceImpl implements MailService {
                     }
                 }
             }
-            
-            javaMailSender.send(message);
-            log.info("带附件邮件发送成功，收件人: {}, 附件数: {}", String.join(",", to), 
+
+            executeWithRetry(() -> javaMailSender.send(message), to);
+            log.info("带附件邮件发送成功，收件人: {}, 附件数: {}", String.join(",", to),
                     attachments != null ? attachments.length : 0);
         } catch (Exception e) {
             log.error("带附件邮件发送失败，收件人: {}", String.join(",", to), e);
@@ -125,7 +127,8 @@ public class MailServiceImpl implements MailService {
             }
             
             // 处理模板
-            String content = templateEngine.process(templateName, context);
+            String resolvedTemplateName = resolveTemplateName(templateName);
+            String content = templateEngine.process(resolvedTemplateName, context);
             
             // 发送HTML邮件
             sendHtmlMail(to, subject, content);
@@ -166,5 +169,79 @@ public class MailServiceImpl implements MailService {
             throw new RuntimeException("未配置默认发件人地址");
         }
         return from;
+    }
+
+    /**
+     * 根据配置解析模板名称，应用前缀与必要时的后缀
+     */
+    private String resolveTemplateName(String templateName) {
+        String name = templateName;
+        String prefix = mailProperties.getTemplatePrefix();
+        if (prefix != null && !prefix.isBlank() && !name.startsWith(prefix)) {
+            name = prefix + name;
+        }
+
+        // 仅在模板解析器未配置后缀时，才追加自定义后缀，避免重复
+        String suffix = mailProperties.getTemplateSuffix();
+        if (shouldAppendSuffix() && suffix != null && !suffix.isBlank() && !name.endsWith(suffix)) {
+            name = name + suffix;
+        }
+        return name;
+    }
+
+    /**
+     * 判断当前模板引擎是否已经配置了非空的后缀
+     */
+    private boolean shouldAppendSuffix() {
+        try {
+            for (ITemplateResolver resolver : templateEngine.getTemplateResolvers()) {
+                if (resolver instanceof AbstractConfigurableTemplateResolver configurable) {
+                    String engineSuffix = configurable.getSuffix();
+                    if (engineSuffix != null && !engineSuffix.isEmpty()) {
+                        return false; // 引擎已配置后缀，避免重复追加
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // 忽略检查异常，默认追加后缀
+        }
+        return true;
+    }
+
+    /**
+     * 执行带重试的发送操作，使用配置中的重试次数与间隔
+     */
+    private void executeWithRetry(Runnable action, String[] recipients) {
+        // retryTimes 表示“失败后的重试次数”，因此总尝试次数 = 初次尝试 + 重试次数
+        int maxAttempts = Math.max(1, mailProperties.getRetryTimes() + 1);
+        long intervalMs = Math.max(0L, mailProperties.getRetryInterval());
+
+        int attempt = 0; // 尝试次数，从0开始表示初次尝试，后续增加的才是重试次数
+        RuntimeException lastException = null;
+        while (attempt < maxAttempts) {
+            try {
+                action.run();
+                if (attempt > 0) {
+                    log.info("邮件发送重试成功（第{}次），收件人: {}", attempt + 1, String.join(",", recipients));
+                }
+                return;
+            } catch (RuntimeException e) {
+                lastException = e;
+                attempt++;
+                if (attempt >= maxAttempts) {
+                    break;
+                }
+                log.warn("邮件发送失败，准备重试({}/{}), {}ms后重试，收件人: {}", attempt, maxAttempts, intervalMs, String.join(",", recipients), e);
+                try {
+                    Thread.sleep(intervalMs);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException("邮件发送重试被中断", ie);
+                }
+            }
+        }
+        if (lastException != null) {
+            throw lastException;
+        }
     }
 }

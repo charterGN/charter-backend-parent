@@ -1,8 +1,6 @@
 package ink.charter.website.common.mail.config;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -21,11 +19,6 @@ public class MailProperties {
      * 是否启用邮件服务
      */
     private boolean enabled = true;
-
-    /**
-     * 是否启用异步发送
-     */
-    private boolean enableAsync = true;
 
     /**
      * 默认发件人
