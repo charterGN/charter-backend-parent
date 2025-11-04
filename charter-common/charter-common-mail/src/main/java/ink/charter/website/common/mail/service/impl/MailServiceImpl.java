@@ -222,7 +222,7 @@ public class MailServiceImpl implements MailService {
             try {
                 action.run();
                 if (attempt > 0) {
-                    log.info("邮件发送重试成功（第{}次），收件人: {}", attempt + 1, String.join(",", recipients));
+                    log.info("邮件发送重试成功（第{}次重试），收件人: {}", attempt + 1, String.join(",", recipients));
                 }
                 return;
             } catch (RuntimeException e) {
@@ -231,7 +231,7 @@ public class MailServiceImpl implements MailService {
                 if (attempt >= maxAttempts) {
                     break;
                 }
-                log.warn("邮件发送失败，准备重试({}/{}), {}ms后重试，收件人: {}", attempt, maxAttempts, intervalMs, String.join(",", recipients), e);
+                log.warn("邮件发送失败，准备重试({}/{}), {}ms后重试，收件人: {}", attempt, maxAttempts - 1, intervalMs, String.join(",", recipients), e);
                 try {
                     Thread.sleep(intervalMs);
                 } catch (InterruptedException ie) {
