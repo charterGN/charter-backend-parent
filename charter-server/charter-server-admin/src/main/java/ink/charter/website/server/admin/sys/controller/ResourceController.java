@@ -30,7 +30,7 @@ import java.util.stream.Stream;
  */
 @Slf4j
 @RestController
-@RequestMapping("/resource")
+@RequestMapping("/sysResource")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "资源管理", description = "资源管理相关接口")

@@ -27,7 +27,7 @@ public class SysMenuRepositoryImpl implements SysMenuRepository {
         if (menuIds == null || menuIds.isEmpty()) {
             return List.of();
         }
-        return sysMenuMapper.selectBatchIds(menuIds);
+        return sysMenuMapper.selectByIds(menuIds);
     }
 
     @Override

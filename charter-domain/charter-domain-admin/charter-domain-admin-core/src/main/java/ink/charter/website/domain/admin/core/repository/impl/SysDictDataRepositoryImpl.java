@@ -94,7 +94,7 @@ public class SysDictDataRepositoryImpl implements SysDictDataRepository {
         }
         
         try {
-            int result = sysDictDataMapper.deleteBatchIds(ids);
+            int result = sysDictDataMapper.deleteByIds(ids);
             return result > 0;
         } catch (Exception e) {
             log.error("批量删除字典数据失败", e);

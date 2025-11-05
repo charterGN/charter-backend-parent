@@ -94,7 +94,7 @@ public class SysDictTypeRepositoryImpl implements SysDictTypeRepository {
         }
         
         try {
-            int result = sysDictTypeMapper.deleteBatchIds(ids);
+            int result = sysDictTypeMapper.deleteByIds(ids);
             return result > 0;
         } catch (Exception e) {
             log.error("批量删除字典类型失败", e);
