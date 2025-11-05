@@ -99,9 +99,8 @@ springdoc:
       packages-to-scan:
         - ink.charter.website.server.home.controller
 
-# Knife4j的增强配置
+# Knife4j的增强配置（注意不要启用 knife4j.enable，否则可能导致错误）
 knife4j:
-  enable: true
   setting:
     language: zh_cn
   production: true # 是否生产环境
