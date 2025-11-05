@@ -1,7 +1,10 @@
 package ink.charter.website.domain.admin.core.repository.impl;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysMenuEntity;
+import ink.charter.website.domain.admin.api.dto.menu.PageMenuDTO;
 import ink.charter.website.domain.admin.api.repository.SysMenuRepository;
 import ink.charter.website.domain.admin.core.repository.mapper.SysMenuMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +26,12 @@ public class SysMenuRepositoryImpl implements SysMenuRepository {
     private final SysMenuMapper sysMenuMapper;
 
     @Override
+    public PageResult<SysMenuEntity> pageMenus(PageMenuDTO pageRequest) {
+        IPage<SysMenuEntity> result = sysMenuMapper.pageResources(pageRequest);
+        return PageResult.of(result.getRecords(), result.getTotal());
+    }
+
+    @Override
     public List<SysMenuEntity> listByIds(List<Long> menuIds) {
         if (menuIds == null || menuIds.isEmpty()) {
             return List.of();
@@ -36,11 +45,24 @@ public class SysMenuRepositoryImpl implements SysMenuRepository {
     }
 
     @Override
+    public List<SysMenuEntity> listAll() {
+        return sysMenuMapper.selectAll();
+    }
+
+    @Override
     public SysMenuEntity getById(Long menuId) {
         if (menuId == null) {
             return null;
         }
         return sysMenuMapper.selectById(menuId);
+    }
+
+    @Override
+    public List<SysMenuEntity> listByParentId(Long parentId) {
+        if (parentId == null) {
+            return List.of();
+        }
+        return sysMenuMapper.selectByParentId(parentId);
     }
 
     @Override
@@ -78,6 +100,32 @@ public class SysMenuRepositoryImpl implements SysMenuRepository {
             return sysMenuMapper.deleteById(menuId) > 0;
         } catch (Exception e) {
             log.error("删除菜单失败: {}", e.getMessage(), e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean batchDelete(List<Long> menuIds) {
+        if (menuIds == null || menuIds.isEmpty()) {
+            return false;
+        }
+        try {
+            return sysMenuMapper.deleteByIds(menuIds) > 0;
+        } catch (Exception e) {
+            log.error("批量删除菜单失败: {}", e.getMessage(), e);
+            return false;
+        }
+    }
+
+    @Override
+    public boolean updateStatus(Long menuId, Integer status) {
+        if (menuId == null || status == null) {
+            return false;
+        }
+        try {
+            return sysMenuMapper.updateStatus(menuId, status) > 0;
+        } catch (Exception e) {
+            log.error("更新菜单状态失败: {}", e.getMessage(), e);
             return false;
         }
     }

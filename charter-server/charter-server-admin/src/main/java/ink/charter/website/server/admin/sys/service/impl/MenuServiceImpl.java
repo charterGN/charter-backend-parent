@@ -1,6 +1,10 @@
 package ink.charter.website.server.admin.sys.service.impl;
 
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysMenuEntity;
+import ink.charter.website.common.core.exception.BusinessException;
+import ink.charter.website.common.core.utils.IdGenerator;
+import ink.charter.website.domain.admin.api.dto.menu.PageMenuDTO;
 import ink.charter.website.domain.admin.api.repository.SysMenuRepository;
 import ink.charter.website.domain.admin.api.repository.SysRoleMenuRepository;
 import ink.charter.website.server.admin.sys.converter.MenuConverter;
@@ -32,6 +36,13 @@ public class MenuServiceImpl implements MenuService {
     private final SysRoleMenuRepository sysRoleMenuRepository;
     private final UserService userService;
     private final MenuConverter menuConverter;
+
+    @Override
+    public PageResult<MenuVO> pageMenus(PageMenuDTO pageRequest) {
+        PageResult<SysMenuEntity> pageResult = sysMenuRepository.pageMenus(pageRequest);
+        List<MenuVO> voList = menuConverter.convertToMenuVOList(pageResult.getRecords());
+        return PageResult.of(voList, pageResult.getTotal());
+    }
 
     /**
      * 获取用户菜单列表
@@ -85,6 +96,33 @@ public class MenuServiceImpl implements MenuService {
         return menuConverter.convertToMenuVOList(menuList);
     }
 
+    @Override
+    public List<MenuVO> listAll() {
+        List<SysMenuEntity> menuList = sysMenuRepository.listAll();
+        return menuConverter.convertToMenuVOList(menuList);
+    }
+
+    @Override
+    public MenuVO getById(Long menuId) {
+        if (menuId == null) {
+            throw BusinessException.of("菜单ID不能为空");
+        }
+        SysMenuEntity menu = sysMenuRepository.getById(menuId);
+        if (menu == null) {
+            throw BusinessException.dataNotFound("菜单");
+        }
+        return menuConverter.convertToMenuVO(menu);
+    }
+
+    @Override
+    public List<MenuVO> listByParentId(Long parentId) {
+        if (parentId == null) {
+            return new ArrayList<>();
+        }
+        List<SysMenuEntity> menuList = sysMenuRepository.listByParentId(parentId);
+        return menuConverter.convertToMenuVOList(menuList);
+    }
+
     /**
      * 根据角色ID获取菜单ID列表
      *
@@ -94,6 +132,124 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Long> listMenuIdsByRoleId(Long roleId) {
         return sysRoleMenuRepository.getMenuIdsByRoleId(roleId);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean create(SysMenuEntity menu) {
+        if (menu == null) {
+            throw BusinessException.of("菜单信息不能为空");
+        }
+        
+        // 生成ID
+        menu.setId(IdGenerator.snowflakeId());
+        
+        // 设置默认值
+        if (menu.getStatus() == null) {
+            menu.setStatus(1);
+        }
+        if (menu.getVisible() == null) {
+            menu.setVisible(1);
+        }
+        if (menu.getCache() == null) {
+            menu.setCache(0);
+        }
+        if (menu.getExternalLink() == null) {
+            menu.setExternalLink(0);
+        }
+        if (menu.getSortOrder() == null) {
+            menu.setSortOrder(0);
+        }
+        
+        boolean result = sysMenuRepository.save(menu);
+        if (!result) {
+            throw BusinessException.of("创建菜单失败");
+        }
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean update(SysMenuEntity menu) {
+        if (menu == null || menu.getId() == null) {
+            throw BusinessException.of("菜单信息不完整");
+        }
+        
+        // 检查菜单是否存在
+        SysMenuEntity existMenu = sysMenuRepository.getById(menu.getId());
+        if (existMenu == null) {
+            throw BusinessException.dataNotFound("菜单");
+        }
+        
+        // 不允许将父菜单设置为自己
+        if (menu.getParentId() != null && menu.getParentId().equals(menu.getId())) {
+            throw BusinessException.of("父菜单不能是自己");
+        }
+        
+        boolean result = sysMenuRepository.update(menu);
+        if (!result) {
+            throw BusinessException.of("更新菜单失败");
+        }
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean delete(Long menuId) {
+        if (menuId == null) {
+            throw BusinessException.of("菜单ID不能为空");
+        }
+        
+        // 检查是否有子菜单
+        List<SysMenuEntity> children = sysMenuRepository.listByParentId(menuId);
+        if (children != null && !children.isEmpty()) {
+            throw BusinessException.of("存在子菜单，无法删除");
+        }
+        
+        boolean result = sysMenuRepository.delete(menuId);
+        if (!result) {
+            throw BusinessException.of("删除菜单失败");
+        }
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean batchDelete(List<Long> menuIds) {
+        if (menuIds == null || menuIds.isEmpty()) {
+            throw BusinessException.of("菜单ID列表不能为空");
+        }
+        
+        // 检查每个菜单是否有子菜单
+        for (Long menuId : menuIds) {
+            List<SysMenuEntity> children = sysMenuRepository.listByParentId(menuId);
+            if (children != null && !children.isEmpty()) {
+                throw BusinessException.of("存在子菜单，无法删除");
+            }
+        }
+        
+        boolean result = sysMenuRepository.batchDelete(menuIds);
+        if (!result) {
+            throw BusinessException.of("批量删除菜单失败");
+        }
+        return true;
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateStatus(Long menuId, Integer status) {
+        if (menuId == null) {
+            throw BusinessException.of("菜单ID不能为空");
+        }
+        if (status == null || (status != 0 && status != 1)) {
+            throw BusinessException.of("状态值不合法");
+        }
+        
+        boolean result = sysMenuRepository.updateStatus(menuId, status);
+        if (!result) {
+            throw BusinessException.of("更新菜单状态失败");
+        }
+        return true;
     }
 
     /**

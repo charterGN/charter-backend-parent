@@ -1,6 +1,8 @@
 package ink.charter.website.server.admin.sys.converter;
 
 import ink.charter.website.common.core.entity.sys.SysMenuEntity;
+import ink.charter.website.domain.admin.api.dto.menu.CreateMenuDTO;
+import ink.charter.website.domain.admin.api.dto.menu.UpdateMenuDTO;
 import ink.charter.website.domain.admin.api.vo.menu.DynamicMenuVO;
 import ink.charter.website.domain.admin.api.vo.menu.MenuVO;
 import org.mapstruct.Mapper;
@@ -19,6 +21,25 @@ import java.util.List;
 public interface MenuConverter {
 
     MenuConverter INSTANCE = Mappers.getMapper(MenuConverter.class);
+
+    /**
+     * CreateMenuDTO转换为SysMenuEntity
+     */
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createTime", ignore = true)
+    @Mapping(target = "updateTime", ignore = true)
+    @Mapping(target = "isDeleted", ignore = true)
+    @Mapping(target = "param", ignore = true)
+    SysMenuEntity toEntity(CreateMenuDTO dto);
+
+    /**
+     * UpdateMenuDTO转换为SysMenuEntity
+     */
+    @Mapping(target = "createTime", ignore = true)
+    @Mapping(target = "updateTime", ignore = true)
+    @Mapping(target = "isDeleted", ignore = true)
+    @Mapping(target = "param", ignore = true)
+    SysMenuEntity toEntity(UpdateMenuDTO dto);
 
     /**
      * 将实体类转换为VO对象

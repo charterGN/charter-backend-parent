@@ -1,6 +1,12 @@
 package ink.charter.website.server.admin.sys.controller;
 
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.common.Result;
+import ink.charter.website.common.core.entity.sys.SysMenuEntity;
+import ink.charter.website.domain.admin.api.dto.menu.CreateMenuDTO;
+import ink.charter.website.domain.admin.api.dto.menu.PageMenuDTO;
+import ink.charter.website.domain.admin.api.dto.menu.UpdateMenuDTO;
+import ink.charter.website.server.admin.sys.converter.MenuConverter;
 import ink.charter.website.server.admin.sys.service.MenuService;
 import ink.charter.website.domain.admin.api.vo.menu.DynamicMenuVO;
 import ink.charter.website.domain.admin.api.vo.menu.MenuVO;
@@ -28,6 +34,17 @@ import java.util.List;
 public class MenuController {
 
     private final MenuService menuService;
+    private final MenuConverter menuConverter;
+
+    /**
+     * 分页查询菜单
+     */
+    @PostMapping("/page")
+    @Operation(summary = "分页查询菜单", description = "分页查询菜单列表")
+    public Result<PageResult<MenuVO>> pageMenus(@RequestBody PageMenuDTO pageRequest) {
+        PageResult<MenuVO> result = menuService.pageMenus(pageRequest);
+        return Result.success(result);
+    }
 
     /**
      * 获取用户菜单列表
@@ -57,6 +74,37 @@ public class MenuController {
     }
 
     /**
+     * 查询所有菜单列表
+     */
+    @GetMapping("/listAll")
+    @Operation(summary = "查询所有菜单列表", description = "查询所有菜单列表")
+    public Result<List<MenuVO>> listAll() {
+        List<MenuVO> menuList = menuService.listAll();
+        return Result.success(menuList);
+    }
+
+    /**
+     * 根据ID查询菜单
+     */
+    @GetMapping("/getById")
+    @Operation(summary = "根据ID查询菜单", description = "根据菜单ID查询菜单详情")
+    public Result<MenuVO> getById(@Parameter(description = "菜单ID", required = true) @RequestParam Long id) {
+        MenuVO menu = menuService.getById(id);
+        return Result.success(menu);
+    }
+
+    /**
+     * 根据父菜单ID查询子菜单列表
+     */
+    @GetMapping("/listByParentId")
+    @Operation(summary = "根据父菜单ID查询子菜单列表", description = "根据父菜单ID查询子菜单列表")
+    public Result<List<MenuVO>> listByParentId(
+            @Parameter(description = "父菜单ID", required = true) @RequestParam Long parentId) {
+        List<MenuVO> menuList = menuService.listByParentId(parentId);
+        return Result.success(menuList);
+    }
+
+    /**
      * 根据角色ID获取菜单ID列表
      *
      * @param roleId 角色ID
@@ -69,6 +117,62 @@ public class MenuController {
             @PathVariable Long roleId) {
         List<Long> menuIds = menuService.listMenuIdsByRoleId(roleId);
         return Result.success(menuIds);
+    }
+
+    /**
+     * 创建菜单
+     */
+    @PostMapping("/create")
+    @Operation(summary = "创建菜单", description = "创建新菜单")
+    public Result<MenuVO> create(@RequestBody @Validated CreateMenuDTO createMenuDTO) {
+        SysMenuEntity menu = menuConverter.toEntity(createMenuDTO);
+        menuService.create(menu);
+        MenuVO menuVO = menuConverter.convertToMenuVO(menu);
+        return Result.success(menuVO);
+    }
+
+    /**
+     * 更新菜单
+     */
+    @PutMapping("/update")
+    @Operation(summary = "更新菜单", description = "更新菜单信息")
+    public Result<MenuVO> update(@RequestBody @Validated UpdateMenuDTO updateMenuDTO) {
+        SysMenuEntity menu = menuConverter.toEntity(updateMenuDTO);
+        menuService.update(menu);
+        MenuVO menuVO = menuService.getById(menu.getId());
+        return Result.success(menuVO);
+    }
+
+    /**
+     * 删除菜单
+     */
+    @DeleteMapping("/delete")
+    @Operation(summary = "删除菜单", description = "根据菜单ID删除菜单")
+    public Result<Void> delete(@Parameter(description = "菜单ID", required = true) @RequestParam Long id) {
+        menuService.delete(id);
+        return Result.success();
+    }
+
+    /**
+     * 批量删除菜单
+     */
+    @DeleteMapping("/batchDelete")
+    @Operation(summary = "批量删除菜单", description = "批量删除菜单")
+    public Result<Void> batchDelete(@RequestBody List<Long> ids) {
+        menuService.batchDelete(ids);
+        return Result.success();
+    }
+
+    /**
+     * 更新菜单状态
+     */
+    @PutMapping("/updateStatus/{id}/{status}")
+    @Operation(summary = "更新菜单状态", description = "更新菜单状态")
+    public Result<Void> updateStatus(
+            @Parameter(description = "菜单ID", required = true) @PathVariable Long id,
+            @Parameter(description = "状态：0-禁用，1-启用", required = true) @PathVariable Integer status) {
+        menuService.updateStatus(id, status);
+        return Result.success();
     }
 
     /**
