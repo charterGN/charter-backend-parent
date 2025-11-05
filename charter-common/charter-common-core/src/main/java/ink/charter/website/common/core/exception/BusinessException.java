@@ -137,4 +137,15 @@ public class BusinessException extends BaseException {
         return new BusinessException(ResCodeEnum.OPERATION_NOT_ALLOWED.getCode(),
                 operation + "操作不被允许");
     }
+
+    /**
+     * 参数无效异常
+     *
+     * @param param 参数名称
+     * @return 业务异常
+     */
+    public static BusinessException paramInvalid(String param) {
+        return new BusinessException(ResCodeEnum.PARAM_INVALID.getCode(),
+                param + "参数无效");
+    }
 }
