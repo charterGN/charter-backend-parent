@@ -45,8 +45,8 @@
             <artifactId>fastjson2</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
         <!-- Jackson JSR310 模块，支持Java 8时间类型 -->
         <dependency>

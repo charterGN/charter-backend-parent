@@ -8,14 +8,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Knife4j配置类
+ * Springdoc配置类
  * 用于配置API文档相关设置
  *
  * @author charter
  * @create 2025/07/19
  */
 @Configuration
-public class Knife4jConfig {
+public class SpringdocConfig {
 
     /**
      * 配置OpenAPI信息

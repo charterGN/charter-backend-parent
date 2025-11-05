@@ -56,7 +56,7 @@ public class ApplicationStartupListener implements ApplicationListener<Applicati
         String externalUrl = String.format("%s://%s:%s%s", protocol, hostAddress, port, contextPath);
         
         // 构建Swagger文档URL
-        String swaggerUrl = String.format("%s://localhost:%s%s/doc.html", protocol, port, contextPath);
+        String swaggerUrl = String.format("%s://localhost:%s%s/swagger-ui.html", protocol, port, contextPath);
         
         // 打印启动成功信息
         printStartupInfo(applicationName, version, activeProfiles, localUrl, externalUrl, swaggerUrl);

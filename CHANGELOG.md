@@ -27,7 +27,7 @@
 - ✅ 操作日志记录
 - ✅ 文件上传（阿里云OSS）
 - ✅ 全局异常处理
-- ✅ API接口文档（Knife4j）
+- ✅ API接口文档（Springdoc）
 - ✅ 定时任务支持
 
 **业务功能**
@@ -99,7 +99,7 @@ java -jar charter-app.jar --spring.profiles.active=prod
 
 ### 访问地址
 - 应用地址: http://localhost:8065
-- API文档: http://localhost:8065/doc.html
+- API文档: http://localhost:8065/swagger-ui.html
 - Swagger UI: http://localhost:8065/swagger-ui.html
 
 ---

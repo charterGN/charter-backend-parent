@@ -20,7 +20,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 @Slf4j
 @AutoConfiguration
 @ConditionalOnClass(DispatcherServlet.class)
-@Import({CharterWebConfig.class, Knife4jConfig.class})
+@Import({CharterWebConfig.class, SpringdocConfig.class})
 public class WebAutoConfiguration {
 
     /**
