@@ -21,7 +21,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- spring相关 -->
-        <spring.boot.version>3.3.6</spring.boot.version>
+        <spring.boot.version>3.4.5</spring.boot.version>
 
         <!-- 数据库相关依赖 -->
         <mybatis-plus.version>3.5.8</mybatis-plus.version>

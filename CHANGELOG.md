@@ -8,7 +8,7 @@
 
 **项目架构**
 - 采用多模块Maven项目结构
-- 基于Spring Boot 3.3.6 + Java 17
+- 基于Spring Boot 3.4.5 + Java 17
 - 实现DDD（领域驱动设计）架构模式
 
 **核心模块**

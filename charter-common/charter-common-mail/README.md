@@ -287,7 +287,7 @@ spring:
 
 ## 技术栈
 
-- Spring Boot 3.3.6
+- Spring Boot 3.4.5
 - Spring Mail
 - Thymeleaf 模板引擎
 - Jakarta Mail API
