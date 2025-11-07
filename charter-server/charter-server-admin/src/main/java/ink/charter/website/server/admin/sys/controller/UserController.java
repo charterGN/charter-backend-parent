@@ -58,6 +58,14 @@ public class UserController {
         description = "创建新用户"
     )
     public Result<UserVO> createUser(@RequestBody CreateUserDTO createUserDTO) {
+        // 用户名、邮箱唯一性校验
+        if (userService.getUserByUsername(createUserDTO.getUsername()) != null) {
+            return Result.error("该用户名已存在");
+        }
+        if (userService.getUserByEmail(createUserDTO.getEmail()) != null) {
+            return Result.error("该邮箱已存在");
+        }
+
         SysUserEntity user = userConverter.toEntity(createUserDTO);
         boolean success = userService.createUser(user);
 
@@ -84,6 +92,14 @@ public class UserController {
         SysUserEntity existingUser = userService.getUserById(userId);
         if (existingUser == null) {
             return Result.error("用户不存在");
+        }
+
+        // 用户名、邮箱唯一性校验
+        if (userService.getUserByUsername(updateUserDTO.getUsername()) != null) {
+            return Result.error("该用户名已存在");
+        }
+        if (userService.getUserByEmail(updateUserDTO.getEmail()) != null) {
+            return Result.error("该邮箱已存在");
         }
 
         SysUserEntity user = userConverter.toEntity(updateUserDTO);
