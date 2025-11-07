@@ -134,7 +134,7 @@ public class MenuController {
     /**
      * 更新菜单
      */
-    @PutMapping("/update")
+    @PostMapping("/update")
     @Operation(summary = "更新菜单", description = "更新菜单信息")
     public Result<MenuVO> update(@RequestBody @Validated UpdateMenuDTO updateMenuDTO) {
         SysMenuEntity menu = menuConverter.toEntity(updateMenuDTO);
@@ -146,7 +146,7 @@ public class MenuController {
     /**
      * 删除菜单
      */
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     @Operation(summary = "删除菜单", description = "根据菜单ID删除菜单")
     public Result<Void> delete(@Parameter(description = "菜单ID", required = true) @RequestParam Long id) {
         menuService.delete(id);
@@ -156,7 +156,7 @@ public class MenuController {
     /**
      * 批量删除菜单
      */
-    @DeleteMapping("/batchDelete")
+    @PostMapping("/batchDelete")
     @Operation(summary = "批量删除菜单", description = "批量删除菜单")
     public Result<Void> batchDelete(@RequestBody List<Long> ids) {
         menuService.batchDelete(ids);
@@ -166,7 +166,7 @@ public class MenuController {
     /**
      * 更新菜单状态
      */
-    @PutMapping("/updateStatus/{id}/{status}")
+    @PostMapping("/updateStatus/{id}/{status}")
     @Operation(summary = "更新菜单状态", description = "更新菜单状态")
     public Result<Void> updateStatus(
             @Parameter(description = "菜单ID", required = true) @PathVariable Long id,

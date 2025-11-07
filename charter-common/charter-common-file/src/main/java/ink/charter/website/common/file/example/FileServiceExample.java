@@ -225,7 +225,7 @@ public class FileServiceExample {
                 }
             }
             
-            @DeleteMapping("/{fileId}")
+            @PostMapping("/{fileId}")
             public Result<Void> deleteFile(@PathVariable Long fileId) {
                 Boolean success = ChartFileUtils.delete(fileId);
                 return success ? Result.success() : Result.error("删除失败");
