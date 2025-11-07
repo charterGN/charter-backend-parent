@@ -104,11 +104,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             // 设置基本信息
             Long userId = (Long) user.getClass().getMethod("getId").invoke(user);
             String username = (String) user.getClass().getMethod("getUsername").invoke(user);
+            String nickname = (String) user.getClass().getMethod("getNickname").invoke(user);
+            String email = (String) user.getClass().getMethod("getEmail").invoke(user);
+            String phone = (String) user.getClass().getMethod("getPhone").invoke(user);
+            String avatar = (String) user.getClass().getMethod("getAvatar").invoke(user);
             String password = (String) user.getClass().getMethod("getPassword").invoke(user);
             Integer status = (Integer) user.getClass().getMethod("getStatus").invoke(user);
             
             loginUser.setUserId(userId);
             loginUser.setUsername(username);
+            loginUser.setNickname(nickname);
+            loginUser.setEmail(email);
+            loginUser.setPhone(phone);
+            loginUser.setAvatar(avatar);
             loginUser.setPassword(password);
             loginUser.setStatus(status);
             
