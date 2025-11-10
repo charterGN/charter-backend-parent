@@ -79,29 +79,8 @@ public class SecurityConfig {
                 
                 // 配置请求授权
                 .authorizeHttpRequests(auth -> auth
-                        // 公开接口
-                        .requestMatchers(
-                                "/api-admin/auth/login",
-                                "/api-admin/auth/register", 
-                                "/api-admin/auth/captcha",
-                                "/api-admin/auth/refresh",
-                                "/api-admin/public/**"
-                        ).permitAll()
-                        
-                        // Swagger文档接口
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui.html",
-                                "/webjars/**"
-                        ).permitAll()
-                        
-                        // 静态资源
-                        .requestMatchers(
-                                "/favicon.ico",
-                                "/error",
-                                "/actuator/**"
-                        ).permitAll()
+                        // 白名单接口（无需认证）
+                        .requestMatchers(SecurityWhitelistConfig.getAllWhitelist()).permitAll()
                         
                         // 管理员接口
 //                        .requestMatchers("/api-admin/backend/**").hasRole("ADMIN")

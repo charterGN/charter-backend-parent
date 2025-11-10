@@ -1,5 +1,6 @@
 package ink.charter.website.common.auth.filter;
 
+import ink.charter.website.common.auth.config.SecurityWhitelistConfig;
 import ink.charter.website.common.auth.model.LoginUser;
 import ink.charter.website.common.auth.service.TokenService;
 import jakarta.servlet.FilterChain;
@@ -117,16 +118,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        
-        // 跳过登录、注册等公开接口
-        return path.startsWith("/api-admin/auth/login") ||
-               path.startsWith("/api-admin/auth/register") ||
-               path.startsWith("/api-admin/auth/captcha") ||
-               path.startsWith("/api-admin/public/") ||
-               path.startsWith("/swagger-ui/") ||
-               path.startsWith("/v3/api-docs") ||
-               path.startsWith("/swagger-ui.html") ||
-               path.startsWith("/favicon.ico") ||
-               path.startsWith("/error");
+        return SecurityWhitelistConfig.isWhitelisted(path);
     }
 }
