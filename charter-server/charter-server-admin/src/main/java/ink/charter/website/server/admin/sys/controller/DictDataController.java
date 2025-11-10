@@ -41,32 +41,28 @@ public class DictDataController {
     private final DictDataConverter dictDataConverter;
 
     /**
-     * 分页查询字典数据
+     * 查询字典数据
      */
-    @GetMapping("/listPage")
-    @Operation(summary = "分页查询字典数据", description = "分页查询字典数据列表")
+    @GetMapping("/list")
+    @Operation(summary = "查询字典数据", description = "查询字典数据列表")
     @OperationLog(
         module = LogConstant.OptModule.DICT,
         type = LogConstant.OptType.SELECT,
-        description = "分页查询字典数据",
+        description = "查询字典数据",
         recordParams = false
     )
-    public Result<Page<DictDataVO>> listPage(
-            @Parameter(description = "页码") @RequestParam(defaultValue = "1") Integer pageNo,
-            @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") Integer pageSize,
+    public Result<List<DictDataVO>> list(
             @Parameter(description = "字典类型") @RequestParam(required = false) String dictType,
             @Parameter(description = "字典标签") @RequestParam(required = false) String dictLabel,
             @Parameter(description = "状态") @RequestParam(required = false) Integer status) {
         
-        Page<SysDictDataEntity> page = dictDataService.listPage(pageNo, pageSize, dictType, dictLabel, status);
+        List<SysDictDataEntity> list = dictDataService.list(dictType, dictLabel, status);
         
-        Page<DictDataVO> voPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
-        List<DictDataVO> voList = page.getRecords().stream()
+        List<DictDataVO> voList = list.stream()
                 .map(dictDataConverter::toVO)
                 .collect(Collectors.toList());
-        voPage.setRecords(voList);
-        
-        return Result.success("查询成功", voPage);
+
+        return Result.success("查询成功", voList);
     }
 
     /**

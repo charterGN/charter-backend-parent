@@ -24,8 +24,8 @@ public class DictDataServiceImpl implements DictDataService {
     private final SysDictDataRepository sysDictDataRepository;
 
     @Override
-    public Page<SysDictDataEntity> listPage(Integer pageNo, Integer pageSize, String dictType, String dictLabel, Integer status) {
-        return sysDictDataRepository.listPage(pageNo, pageSize, dictType, dictLabel, status);
+    public List<SysDictDataEntity> list(String dictType, String dictLabel, Integer status) {
+        return sysDictDataRepository.list(dictType, dictLabel, status);
     }
 
     @Override

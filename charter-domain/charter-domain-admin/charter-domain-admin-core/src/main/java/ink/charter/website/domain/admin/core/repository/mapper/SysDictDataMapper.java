@@ -19,16 +19,15 @@ import java.util.List;
 public interface SysDictDataMapper extends BaseMapper<SysDictDataEntity> {
 
     /**
-     * 分页查询字典数据
+     * 查询字典数据
      *
-     * @param page 分页参数
      * @param dictType 字典类型
      * @param dictLabel 字典标签
      * @param status 状态
      * @return 分页结果
      */
-    default Page<SysDictDataEntity> selectPage(Page<SysDictDataEntity> page, String dictType, String dictLabel, Integer status) {
-        return selectPage(page, QueryWrappers.<SysDictDataEntity>lambdaQuery()
+    default List<SysDictDataEntity> list(String dictType, String dictLabel, Integer status) {
+        return selectList(QueryWrappers.<SysDictDataEntity>lambdaQuery()
             .eqIfPresent(SysDictDataEntity::getDictType, dictType)
             .likeIfPresent(SysDictDataEntity::getDictLabel, dictLabel)
             .eqIfPresent(SysDictDataEntity::getStatus, status)

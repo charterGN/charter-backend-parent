@@ -24,9 +24,8 @@ public class SysDictDataRepositoryImpl implements SysDictDataRepository {
     private final SysDictDataMapper sysDictDataMapper;
 
     @Override
-    public Page<SysDictDataEntity> listPage(Integer pageNo, Integer pageSize, String dictType, String dictLabel, Integer status) {
-        Page<SysDictDataEntity> page = new Page<>(pageNo, pageSize);
-        return sysDictDataMapper.selectPage(page, dictType, dictLabel, status);
+    public List<SysDictDataEntity> list(String dictType, String dictLabel, Integer status) {
+        return sysDictDataMapper.list(dictType, dictLabel, status);
     }
 
     @Override

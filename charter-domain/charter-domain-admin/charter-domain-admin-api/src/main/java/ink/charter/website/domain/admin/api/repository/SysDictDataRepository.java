@@ -14,16 +14,14 @@ import java.util.List;
 public interface SysDictDataRepository {
 
     /**
-     * 分页查询字典数据
+     * 查询字典数据
      *
-     * @param pageNo 页码
-     * @param pageSize 每页大小
      * @param dictType 字典类型
      * @param dictLabel 字典标签
      * @param status 状态
      * @return 分页结果
      */
-    Page<SysDictDataEntity> listPage(Integer pageNo, Integer pageSize, String dictType, String dictLabel, Integer status);
+    List<SysDictDataEntity> list(String dictType, String dictLabel, Integer status);
 
     /**
      * 根据ID查询字典数据
