@@ -3,6 +3,7 @@ package ink.charter.website.server.admin.sys.controller;
 import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.common.Result;
 import ink.charter.website.common.core.entity.sys.SysMenuEntity;
+import ink.charter.website.common.core.utils.StringUtils;
 import ink.charter.website.domain.admin.api.dto.menu.CreateMenuDTO;
 import ink.charter.website.domain.admin.api.dto.menu.PageMenuDTO;
 import ink.charter.website.domain.admin.api.dto.menu.UpdateMenuDTO;
@@ -187,13 +188,16 @@ public class MenuController {
     public Result<Void> saveRoleMenu(
             @Parameter(description = "角色ID", required = true)
             @PathVariable Long roleId,
-            @Parameter(description = "菜单ID列表（用逗号分隔）", required = true)
+            @Parameter(description = "菜单ID列表（用逗号分隔）")
             @PathVariable String menuIds) {
         // 处理菜单ID列表
-        List<Long> menuIdList = java.util.Arrays.stream(menuIds.split(","))
-                .filter(id -> !id.trim().isEmpty() && !id.equals("-1"))
-                .map(Long::valueOf)
-                .collect(java.util.stream.Collectors.toList());
+        List<Long> menuIdList = null;
+        if (StringUtils.isNotBlank(menuIds)) {
+            menuIdList = java.util.Arrays.stream(menuIds.split(","))
+                    .filter(id -> !id.trim().isEmpty() && !id.equals("-1"))
+                    .map(Long::valueOf)
+                    .collect(java.util.stream.Collectors.toList());
+        }
         
         menuService.saveRoleMenu(roleId, menuIdList);
         return Result.success();

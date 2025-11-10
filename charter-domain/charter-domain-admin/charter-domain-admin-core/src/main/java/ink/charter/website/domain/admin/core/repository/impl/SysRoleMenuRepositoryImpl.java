@@ -2,6 +2,7 @@ package ink.charter.website.domain.admin.core.repository.impl;
 
 
 import ink.charter.website.common.core.entity.sys.SysRoleMenuEntity;
+import ink.charter.website.common.mybatis.wrapper.QueryWrappers;
 import ink.charter.website.domain.admin.api.repository.SysRoleMenuRepository;
 import ink.charter.website.domain.admin.core.repository.mapper.SysRoleMenuMapper;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -86,20 +89,38 @@ public class SysRoleMenuRepositoryImpl implements SysRoleMenuRepository {
         }
         
         try {
-            // 删除原有关联
-            deleteByRoleId(roleId);
+            // 查询数据库中已有的菜单ID
+            List<Long> existingMenuIds = getMenuIdsByRoleId(roleId);
+            Set<Long> existingSet = new HashSet<>(existingMenuIds);
+            Set<Long> newSet = menuIds != null ? new HashSet<>(menuIds) : new HashSet<>();
             
-            // 添加新关联
-            if (menuIds != null && !menuIds.isEmpty()) {
+            // 计算需要新增的菜单ID（新分配的 - 已有的）
+            Set<Long> toAdd = new HashSet<>(newSet);
+            toAdd.removeAll(existingSet);
+            
+            // 计算需要删除的菜单ID（已有的 - 新分配的）
+            Set<Long> toDelete = new HashSet<>(existingSet);
+            toDelete.removeAll(newSet);
+            
+            // 删除不再需要的关联
+            if (!toDelete.isEmpty()) {
+                sysRoleMenuMapper.delete(QueryWrappers.<SysRoleMenuEntity>lambdaQuery()
+                        .eq(SysRoleMenuEntity::getRoleId, roleId)
+                        .in(SysRoleMenuEntity::getMenuId, toDelete));
+            }
+            
+            // 新增需要的关联
+            if (!toAdd.isEmpty()) {
                 List<SysRoleMenuEntity> roleMenuList = new ArrayList<>();
-                for (Long menuId : menuIds) {
+                for (Long menuId : toAdd) {
                     SysRoleMenuEntity roleMenu = new SysRoleMenuEntity();
                     roleMenu.setRoleId(roleId);
                     roleMenu.setMenuId(menuId);
                     roleMenuList.add(roleMenu);
                 }
-                return saveBatch(roleMenuList);
+                saveBatch(roleMenuList);
             }
+            
             return true;
         } catch (Exception e) {
             log.error("保存角色菜单关联失败: {}", e.getMessage(), e);

@@ -3,6 +3,7 @@ package ink.charter.website.server.admin.sys.controller;
 import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.common.Result;
 import ink.charter.website.common.core.entity.sys.SysRoleEntity;
+import ink.charter.website.common.core.utils.StringUtils;
 import ink.charter.website.common.log.annotation.OperationLog;
 import ink.charter.website.common.log.constant.LogConstant;
 import ink.charter.website.domain.admin.api.dto.role.CreateRoleDTO;
@@ -271,10 +272,13 @@ public class RoleController {
         description = "保存用户角色关联"
     )
     public Result<Void> saveUserRoles(@Parameter(description = "用户ID", required = true) @RequestParam Long userId,
-                                      @Parameter(description = "角色ID列表（用逗号分隔）", required = true) @RequestParam String roleIds) {
-        List<Long> roleIdList = Stream.of(roleIds.split(","))
-                .map(Long::parseLong)
-                .toList();
+                                      @Parameter(description = "角色ID列表（用逗号分隔）") @RequestParam String roleIds) {
+        List<Long> roleIdList = null;
+        if (StringUtils.isNotBlank(roleIds)) {
+            roleIdList = Stream.of(roleIds.split(","))
+                    .map(Long::parseLong)
+                    .toList();
+        }
         
         roleService.saveUserRoles(userId, roleIdList);
         return Result.success("保存用户角色关联成功");

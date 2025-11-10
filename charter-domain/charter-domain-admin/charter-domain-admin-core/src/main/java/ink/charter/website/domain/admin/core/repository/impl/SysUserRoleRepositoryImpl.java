@@ -2,6 +2,7 @@ package ink.charter.website.domain.admin.core.repository.impl;
 
 import ink.charter.website.common.core.entity.sys.SysUserRoleEntity;
 import ink.charter.website.common.core.utils.IdGenerator;
+import ink.charter.website.common.mybatis.wrapper.QueryWrappers;
 import ink.charter.website.domain.admin.api.repository.SysUserRoleRepository;
 import ink.charter.website.domain.admin.core.repository.mapper.SysUserRoleMapper;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -94,30 +97,45 @@ public class SysUserRoleRepositoryImpl implements SysUserRoleRepository {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean saveUserRoles(Long userId, List<Long> roleIds) {
-        if (userId == null || roleIds == null) {
+        if (userId == null) {
             return false;
         }
         
         try {
-            // 先删除原有关联
-            deleteByUserId(userId);
+            // 查询数据库中已有的角色ID
+            List<Long> existingRoleIds = getRoleIdsByUserId(userId);
+            Set<Long> existingSet = new HashSet<>(existingRoleIds);
+            Set<Long> newSet = roleIds != null ? new HashSet<>(roleIds) : new HashSet<>();
             
-            // 如果角色ID列表为空，则只删除不新增
-            if (roleIds.isEmpty()) {
-                return true;
+            // 计算需要新增的角色ID（新分配的 - 已有的）
+            Set<Long> toAdd = new HashSet<>(newSet);
+            toAdd.removeAll(existingSet);
+            
+            // 计算需要删除的角色ID（已有的 - 新分配的）
+            Set<Long> toDelete = new HashSet<>(existingSet);
+            toDelete.removeAll(newSet);
+            
+            // 删除不再需要的关联
+            if (!toDelete.isEmpty()) {
+                sysUserRoleMapper.delete(QueryWrappers.<SysUserRoleEntity>lambdaQuery()
+                        .eq(SysUserRoleEntity::getUserId, userId)
+                        .in(SysUserRoleEntity::getRoleId, toDelete));
             }
             
-            // 批量新增关联
-            List<SysUserRoleEntity> userRoleList = new ArrayList<>();
-            for (Long roleId : roleIds) {
-                SysUserRoleEntity userRole = new SysUserRoleEntity();
-                userRole.setId(IdGenerator.snowflakeId());
-                userRole.setUserId(userId);
-                userRole.setRoleId(roleId);
-                userRoleList.add(userRole);
+            // 新增需要的关联
+            if (!toAdd.isEmpty()) {
+                List<SysUserRoleEntity> userRoleList = new ArrayList<>();
+                for (Long roleId : toAdd) {
+                    SysUserRoleEntity userRole = new SysUserRoleEntity();
+                    userRole.setId(IdGenerator.snowflakeId());
+                    userRole.setUserId(userId);
+                    userRole.setRoleId(roleId);
+                    userRoleList.add(userRole);
+                }
+                saveBatch(userRoleList);
             }
             
-            return saveBatch(userRoleList);
+            return true;
         } catch (Exception e) {
             log.error("保存用户角色关联失败", e);
             throw new RuntimeException("保存用户角色关联失败", e);
