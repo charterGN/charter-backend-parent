@@ -1,5 +1,7 @@
 package ink.charter.website.domain.admin.api.vo.resource;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -24,6 +26,7 @@ public class ResourceVO implements Serializable {
      * 资源ID
      */
     @Schema(description = "资源ID")
+    @JsonSerialize(using = ToStringSerializer.class) // 将Long类型序列化为String，避免前端精度丢失
     private Long id;
 
     /**

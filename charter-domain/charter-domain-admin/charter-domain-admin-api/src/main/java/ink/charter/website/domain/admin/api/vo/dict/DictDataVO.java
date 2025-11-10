@@ -1,6 +1,8 @@
 package ink.charter.website.domain.admin.api.vo.dict;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 public class DictDataVO {
 
     @Schema(description = "字典数据ID", example = "1")
+    @JsonSerialize(using = ToStringSerializer.class) // 将Long类型序列化为String，避免前端精度丢失
     private Long id;
 
     @Schema(description = "字典类型", example = "sys_user_status")

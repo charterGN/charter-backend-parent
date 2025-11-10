@@ -1,5 +1,7 @@
 package ink.charter.website.domain.admin.api.vo.menu;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -22,6 +24,7 @@ public class DynamicMenuVO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Schema(description = "菜单ID")
+    @JsonSerialize(using = ToStringSerializer.class) // 将Long类型序列化为String，避免前端精度丢失
     private Long menuId;
 
     @Schema(description = "菜单名称")

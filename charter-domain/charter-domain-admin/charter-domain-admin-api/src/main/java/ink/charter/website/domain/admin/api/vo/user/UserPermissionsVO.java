@@ -1,5 +1,7 @@
 package ink.charter.website.domain.admin.api.vo.user;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -16,6 +18,7 @@ import java.util.Set;
 public class UserPermissionsVO {
 
     @Schema(description = "用户ID", example = "1")
+    @JsonSerialize(using = ToStringSerializer.class) // 将Long类型序列化为String，避免前端精度丢失
     private Long userId;
 
     @Schema(description = "用户名", example = "admin")
