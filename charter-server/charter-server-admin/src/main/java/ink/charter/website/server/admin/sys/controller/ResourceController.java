@@ -3,6 +3,7 @@ package ink.charter.website.server.admin.sys.controller;
 import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.common.Result;
 import ink.charter.website.common.core.entity.sys.SysResourceEntity;
+import ink.charter.website.common.core.utils.StringUtils;
 import ink.charter.website.common.log.annotation.OperationLog;
 import ink.charter.website.common.log.constant.LogConstant;
 import ink.charter.website.domain.admin.api.dto.resource.CreateResourceDTO;
@@ -287,11 +288,14 @@ public class ResourceController {
         description = "保存角色资源关联"
     )
     public Result<Void> saveRoleResources(@Parameter(description = "角色ID", required = true) @RequestParam Long roleId,
-                                          @Parameter(description = "资源ID列表（用逗号分隔）", required = true) @RequestParam String resourceIds) {
-        List<Long> resourceIdList = Stream.of(resourceIds.split(","))
-                .map(Long::parseLong)
-                .toList();
-        
+                                          @Parameter(description = "资源ID列表（用逗号分隔）") @RequestParam String resourceIds) {
+        List<Long> resourceIdList = null;
+        if (StringUtils.isNotBlank(resourceIds)) {
+            resourceIdList = Stream.of(resourceIds.split(","))
+                    .map(Long::parseLong)
+                    .toList();
+        }
+
         resourceService.saveRoleResources(roleId, resourceIdList);
         return Result.success("保存角色资源关联成功");
     }
