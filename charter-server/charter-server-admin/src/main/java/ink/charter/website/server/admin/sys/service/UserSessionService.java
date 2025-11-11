@@ -1,6 +1,8 @@
 package ink.charter.website.server.admin.sys.service;
 
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
+import ink.charter.website.domain.admin.api.dto.session.PageUserSessionDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +16,14 @@ import java.util.List;
 public interface UserSessionService {
 
     /**
+     * 分页查询用户会话
+     *
+     * @param pageRequest 分页查询参数
+     * @return 分页结果
+     */
+    PageResult<SysUserSessionEntity> pageSessions(PageUserSessionDTO pageRequest);
+
+    /**
      * 创建用户会话
      *
      * @param userId 用户ID
@@ -24,7 +34,7 @@ public interface UserSessionService {
      * @param expireTime 过期时间
      * @return 会话信息
      */
-    SysUserSessionEntity createSession(Long userId, String sessionToken, String refreshToken, 
+    SysUserSessionEntity createSession(Long userId, String sessionToken, String refreshToken,
                                       String loginIp, String userAgent, LocalDateTime expireTime);
 
     /**

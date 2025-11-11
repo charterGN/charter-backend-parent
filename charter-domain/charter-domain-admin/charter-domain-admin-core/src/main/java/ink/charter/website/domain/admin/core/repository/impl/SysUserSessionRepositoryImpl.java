@@ -1,6 +1,9 @@
 package ink.charter.website.domain.admin.core.repository.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
+import ink.charter.website.domain.admin.api.dto.session.PageUserSessionDTO;
 import ink.charter.website.domain.admin.api.repository.SysUserSessionRepository;
 import ink.charter.website.domain.admin.core.repository.mapper.SysUserSessionMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +27,23 @@ public class SysUserSessionRepositoryImpl implements SysUserSessionRepository {
     private final SysUserSessionMapper sysUserSessionMapper;
 
     @Override
+    public PageResult<SysUserSessionEntity> pageSessions(PageUserSessionDTO pageRequest) {
+        try {
+            IPage<SysUserSessionEntity> page = sysUserSessionMapper.pageSessions(pageRequest);
+            return PageResult.of(page.getRecords(), page.getTotal());
+        } catch (Exception e) {
+            log.error("分页查询用户会话失败: {}", e.getMessage(), e);
+            return PageResult.empty();
+        }
+    }
+
+    @Override
     public SysUserSessionEntity createSession(Long userId, String sessionToken, String refreshToken,
                                              String loginIp, String userAgent, LocalDateTime expireTime) {
         if (userId == null || !StringUtils.hasText(sessionToken)) {
             return null;
         }
-        
+
         try {
             SysUserSessionEntity session = new SysUserSessionEntity();
             session.setUserId(userId);
@@ -41,7 +55,7 @@ public class SysUserSessionRepositoryImpl implements SysUserSessionRepository {
             session.setLoginTime(LocalDateTime.now());
             session.setExpireTime(expireTime);
             session.setStatus(1); // 1-有效
-            
+
             int result = sysUserSessionMapper.insert(session);
             return result > 0 ? session : null;
         } catch (Exception e) {
@@ -118,12 +132,12 @@ public class SysUserSessionRepositoryImpl implements SysUserSessionRepository {
         if (session == null) {
             return false;
         }
-        
+
         // 检查会话状态
         if (!Integer.valueOf(1).equals(session.getStatus())) {
             return false;
         }
-        
+
         // 检查是否过期
         return session.getExpireTime() == null || !session.getExpireTime().isBefore(LocalDateTime.now());
     }
@@ -133,19 +147,19 @@ public class SysUserSessionRepositoryImpl implements SysUserSessionRepository {
         if (!StringUtils.hasText(refreshToken) || !StringUtils.hasText(newSessionToken)) {
             return false;
         }
-        
+
         try {
             // 查询原会话
             SysUserSessionEntity session = getSessionByRefreshToken(refreshToken);
             if (session == null || !isSessionValid(session)) {
                 return false;
             }
-            
+
             // 更新会话信息
             session.setToken(newSessionToken);
             session.setRefreshToken(newRefreshToken);
             session.setExpireTime(newExpireTime);
-            
+
             return sysUserSessionMapper.updateById(session) > 0;
         } catch (Exception e) {
             log.error("刷新会话失败: {}", e.getMessage(), e);

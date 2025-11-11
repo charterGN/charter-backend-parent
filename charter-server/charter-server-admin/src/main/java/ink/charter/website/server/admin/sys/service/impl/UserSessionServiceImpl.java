@@ -1,6 +1,8 @@
 package ink.charter.website.server.admin.sys.service.impl;
 
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
+import ink.charter.website.domain.admin.api.dto.session.PageUserSessionDTO;
 import ink.charter.website.domain.admin.api.repository.SysUserSessionRepository;
 import ink.charter.website.server.admin.sys.service.UserSessionService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +24,11 @@ import java.util.List;
 public class UserSessionServiceImpl implements UserSessionService {
 
     private final SysUserSessionRepository sysUserSessionRepository;
+
+    @Override
+    public PageResult<SysUserSessionEntity> pageSessions(PageUserSessionDTO pageRequest) {
+        return sysUserSessionRepository.pageSessions(pageRequest);
+    }
 
     @Override
     public SysUserSessionEntity createSession(Long userId, String sessionToken, String refreshToken,

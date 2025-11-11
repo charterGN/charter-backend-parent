@@ -2,10 +2,12 @@ package ink.charter.website.server.admin.sys.controller;
 
 import ink.charter.website.server.admin.sys.service.UserSessionService;
 import ink.charter.website.server.admin.sys.converter.UserSessionConverter;
+import ink.charter.website.domain.admin.api.dto.session.PageUserSessionDTO;
 import ink.charter.website.domain.admin.api.vo.session.SessionCountVO;
 import ink.charter.website.domain.admin.api.vo.session.UserSessionVO;
 import ink.charter.website.common.log.annotation.OperationLog;
 import ink.charter.website.common.log.constant.LogConstant;
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.common.Result;
 import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +29,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/admin/session")
+@RequestMapping("/session")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "用户会话管理", description = "用户会话管理相关接口")
@@ -35,6 +37,18 @@ public class UserSessionController {
 
     private final UserSessionService userSessionService;
     private final UserSessionConverter userSessionConverter;
+
+    /**
+     * 分页查询用户会话
+     */
+    @PostMapping("/page")
+    @Operation(summary = "分页查询用户会话", description = "分页查询用户会话列表")
+    public Result<PageResult<UserSessionVO>> pageSessions(@RequestBody PageUserSessionDTO pageRequest) {
+        PageResult<SysUserSessionEntity> pageResult = userSessionService.pageSessions(pageRequest);
+        List<UserSessionVO> sessionVOs = userSessionConverter.toVOList(pageResult.getRecords());
+        PageResult<UserSessionVO> result = PageResult.of(sessionVOs, pageResult.getTotal());
+        return Result.success("查询成功", result);
+    }
 
     /**
      * 获取用户的活跃会话列表

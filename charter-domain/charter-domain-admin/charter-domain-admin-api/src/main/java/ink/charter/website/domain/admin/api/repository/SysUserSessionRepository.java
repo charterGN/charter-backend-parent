@@ -1,6 +1,8 @@
 package ink.charter.website.domain.admin.api.repository;
 
+import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
+import ink.charter.website.domain.admin.api.dto.session.PageUserSessionDTO;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,6 +13,14 @@ import java.util.List;
  * @create 2025/07/23
  */
 public interface SysUserSessionRepository {
+
+    /**
+     * 分页查询用户会话
+     *
+     * @param pageRequest 分页查询参数
+     * @return 分页结果
+     */
+    PageResult<SysUserSessionEntity> pageSessions(PageUserSessionDTO pageRequest);
 
     /**
      * 创建用户会话
