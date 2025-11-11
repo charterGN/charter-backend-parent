@@ -30,8 +30,8 @@ CREATE TABLE `sys_user` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_username` (`username`),
-  UNIQUE KEY `uk_email` (`email`),
+  UNIQUE KEY `uk_username` ((CASE WHEN `is_deleted` = 0 THEN `username` END)),
+  UNIQUE KEY `uk_email` ((CASE WHEN `is_deleted` = 0 THEN `email` END)),
   KEY `idx_status` (`status`),
   KEY `idx_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统用户表';
@@ -48,7 +48,7 @@ CREATE TABLE `sys_role` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_role_code` (`role_code`),
+  UNIQUE KEY `uk_role_code` ((CASE WHEN `is_deleted` = 0 THEN `role_code` END)),
   KEY `idx_status` (`status`),
   KEY `idx_sort_order` (`sort_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统角色表';
@@ -92,7 +92,7 @@ CREATE TABLE `sys_resource` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_resource_code` (`resource_code`),
+  UNIQUE KEY `uk_resource_code` ((CASE WHEN `is_deleted` = 0 THEN `resource_code` END)),
   KEY `idx_resource_type` (`resource_type`),
   KEY `idx_status` (`status`),
   KEY `idx_url_method` (`url`, `method`)
@@ -111,7 +111,7 @@ CREATE TABLE `sys_user_role` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_user_role` (`user_id`, `role_id`),
+  UNIQUE KEY `uk_user_role` ((CASE WHEN `is_deleted` = 0 THEN CONCAT(`user_id`, '-', `role_id`) END)),
   KEY `idx_user_id` (`user_id`),
   KEY `idx_role_id` (`role_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户角色关联表';
@@ -125,7 +125,7 @@ CREATE TABLE `sys_role_menu` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_role_menu` (`role_id`, `menu_id`),
+  UNIQUE KEY `uk_role_menu` ((CASE WHEN `is_deleted` = 0 THEN CONCAT(`role_id`, '-', `menu_id`) END)),
   KEY `idx_role_id` (`role_id`),
   KEY `idx_menu_id` (`menu_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色菜单关联表';
@@ -139,7 +139,7 @@ CREATE TABLE `sys_role_resource` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_role_resource` (`role_id`, `resource_id`),
+  UNIQUE KEY `uk_role_resource` ((CASE WHEN `is_deleted` = 0 THEN CONCAT(`role_id`, '-', `resource_id`) END)),
   KEY `idx_role_id` (`role_id`),
   KEY `idx_resource_id` (`resource_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色资源关联表';
@@ -165,7 +165,7 @@ CREATE TABLE `sys_user_session` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_session_id` (`session_id`),
+  UNIQUE KEY `uk_session_id` ((CASE WHEN `is_deleted` = 0 THEN `session_id` END)),
   KEY `idx_user_id` (`user_id`),
   KEY `idx_token` (`token`(100)),
   KEY `idx_status` (`status`),
@@ -221,7 +221,7 @@ CREATE TABLE `sys_files` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_file_md5` (`file_md5`),
+  UNIQUE KEY `uk_file_md5` ((CASE WHEN `is_deleted` = 0 THEN `file_md5` END)),
   KEY `idx_upload_user_id` (`upload_user_id`),
   KEY `idx_file_type` (`file_type`),
   KEY `idx_status` (`status`),
@@ -251,7 +251,7 @@ CREATE TABLE `sys_job` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_job_name_group` (`job_name`, `job_group`),
+  UNIQUE KEY `uk_job_name_group` ((CASE WHEN `is_deleted` = 0 THEN CONCAT(`job_name`, '-', `job_group`) END)),
   KEY `idx_status` (`status`),
   KEY `idx_job_group` (`job_group`),
   KEY `idx_create_time` (`create_time`)
@@ -292,7 +292,7 @@ CREATE TABLE `sys_dict_type` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uk_dict_type` (`dict_type`),
+  UNIQUE KEY `uk_dict_type` ((CASE WHEN `is_deleted` = 0 THEN `dict_type` END)),
   KEY `idx_status` (`status`),
   KEY `idx_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典类型表';
