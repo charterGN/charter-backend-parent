@@ -1,5 +1,7 @@
 package ink.charter.website.server.admin.sys.controller;
 
+import ink.charter.website.common.core.common.PageResult;
+import ink.charter.website.domain.admin.api.dto.dict.PageDictTypeDTO;
 import ink.charter.website.server.admin.sys.service.DictTypeService;
 import ink.charter.website.server.admin.sys.converter.DictTypeConverter;
 import ink.charter.website.domain.admin.api.dto.dict.CreateDictTypeDTO;
@@ -41,7 +43,7 @@ public class DictTypeController {
     /**
      * 分页查询字典类型
      */
-    @GetMapping("/listPage")
+    @PostMapping("/listPage")
     @Operation(summary = "分页查询字典类型", description = "分页查询字典类型列表")
     @OperationLog(
         module = LogConstant.OptModule.DICT,
@@ -49,20 +51,14 @@ public class DictTypeController {
         description = "分页查询字典类型",
         recordParams = false
     )
-    public Result<Page<DictTypeVO>> listPage(
-            @Parameter(description = "页码") @RequestParam(defaultValue = "1") Integer pageNo,
-            @Parameter(description = "每页大小") @RequestParam(defaultValue = "10") Integer pageSize,
-            @Parameter(description = "字典名称") @RequestParam(required = false) String dictName,
-            @Parameter(description = "字典类型") @RequestParam(required = false) String dictType,
-            @Parameter(description = "状态") @RequestParam(required = false) Integer status) {
+    public Result<PageResult<DictTypeVO>> listPage(@RequestBody PageDictTypeDTO pageRequest) {
         
-        Page<SysDictTypeEntity> page = dictTypeService.listPage(pageNo, pageSize, dictName, dictType, status);
+        Page<SysDictTypeEntity> page = dictTypeService.listPage(pageRequest);
         
-        Page<DictTypeVO> voPage = new Page<>(page.getCurrent(), page.getSize(), page.getTotal());
         List<DictTypeVO> voList = page.getRecords().stream()
                 .map(dictTypeConverter::toVO)
                 .collect(Collectors.toList());
-        voPage.setRecords(voList);
+        PageResult<DictTypeVO> voPage = PageResult.of(voList, page.getTotal());
         
         return Result.success("查询成功", voPage);
     }

@@ -2,6 +2,7 @@ package ink.charter.website.server.admin.sys.service;
 
 import ink.charter.website.common.core.entity.sys.SysDictTypeEntity;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ink.charter.website.domain.admin.api.dto.dict.PageDictTypeDTO;
 
 import java.util.List;
 
@@ -16,14 +17,10 @@ public interface DictTypeService {
     /**
      * 分页查询字典类型
      *
-     * @param pageNo 页码
-     * @param pageSize 每页大小
-     * @param dictName 字典名称
-     * @param dictType 字典类型
-     * @param status 状态
+     * @param pageDictTypeDTO 分页参数
      * @return 分页结果
      */
-    Page<SysDictTypeEntity> listPage(Integer pageNo, Integer pageSize, String dictName, String dictType, Integer status);
+    Page<SysDictTypeEntity> listPage(PageDictTypeDTO pageDictTypeDTO);
 
     /**
      * 根据ID查询字典类型

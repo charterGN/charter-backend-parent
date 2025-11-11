@@ -26,7 +26,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
      * @param pageRequest 分页参数
      * @return 分页结果
      */
-    default IPage<SysMenuEntity> pageResources(PageMenuDTO pageRequest) {
+    default IPage<SysMenuEntity> pageMenus(PageMenuDTO pageRequest) {
         PageRequest page = pageRequest.getPageRequest();
         return selectPage(new Page<>(page.getPageNo(), page.getPageSize()), QueryWrappers.<SysMenuEntity>lambdaQuery()
                 .likeIfPresent(SysMenuEntity::getMenuName, pageRequest.getMenuName())

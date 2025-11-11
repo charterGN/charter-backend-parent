@@ -1,7 +1,9 @@
 package ink.charter.website.domain.admin.core.repository.impl;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ink.charter.website.common.core.common.PageRequest;
 import ink.charter.website.common.core.entity.sys.SysDictTypeEntity;
+import ink.charter.website.domain.admin.api.dto.dict.PageDictTypeDTO;
 import ink.charter.website.domain.admin.api.repository.SysDictTypeRepository;
 import ink.charter.website.domain.admin.core.repository.mapper.SysDictTypeMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,9 +26,8 @@ public class SysDictTypeRepositoryImpl implements SysDictTypeRepository {
     private final SysDictTypeMapper sysDictTypeMapper;
 
     @Override
-    public Page<SysDictTypeEntity> listPage(Integer pageNo, Integer pageSize, String dictName, String dictType, Integer status) {
-        Page<SysDictTypeEntity> page = new Page<>(pageNo, pageSize);
-        return sysDictTypeMapper.selectPage(page, dictName, dictType, status);
+    public Page<SysDictTypeEntity> listPage(PageDictTypeDTO pageDictTypeDTO) {
+        return sysDictTypeMapper.pageDictType(pageDictTypeDTO);
     }
 
     @Override

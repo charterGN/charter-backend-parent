@@ -1,6 +1,7 @@
 package ink.charter.website.server.admin.sys.service.impl;
 
 import ink.charter.website.common.core.entity.sys.SysDictTypeEntity;
+import ink.charter.website.domain.admin.api.dto.dict.PageDictTypeDTO;
 import ink.charter.website.domain.admin.api.repository.SysDictTypeRepository;
 import ink.charter.website.server.admin.sys.service.DictTypeService;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,8 +25,8 @@ public class DictTypeServiceImpl implements DictTypeService {
     private final SysDictTypeRepository sysDictTypeRepository;
 
     @Override
-    public Page<SysDictTypeEntity> listPage(Integer pageNo, Integer pageSize, String dictName, String dictType, Integer status) {
-        return sysDictTypeRepository.listPage(pageNo, pageSize, dictName, dictType, status);
+    public Page<SysDictTypeEntity> listPage(PageDictTypeDTO pageDictTypeDTO) {
+        return sysDictTypeRepository.listPage(pageDictTypeDTO);
     }
 
     @Override

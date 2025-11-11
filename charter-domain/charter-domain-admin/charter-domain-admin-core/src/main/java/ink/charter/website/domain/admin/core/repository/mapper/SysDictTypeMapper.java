@@ -2,8 +2,10 @@ package ink.charter.website.domain.admin.core.repository.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ink.charter.website.common.core.common.PageRequest;
 import ink.charter.website.common.core.entity.sys.SysDictTypeEntity;
 import ink.charter.website.common.mybatis.wrapper.QueryWrappers;
+import ink.charter.website.domain.admin.api.dto.dict.PageDictTypeDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.util.StringUtils;
 
@@ -21,17 +23,15 @@ public interface SysDictTypeMapper extends BaseMapper<SysDictTypeEntity> {
     /**
      * 分页查询字典类型
      *
-     * @param page 分页参数
-     * @param dictName 字典名称
-     * @param dictType 字典类型
-     * @param status 状态
+     * @param pageRequest 分页参数
      * @return 分页结果
      */
-    default Page<SysDictTypeEntity> selectPage(Page<SysDictTypeEntity> page, String dictName, String dictType, Integer status) {
-        return selectPage(page, QueryWrappers.<SysDictTypeEntity>lambdaQuery()
-            .likeIfPresent(SysDictTypeEntity::getDictName, dictName)
-            .likeIfPresent(SysDictTypeEntity::getDictType, dictType)
-            .eqIfPresent(SysDictTypeEntity::getStatus, status)
+    default Page<SysDictTypeEntity> pageDictType(PageDictTypeDTO pageRequest) {
+        PageRequest page = pageRequest.getPageRequest();
+        return selectPage(new Page<>(page.getPageNo(), page.getPageSize()), QueryWrappers.<SysDictTypeEntity>lambdaQuery()
+            .likeIfPresent(SysDictTypeEntity::getDictName, pageRequest.getDictName())
+            .likeIfPresent(SysDictTypeEntity::getDictType, pageRequest.getDictType())
+            .eqIfPresent(SysDictTypeEntity::getStatus, pageRequest.getStatus())
             .orderByDesc(SysDictTypeEntity::getCreateTime));
     }
 
