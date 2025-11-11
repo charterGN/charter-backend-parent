@@ -25,7 +25,7 @@ INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, comp
 
 -- 插入菜单管理菜单
 INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
-(13, 1, '菜单管理', 'menuPage', 2, '/system/menu', 'system/role/index', 'Avatar', 3, 1, 1, 0, 0, NOW(), NOW(), 0);
+(13, 1, '菜单管理', 'menuPage', 2, '/system/menu', 'system/menu/index', 'Menu', 3, 1, 1, 0, 0, NOW(), NOW(), 0);
 
 -- 插入字典管理菜单
 INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
