@@ -1,6 +1,7 @@
 package ink.charter.website.domain.admin.core.repository.impl;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
 import ink.charter.website.domain.admin.api.dto.session.PageUserSessionDTO;
@@ -29,8 +30,21 @@ public class SysUserSessionRepositoryImpl implements SysUserSessionRepository {
     @Override
     public PageResult<SysUserSessionEntity> pageSessions(PageUserSessionDTO pageRequest) {
         try {
-            IPage<SysUserSessionEntity> page = sysUserSessionMapper.pageSessions(pageRequest);
-            return PageResult.of(page.getRecords(), page.getTotal());
+            Page<SysUserSessionEntity> page = new Page<>(
+                pageRequest.getPageRequest().getPageNo(),
+                pageRequest.getPageRequest().getPageSize()
+            );
+            
+            IPage<SysUserSessionEntity> result = sysUserSessionMapper.pageSessionsWithUsername(
+                page,
+                pageRequest.getUsername(),
+                pageRequest.getLoginIp(),
+                pageRequest.getStatus(),
+                pageRequest.getLoginStartTime(),
+                pageRequest.getLoginEndTime()
+            );
+            
+            return PageResult.of(result.getRecords(), result.getTotal());
         } catch (Exception e) {
             log.error("分页查询用户会话失败: {}", e.getMessage(), e);
             return PageResult.empty();

@@ -8,6 +8,7 @@ import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
 import ink.charter.website.common.mybatis.wrapper.QueryWrappers;
 import ink.charter.website.domain.admin.api.dto.session.PageUserSessionDTO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -22,21 +23,22 @@ import java.util.List;
 public interface SysUserSessionMapper extends BaseMapper<SysUserSessionEntity> {
 
     /**
-     * 分页查询用户会话
+     * 分页查询用户会话（关联用户表获取用户名）
      *
-     * @param pageRequest 分页查询参数
+     * @param page 分页参数
+     * @param username 用户名（模糊查询）
+     * @param loginIp 登录IP
+     * @param status 状态
+     * @param loginStartTime 登录开始时间
+     * @param loginEndTime 登录结束时间
      * @return 分页结果
      */
-    default IPage<SysUserSessionEntity> pageSessions(PageUserSessionDTO pageRequest) {
-        PageRequest page = pageRequest.getPageRequest();
-        return selectPage(new Page<>(page.getPageNo(), page.getPageSize()), QueryWrappers.<SysUserSessionEntity>lambdaQuery()
-                .eqIfPresent(SysUserSessionEntity::getUserId, pageRequest.getUserId())
-                .likeIfPresent(SysUserSessionEntity::getLoginIp, pageRequest.getLoginIp())
-                .eqIfPresent(SysUserSessionEntity::getStatus, pageRequest.getStatus())
-                .geIfPresent(SysUserSessionEntity::getLoginTime, pageRequest.getLoginStartTime())
-                .leIfPresent(SysUserSessionEntity::getLoginTime, pageRequest.getLoginEndTime())
-                .orderByDesc(SysUserSessionEntity::getLoginTime));
-    }
+    IPage<SysUserSessionEntity> pageSessionsWithUsername(Page<SysUserSessionEntity> page,
+                                                         @Param("username") String username,
+                                                         @Param("loginIp") String loginIp,
+                                                         @Param("status") Integer status,
+                                                         @Param("loginStartTime") LocalDateTime loginStartTime,
+                                                         @Param("loginEndTime") LocalDateTime loginEndTime);
 
     /**
      * 根据会话Token查询会话信息

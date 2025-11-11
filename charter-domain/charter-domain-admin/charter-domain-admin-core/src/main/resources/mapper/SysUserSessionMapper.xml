@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ink.charter.website.domain.admin.core.repository.mapper.SysUserSessionMapper">
+
+    <!-- 自定义ResultMap，将username映射到param中 -->
+    <resultMap id="SessionWithUsernameMap" type="ink.charter.website.common.core.entity.sys.SysUserSessionEntity">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="session_id" property="sessionId"/>
+        <result column="token" property="token"/>
+        <result column="refresh_token" property="refreshToken"/>
+        <result column="login_address" property="loginAddress"/>
+        <result column="login_ip" property="loginIp"/>
+        <result column="user_agent" property="userAgent"/>
+        <result column="login_time" property="loginTime"/>
+        <result column="expire_time" property="expireTime"/>
+        <result column="status" property="status"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <!-- 将username映射到param中 -->
+        <result column="username" property="param.username"/>
+    </resultMap>
+
+    <!-- 分页查询用户会话（关联用户表获取用户名） -->
+    <select id="pageSessionsWithUsername" resultMap="SessionWithUsernameMap">
+        SELECT 
+            s.id,
+            s.user_id,
+            s.session_id,
+            s.token,
+            s.refresh_token,
+            s.login_address,
+            s.login_ip,
+            s.user_agent,
+            s.login_time,
+            s.expire_time,
+            s.status,
+            s.create_time,
+            s.update_time,
+            s.is_deleted,
+            u.username
+        FROM sys_user_session s
+        LEFT JOIN sys_user u ON s.user_id = u.id
+        WHERE s.is_deleted = 0
+        <if test="username != null and username != ''">
+            AND u.username LIKE CONCAT('%', #{username}, '%')
+        </if>
+        <if test="loginIp != null and loginIp != ''">
+            AND s.login_ip LIKE CONCAT('%', #{loginIp}, '%')
+        </if>
+        <if test="status != null">
+            AND s.status = #{status}
+        </if>
+        <if test="loginStartTime != null">
+            AND s.login_time &gt;= #{loginStartTime}
+        </if>
+        <if test="loginEndTime != null">
+            AND s.login_time &lt;= #{loginEndTime}
+        </if>
+        ORDER BY s.login_time DESC
+    </select>
+
+</mapper>

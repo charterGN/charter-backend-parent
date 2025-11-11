@@ -30,10 +30,10 @@ public class PageUserSessionDTO implements Serializable {
     private PageRequest pageRequest = new PageRequest();
 
     /**
-     * 用户ID
+     * 用户名
      */
-    @Schema(description = "用户ID")
-    private Long userId;
+    @Schema(description = "用户名")
+    private String username;
 
     /**
      * 登录IP
