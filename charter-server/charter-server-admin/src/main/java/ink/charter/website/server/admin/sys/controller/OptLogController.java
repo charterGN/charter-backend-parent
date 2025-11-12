@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +42,7 @@ public class OptLogController {
      */
     @PostMapping("/page")
     @Operation(summary = "分页查询操作日志", description = "分页查询操作日志列表")
+    @PreAuthorize("hasAuthority('sys:optLog:page')")
     public Result<PageResult<OptLogVO>> pageOptLogs(@RequestBody PageOptLogDTO pageRequest) {
         PageResult<SysOptLogEntity> pageResult = optLogService.pageOptLogs(pageRequest);
         List<OptLogVO> optLogVOs = optLogConverter.toVOList(pageResult.getRecords());
@@ -68,6 +70,7 @@ public class OptLogController {
      */
     @PostMapping("/batch/deleted")
     @Operation(summary = "批量删除操作日志", description = "根据ID列表批量删除操作日志")
+    @PreAuthorize("hasAuthority('sys:optLog:batch-delete')")
     @OperationLog(
         module = LogConstant.OptModule.SYSTEM,
         type = LogConstant.OptType.DELETE,
@@ -86,6 +89,7 @@ public class OptLogController {
      */
     @PostMapping("/deleted/{id}")
     @Operation(summary = "删除操作日志", description = "根据ID删除操作日志")
+    @PreAuthorize("hasAuthority('sys:optLog:delete')")
     @OperationLog(
         module = LogConstant.OptModule.SYSTEM,
         type = LogConstant.OptType.DELETE,
@@ -101,6 +105,7 @@ public class OptLogController {
      */
     @PostMapping("/truncate")
     @Operation(summary = "清空操作日志", description = "清空所有操作日志")
+    @PreAuthorize("hasAuthority('sys:optLog:truncate')")
     @OperationLog(
         module = LogConstant.OptModule.SYSTEM,
         type = LogConstant.OptType.DELETE,

@@ -246,6 +246,7 @@ public class UserController {
      */
     @PostMapping("/change-password")
     @Operation(summary = "修改用户密码", description = "修改指定用户的密码")
+    @PreAuthorize("hasAuthority('user:change-password')")
     @OperationLog(
         module = LogConstant.OptModule.USER,
         type = LogConstant.OptType.UPDATE,
@@ -278,6 +279,7 @@ public class UserController {
      */
     @PostMapping("/change-status")
     @Operation(summary = "修改用户状态", description = "启用或禁用指定用户")
+    @PreAuthorize("hasAuthority('user:change-status')")
     @OperationLog(
         module = LogConstant.OptModule.USER,
         type = LogConstant.OptType.UPDATE,

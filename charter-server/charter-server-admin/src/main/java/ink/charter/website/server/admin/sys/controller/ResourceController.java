@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,7 @@ public class ResourceController {
      */
     @PostMapping("/page")
     @Operation(summary = "分页查询资源列表", description = "分页查询资源列表")
+    @PreAuthorize("hasAuthority('sys:resource:page')")
     @OperationLog(
         module = LogConstant.OptModule.RESOURCE,
         type = LogConstant.OptType.SELECT,
@@ -168,6 +170,7 @@ public class ResourceController {
      */
     @PostMapping("/updateInfo")
     @Operation(summary = "更新资源信息", description = "更新资源名称和描述")
+    @PreAuthorize("hasAuthority('sys:resource:updateInfo')")
     @OperationLog(
         module = LogConstant.OptModule.RESOURCE,
         type = LogConstant.OptType.UPDATE,
@@ -188,6 +191,7 @@ public class ResourceController {
      */
     @PostMapping("/change-status")
     @Operation(summary = "修改资源状态", description = "启用或禁用指定资源")
+    @PreAuthorize("hasAuthority('sys:resource:change-status')")
     @OperationLog(
         module = LogConstant.OptModule.RESOURCE,
         type = LogConstant.OptType.UPDATE,
@@ -214,7 +218,8 @@ public class ResourceController {
      * 保存角色资源关联
      */
     @PostMapping("/role/saveResources")
-    @Operation(summary = "保存角色资源关联", description = "保存角色资源关联关系")
+    @Operation(summary = "角色分配资源权限", description = "保存角色资源关联关系")
+    @PreAuthorize("hasAuthority('sys:resource:saveRoleResources')")
     @OperationLog(
         module = LogConstant.OptModule.RESOURCE,
         type = LogConstant.OptType.UPDATE,

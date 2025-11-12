@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,6 +43,7 @@ public class MenuController {
      */
     @PostMapping("/page")
     @Operation(summary = "分页查询菜单", description = "分页查询菜单列表")
+    @PreAuthorize("hasAuthority('sys:menu:page')")
     public Result<PageResult<MenuVO>> pageMenus(@RequestBody PageMenuDTO pageRequest) {
         PageResult<MenuVO> result = menuService.pageMenus(pageRequest);
         return Result.success(result);
@@ -125,6 +127,7 @@ public class MenuController {
      */
     @PostMapping("/create")
     @Operation(summary = "创建菜单", description = "创建新菜单")
+    @PreAuthorize("hasAuthority('sys:menu:create')")
     public Result<MenuVO> create(@RequestBody @Validated CreateMenuDTO createMenuDTO) {
         SysMenuEntity menu = menuConverter.toEntity(createMenuDTO);
         menuService.create(menu);
@@ -137,6 +140,7 @@ public class MenuController {
      */
     @PostMapping("/update")
     @Operation(summary = "更新菜单", description = "更新菜单信息")
+    @PreAuthorize("hasAuthority('sys:menu:update')")
     public Result<MenuVO> update(@RequestBody @Validated UpdateMenuDTO updateMenuDTO) {
         SysMenuEntity menu = menuConverter.toEntity(updateMenuDTO);
         menuService.update(menu);
@@ -149,6 +153,7 @@ public class MenuController {
      */
     @PostMapping("/delete")
     @Operation(summary = "删除菜单", description = "根据菜单ID删除菜单")
+    @PreAuthorize("hasAuthority('sys:menu:delete')")
     public Result<Void> delete(@Parameter(description = "菜单ID", required = true) @RequestParam Long id) {
         menuService.delete(id);
         return Result.success();
@@ -159,6 +164,7 @@ public class MenuController {
      */
     @PostMapping("/batchDelete")
     @Operation(summary = "批量删除菜单", description = "批量删除菜单")
+    @PreAuthorize("hasAuthority('sys:menu:batch-delete')")
     public Result<Void> batchDelete(@RequestBody List<Long> ids) {
         menuService.batchDelete(ids);
         return Result.success();
@@ -169,6 +175,7 @@ public class MenuController {
      */
     @PostMapping("/updateStatus/{id}/{status}")
     @Operation(summary = "更新菜单状态", description = "更新菜单状态")
+    @PreAuthorize("hasAuthority('sys:menu:update-status')")
     public Result<Void> updateStatus(
             @Parameter(description = "菜单ID", required = true) @PathVariable Long id,
             @Parameter(description = "状态：0-禁用，1-启用", required = true) @PathVariable Integer status) {
@@ -184,7 +191,8 @@ public class MenuController {
      * @return 操作结果
      */
     @PostMapping("/saveRoleMenu/{roleId}/{menuIds}")
-    @Operation(summary = "保存角色菜单关联", description = "保存角色与菜单的关联关系")
+    @Operation(summary = "角色分配菜单权限", description = "保存角色与菜单的关联关系")
+    @PreAuthorize("hasAuthority('sys:menu:save-role-menu')")
     public Result<Void> saveRoleMenu(
             @Parameter(description = "角色ID", required = true)
             @PathVariable Long roleId,
@@ -198,7 +206,7 @@ public class MenuController {
                     .map(Long::valueOf)
                     .collect(java.util.stream.Collectors.toList());
         }
-        
+
         menuService.saveRoleMenu(roleId, menuIdList);
         return Result.success();
     }

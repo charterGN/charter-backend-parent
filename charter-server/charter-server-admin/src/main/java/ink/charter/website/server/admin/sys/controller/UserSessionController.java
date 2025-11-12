@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,7 @@ public class UserSessionController {
      */
     @PostMapping("/page")
     @Operation(summary = "分页查询用户会话", description = "分页查询用户会话列表")
+    @PreAuthorize("hasAuthority('sys:session:page')")
     public Result<PageResult<UserSessionVO>> pageSessions(@RequestBody PageUserSessionDTO pageRequest) {
         PageResult<SysUserSessionEntity> pageResult = userSessionService.pageSessions(pageRequest);
         List<UserSessionVO> sessionVOs = userSessionConverter.toVOList(pageResult.getRecords());
@@ -93,6 +95,7 @@ public class UserSessionController {
      */
     @PostMapping("/token/invalidate")
     @Operation(summary = "使会话失效", description = "使指定的会话失效")
+    @PreAuthorize("hasAuthority('sys:session:invalidate')")
     @OperationLog(
         module = LogConstant.OptModule.USER,
         type = LogConstant.OptType.DELETE,
@@ -113,6 +116,7 @@ public class UserSessionController {
      */
     @PostMapping("/user/invalidateAll")
     @Operation(summary = "使用户所有会话失效", description = "使指定用户的所有会话失效")
+    @PreAuthorize("hasAuthority('sys:session:invalidateAll')")
     @OperationLog(
         module = LogConstant.OptModule.USER,
         type = LogConstant.OptType.DELETE,
@@ -128,6 +132,7 @@ public class UserSessionController {
      */
     @PostMapping("/user/invalidateOthers")
     @Operation(summary = "使用户其他会话失效", description = "使指定用户的其他会话失效（除了当前会话）")
+    @PreAuthorize("hasAuthority('sys:session:invalidateOthers')")
     @OperationLog(
         module = LogConstant.OptModule.USER,
         type = LogConstant.OptType.DELETE,
@@ -155,6 +160,7 @@ public class UserSessionController {
      */
     @PostMapping("/cleanup")
     @Operation(summary = "清理过期会话", description = "清理所有过期的会话")
+    @PreAuthorize("hasAuthority('sys:session:cleanup')")
     @OperationLog(
         module = LogConstant.OptModule.SYSTEM,
         type = LogConstant.OptType.DELETE,

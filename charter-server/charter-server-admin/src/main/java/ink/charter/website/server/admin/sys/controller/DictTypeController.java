@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,7 @@ public class DictTypeController {
      */
     @PostMapping("/listPage")
     @Operation(summary = "分页查询字典类型", description = "分页查询字典类型列表")
+    @PreAuthorize("hasAuthority('sys:dictType:list')")
     @OperationLog(
         module = LogConstant.OptModule.DICT,
         type = LogConstant.OptType.SELECT,
@@ -89,6 +91,7 @@ public class DictTypeController {
      */
     @PostMapping("/add")
     @Operation(summary = "创建字典类型", description = "创建新的字典类型")
+    @PreAuthorize("hasAuthority('sys:dictType:add')")
     @OperationLog(
         module = LogConstant.OptModule.DICT,
         type = LogConstant.OptType.INSERT,
@@ -111,6 +114,7 @@ public class DictTypeController {
      */
     @PostMapping("/update")
     @Operation(summary = "更新字典类型", description = "更新指定字典类型的信息")
+    @PreAuthorize("hasAuthority('sys:dictType:update')")
     @OperationLog(
         module = LogConstant.OptModule.DICT,
         type = LogConstant.OptType.UPDATE,
@@ -140,6 +144,7 @@ public class DictTypeController {
      */
     @PostMapping("/deleteById/{id}")
     @Operation(summary = "删除字典类型", description = "删除指定字典类型")
+    @PreAuthorize("hasAuthority('sys:dictType:delete')")
     @OperationLog(
         module = LogConstant.OptModule.DICT,
         type = LogConstant.OptType.DELETE,
@@ -164,6 +169,7 @@ public class DictTypeController {
      */
     @PostMapping("/batchDelete")
     @Operation(summary = "批量删除字典类型", description = "批量删除字典类型")
+    @PreAuthorize("hasAuthority('sys:dictType:batch-delete')")
     @OperationLog(
         module = LogConstant.OptModule.DICT,
         type = LogConstant.OptType.DELETE,
@@ -187,6 +193,7 @@ public class DictTypeController {
      */
     @PostMapping("/updateStatus/{id}/{status}")
     @Operation(summary = "更新字典类型状态", description = "启用或禁用指定字典类型")
+    @PreAuthorize("hasAuthority('sys:dictType:update-status')")
     @OperationLog(
         module = LogConstant.OptModule.DICT,
         type = LogConstant.OptType.UPDATE,

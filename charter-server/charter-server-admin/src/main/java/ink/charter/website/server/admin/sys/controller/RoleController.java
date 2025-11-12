@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +46,7 @@ public class RoleController {
      */
     @PostMapping("/page")
     @Operation(summary = "分页查询角色列表", description = "分页查询角色列表")
+    @PreAuthorize("hasAuthority('sys:role:page')")
     @OperationLog(
         module = LogConstant.OptModule.ROLE,
         type = LogConstant.OptType.SELECT,
@@ -136,6 +138,7 @@ public class RoleController {
      */
     @PostMapping("/create")
     @Operation(summary = "创建角色", description = "创建新的角色")
+    @PreAuthorize("hasAuthority('sys:role:create')")
     @OperationLog(
         module = LogConstant.OptModule.ROLE,
         type = LogConstant.OptType.INSERT,
@@ -158,6 +161,7 @@ public class RoleController {
      */
     @PostMapping("/update")
     @Operation(summary = "更新角色信息", description = "更新指定角色的信息")
+    @PreAuthorize("hasAuthority('sys:role:update')")
     @OperationLog(
         module = LogConstant.OptModule.ROLE,
         type = LogConstant.OptType.UPDATE,
@@ -187,6 +191,7 @@ public class RoleController {
      */
     @PostMapping("/delete")
     @Operation(summary = "删除角色", description = "删除指定角色")
+    @PreAuthorize("hasAuthority('sys:role:delete')")
     @OperationLog(
         module = LogConstant.OptModule.ROLE,
         type = LogConstant.OptType.DELETE,
@@ -212,6 +217,7 @@ public class RoleController {
      */
     @PostMapping("/batchDelete")
     @Operation(summary = "批量删除角色", description = "批量删除指定角色")
+    @PreAuthorize("hasAuthority('sys:role:batch-delete')")
     @OperationLog(
         module = LogConstant.OptModule.ROLE,
         type = LogConstant.OptType.DELETE,
@@ -239,6 +245,7 @@ public class RoleController {
      */
     @PostMapping("/change-status")
     @Operation(summary = "修改角色状态", description = "启用或禁用指定角色")
+    @PreAuthorize("hasAuthority('sys:role:update-status')")
     @OperationLog(
         module = LogConstant.OptModule.ROLE,
         type = LogConstant.OptType.UPDATE,
@@ -265,7 +272,8 @@ public class RoleController {
      * 保存用户角色关联
      */
     @PostMapping("/user/saveRoles")
-    @Operation(summary = "保存用户角色关联", description = "保存用户角色关联关系")
+    @Operation(summary = "用户分配角色权限", description = "保存用户角色关联关系")
+    @PreAuthorize("hasAuthority('sys:role:user:save-roles')")
     @OperationLog(
         module = LogConstant.OptModule.ROLE,
         type = LogConstant.OptType.UPDATE,
