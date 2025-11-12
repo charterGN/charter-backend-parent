@@ -31,8 +31,10 @@ public interface SysResourceMapper extends BaseMapper<SysResourceEntity> {
         PageRequest page = pageRequest.getPageRequest();
         return selectPage(new Page<>(page.getPageNo(), page.getPageSize()), QueryWrappers.<SysResourceEntity>lambdaQuery()
             .likeIfPresent(SysResourceEntity::getResourceName, pageRequest.getResourceName())
-            .eqIfPresent(SysResourceEntity::getResourceType, pageRequest.getResourceType())
+            .likeIfPresent(SysResourceEntity::getResourceCode, pageRequest.getResourceCode())
+            .eqIfPresent(SysResourceEntity::getModule, pageRequest.getModule())
             .eqIfPresent(SysResourceEntity::getStatus, pageRequest.getStatus())
+            .orderByAsc(SysResourceEntity::getModule)
             .orderByDesc(SysResourceEntity::getCreateTime));
     }
 
@@ -51,19 +53,35 @@ public interface SysResourceMapper extends BaseMapper<SysResourceEntity> {
     }
 
     /**
-     * 根据资源类型查询资源列表
+     * 根据所属模块查询资源列表
      *
-     * @param resourceType 资源类型
+     * @param module 所属模块
      * @return 资源列表
      */
-    default List<SysResourceEntity> selectByResourceType(Integer resourceType) {
-        if (resourceType == null) {
+    default List<SysResourceEntity> selectByModule(String module) {
+        if (!StringUtils.hasText(module)) {
             return List.of();
         }
         return selectList(QueryWrappers.<SysResourceEntity>lambdaQuery()
-            .eq(SysResourceEntity::getResourceType, resourceType)
+            .eq(SysResourceEntity::getModule, module)
             .eq(SysResourceEntity::getStatus, 1)
             .orderByDesc(SysResourceEntity::getCreateTime));
+    }
+
+    /**
+     * 查询所有模块列表
+     *
+     * @return 模块列表
+     */
+    default List<String> selectAllModules() {
+        return selectList(QueryWrappers.<SysResourceEntity>lambdaQuery()
+            .select(SysResourceEntity::getModule)
+            .groupBy(SysResourceEntity::getModule)
+            .orderByAsc(SysResourceEntity::getModule))
+            .stream()
+            .map(SysResourceEntity::getModule)
+            .distinct()
+            .toList();
     }
 
     /**
@@ -74,7 +92,7 @@ public interface SysResourceMapper extends BaseMapper<SysResourceEntity> {
     default List<SysResourceEntity> selectAllEnabled() {
         return selectList(QueryWrappers.<SysResourceEntity>lambdaQuery()
             .eq(SysResourceEntity::getStatus, 1)
-            .orderByAsc(SysResourceEntity::getResourceType)
+            .orderByAsc(SysResourceEntity::getModule)
             .orderByDesc(SysResourceEntity::getCreateTime));
     }
 

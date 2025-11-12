@@ -26,8 +26,8 @@ public class SysResourceEntity extends BaseEntity {
     @Schema(description = "资源编码")
     private String resourceCode;
 
-    @Schema(description = "资源类型（1接口 2文件 3数据）")
-    private Integer resourceType;
+    @Schema(description = "所属模块")
+    private String module;
 
     @Schema(description = "资源URL")
     private String url;

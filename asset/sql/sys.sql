@@ -83,7 +83,7 @@ CREATE TABLE `sys_resource` (
   `id` BIGINT NOT NULL COMMENT '资源ID',
   `resource_name` VARCHAR(100) NOT NULL COMMENT '资源名称',
   `resource_code` VARCHAR(100) NOT NULL COMMENT '资源编码',
-  `resource_type` TINYINT NOT NULL COMMENT '资源类型（1接口 2文件 3数据）',
+  `module` VARCHAR(50) NOT NULL COMMENT '所属模块',
   `url` VARCHAR(500) COMMENT '资源URL',
   `method` VARCHAR(10) COMMENT 'HTTP方法',
   `description` VARCHAR(200) COMMENT '资源描述',
@@ -93,7 +93,7 @@ CREATE TABLE `sys_resource` (
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_resource_code` ((CASE WHEN `is_deleted` = 0 THEN `resource_code` END)),
-  KEY `idx_resource_type` (`resource_type`),
+  KEY `idx_module` (`module`),
   KEY `idx_status` (`status`),
   KEY `idx_url_method` (`url`, `method`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统资源表';

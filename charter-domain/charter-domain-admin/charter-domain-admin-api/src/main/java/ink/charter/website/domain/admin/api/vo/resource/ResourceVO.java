@@ -42,10 +42,10 @@ public class ResourceVO implements Serializable {
     private String resourceCode;
 
     /**
-     * 资源类型（1接口 2文件 3数据）
+     * 所属模块
      */
-    @Schema(description = "资源类型（1接口 2文件 3数据）")
-    private Integer resourceType;
+    @Schema(description = "所属模块")
+    private String module;
 
     /**
      * 资源URL

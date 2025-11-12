@@ -39,12 +39,19 @@ public interface SysResourceRepository {
     SysResourceEntity getByResourceCode(String resourceCode);
 
     /**
-     * 根据资源类型查询资源列表
+     * 根据所属模块查询资源列表
      *
-     * @param resourceType 资源类型
+     * @param module 所属模块
      * @return 资源列表
      */
-    List<SysResourceEntity> listByResourceType(Integer resourceType);
+    List<SysResourceEntity> listByModule(String module);
+    
+    /**
+     * 查询所有模块列表
+     *
+     * @return 模块列表
+     */
+    List<String> listAllModules();
 
     /**
      * 查询所有启用的资源

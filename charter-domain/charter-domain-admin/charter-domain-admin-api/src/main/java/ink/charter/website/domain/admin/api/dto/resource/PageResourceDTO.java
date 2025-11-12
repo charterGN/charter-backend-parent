@@ -35,10 +35,16 @@ public class PageResourceDTO implements Serializable {
     private String resourceName;
 
     /**
-     * 资源类型（1接口 2文件 3数据）
+     * 资源编码
      */
-    @Schema(description = "资源类型（1接口 2文件 3数据）")
-    private Integer resourceType;
+    @Schema(description = "资源编码")
+    private String resourceCode;
+
+    /**
+     * 所属模块
+     */
+    @Schema(description = "所属模块")
+    private String module;
 
     /**
      * 状态（0禁用 1启用）

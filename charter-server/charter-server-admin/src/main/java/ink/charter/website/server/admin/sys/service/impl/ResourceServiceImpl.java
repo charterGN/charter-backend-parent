@@ -59,8 +59,38 @@ public class ResourceServiceImpl implements ResourceService {
     }
 
     @Override
-    public List<SysResourceEntity> listByResourceType(Integer resourceType) {
-        return sysResourceRepository.listByResourceType(resourceType);
+    public List<SysResourceEntity> listByModule(String module) {
+        return sysResourceRepository.listByModule(module);
+    }
+
+    @Override
+    public List<String> listAllModules() {
+        return sysResourceRepository.listAllModules();
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean updateResourceInfo(Long id, String resourceName, String description) {
+        if (id == null) {
+            throw BusinessException.paramInvalid("资源ID");
+        }
+        
+        // 检查资源是否存在
+        SysResourceEntity existResource = sysResourceRepository.getById(id);
+        if (existResource == null) {
+            throw BusinessException.dataNotFound("资源");
+        }
+        
+        // 只更新名称和描述
+        existResource.setResourceName(resourceName);
+        existResource.setDescription(description);
+        
+        boolean result = sysResourceRepository.update(existResource);
+        if (!result) {
+            throw BusinessException.of("更新资源信息失败");
+        }
+        
+        return true;
     }
 
     @Override

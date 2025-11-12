@@ -36,11 +36,11 @@ public class CreateResourceDTO implements Serializable {
     private String resourceCode;
 
     /**
-     * 资源类型（1接口 2文件 3数据）
+     * 所属模块
      */
-    @Schema(description = "资源类型（1接口 2文件 3数据）", example = "1")
-    @NotNull(message = "资源类型不能为空")
-    private Integer resourceType;
+    @Schema(description = "所属模块", example = "用户管理")
+    @NotBlank(message = "所属模块不能为空")
+    private String module;
 
     /**
      * 资源URL

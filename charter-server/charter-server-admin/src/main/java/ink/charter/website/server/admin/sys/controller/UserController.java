@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,6 +44,7 @@ public class UserController {
      */
     @PostMapping("/page")
     @Operation(summary = "分页查询用户列表", description = "分页查询用户列表")
+    @PreAuthorize("hasAuthority('user:query')")
     public Result<PageResult<UserVO>> pageUsers(@RequestBody PageUserDTO pageRequest) {
         return Result.success("查询成功", userService.pageUsers(pageRequest));
     }
@@ -52,6 +54,7 @@ public class UserController {
      */
     @PostMapping("/create")
     @Operation(summary = "创建用户", description = "创建新用户")
+    @PreAuthorize("hasAuthority('user:create')")
     @OperationLog(
         module = LogConstant.OptModule.USER,
         type = LogConstant.OptType.INSERT,
@@ -82,6 +85,7 @@ public class UserController {
      */
     @PostMapping("/update")
     @Operation(summary = "更新用户信息", description = "更新指定用户的信息")
+    @PreAuthorize("hasAuthority('user:update')")
     @OperationLog(
         module = LogConstant.OptModule.USER,
         type = LogConstant.OptType.UPDATE,
@@ -121,6 +125,7 @@ public class UserController {
      */
     @PostMapping("/delete")
     @Operation(summary = "删除用户", description = "删除指定用户")
+    @PreAuthorize("hasAuthority('user:delete')")
     @OperationLog(
         module = LogConstant.OptModule.USER,
         type = LogConstant.OptType.DELETE,
@@ -146,6 +151,7 @@ public class UserController {
      */
     @PostMapping("/batchDelete")
     @Operation(summary = "批量删除用户", description = "批量删除指定用户")
+    @PreAuthorize("hasAuthority('user:batch-delete')")
     @OperationLog(
         module = LogConstant.OptModule.USER,
         type = LogConstant.OptType.DELETE,

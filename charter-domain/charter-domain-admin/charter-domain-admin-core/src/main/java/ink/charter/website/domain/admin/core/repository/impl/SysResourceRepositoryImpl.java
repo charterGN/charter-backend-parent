@@ -47,8 +47,13 @@ public class SysResourceRepositoryImpl implements SysResourceRepository {
     }
 
     @Override
-    public List<SysResourceEntity> listByResourceType(Integer resourceType) {
-        return sysResourceMapper.selectByResourceType(resourceType);
+    public List<SysResourceEntity> listByModule(String module) {
+        return sysResourceMapper.selectByModule(module);
+    }
+
+    @Override
+    public List<String> listAllModules() {
+        return sysResourceMapper.selectAllModules();
     }
 
     @Override
