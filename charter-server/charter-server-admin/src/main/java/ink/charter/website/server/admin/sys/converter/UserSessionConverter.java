@@ -24,7 +24,7 @@ public interface UserSessionConverter {
      */
     @Mapping(target = "sessionId", source = "id")
     @Mapping(target = "expired", expression = "java(entity.getExpireTime() != null && entity.getExpireTime().isBefore(java.time.LocalDateTime.now()))")
-    @Mapping(target = "username", expression = "java(entity.getParam() != null ? (String) entity.getParam().get(\"username\") : null)")
+    @Mapping(target = "username", source = "username")
     @Mapping(target = "sessionToken", source = "token")
     UserSessionVO toVO(SysUserSessionEntity entity);
 

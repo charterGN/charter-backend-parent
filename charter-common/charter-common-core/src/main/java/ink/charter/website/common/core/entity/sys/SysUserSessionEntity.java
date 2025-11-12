@@ -1,5 +1,6 @@
 package ink.charter.website.common.core.entity.sys;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import ink.charter.website.common.core.entity.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -51,4 +52,11 @@ public class SysUserSessionEntity extends BaseEntity {
 
     @Schema(description = "状态（0离线 1在线）")
     private Integer status;
+
+    /**
+     * 用户名（非数据库字段，用于关联查询）
+     */
+    @TableField(exist = false)
+    @Schema(description = "用户名")
+    private String username;
 }
