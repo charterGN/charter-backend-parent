@@ -37,6 +37,11 @@ INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, comp
 INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
 (16, 1, '会话管理', 'sessionPage', 2, '/system/session', 'system/session/index', 'ChatLineSquare', 5, 1, 1, 0, 0, NOW(), NOW(), 0);
 
+-- 插入操作日志菜单
+INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
+(17, 1, '操作日志', 'optLogPage', 2, '/system/operlog', 'system/operlog/index', 'InfoFilled', 6, 1, 1, 0, 0, NOW(), NOW(), 0);
+
+
 -- 为管理员角色分配菜单权限
 INSERT INTO sys_role_menu (id, role_id, menu_id, create_time, update_time, is_deleted) VALUES
 (1, 1, 1, NOW(), NOW(), 0),
@@ -45,4 +50,5 @@ INSERT INTO sys_role_menu (id, role_id, menu_id, create_time, update_time, is_de
 (4, 1, 13, NOW(), NOW(), 0),
 (5, 1, 14, NOW(), NOW(), 0),
 (6, 1, 15, NOW(), NOW(), 0),
-(7, 1, 16, NOW(), NOW(), 0);
+(7, 1, 16, NOW(), NOW(), 0),
+(8, 1, 17, NOW(), NOW(), 0);
