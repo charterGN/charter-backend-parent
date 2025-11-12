@@ -94,11 +94,13 @@ public class UserController {
             return Result.error("用户不存在");
         }
 
-        // 用户名、邮箱唯一性校验
-        if (userService.getUserByUsername(updateUserDTO.getUsername()) != null) {
+        // 用户名、邮箱唯一性校验（排除自己）
+        SysUserEntity userByUsername = userService.getUserByUsername(updateUserDTO.getUsername());
+        if (userByUsername != null && !userByUsername.getId().equals(userId)) {
             return Result.error("该用户名已存在");
         }
-        if (userService.getUserByEmail(updateUserDTO.getEmail()) != null) {
+        SysUserEntity userByEmail = userService.getUserByEmail(updateUserDTO.getEmail());
+        if (userByEmail != null && !userByEmail.getId().equals(userId)) {
             return Result.error("该邮箱已存在");
         }
 
