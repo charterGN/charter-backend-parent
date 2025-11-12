@@ -56,3 +56,13 @@ INSERT INTO sys_role_menu (id, role_id, menu_id, create_time, update_time, is_de
 (7, 1, 16, NOW(), NOW(), 0),
 (8, 1, 17, NOW(), NOW(), 0),
 (9, 1, 18, NOW(), NOW(), 0);
+
+-- 插入必要字典类型及数据
+INSERT INTO `charter_website`.`sys_dict_type` (`id`, `dict_name`, `dict_type`, `status`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1988127433409560577, '菜单类型', 'menu_type', 1, '系统菜单类型', '2025-11-11 14:11:32', '2025-11-11 14:11:32', 0);
+INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1988127568277405697, 'menu_type', '目录', '1', 'warning', '', 1, 1, '', '2025-11-11 14:12:05', '2025-11-12 13:49:25', 0);
+INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1988127616734199809, 'menu_type', '菜单', '2', 'success', '', 1, 2, '', '2025-11-11 14:12:16', '2025-11-11 14:12:16', 0);
+INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1988127656873689089, 'menu_type', '按钮', '3', 'info', '', 1, 3, '', '2025-11-11 14:12:26', '2025-11-12 13:35:10', 0);
