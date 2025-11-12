@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ink.charter.website.common.core.common.PageResult;
 import ink.charter.website.common.core.entity.sys.SysUserSessionEntity;
+import ink.charter.website.common.core.utils.IpUtils;
 import ink.charter.website.domain.admin.api.dto.session.PageUserSessionDTO;
 import ink.charter.website.domain.admin.api.repository.SysUserSessionRepository;
 import ink.charter.website.domain.admin.core.repository.mapper.SysUserSessionMapper;
@@ -65,6 +66,7 @@ public class SysUserSessionRepositoryImpl implements SysUserSessionRepository {
             session.setToken(sessionToken);
             session.setRefreshToken(refreshToken);
             session.setLoginIp(loginIp);
+            session.setLoginAddress(IpUtils.getIpLocation(loginIp));
             session.setUserAgent(userAgent);
             session.setLoginTime(LocalDateTime.now());
             session.setExpireTime(expireTime);
