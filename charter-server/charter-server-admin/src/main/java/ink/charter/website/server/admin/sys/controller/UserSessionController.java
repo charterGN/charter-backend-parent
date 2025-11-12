@@ -29,7 +29,7 @@ import java.util.List;
  */
 @Slf4j
 @RestController
-@RequestMapping("/session")
+@RequestMapping("/sysSession")
 @RequiredArgsConstructor
 @Validated
 @Tag(name = "用户会话管理", description = "用户会话管理相关接口")
