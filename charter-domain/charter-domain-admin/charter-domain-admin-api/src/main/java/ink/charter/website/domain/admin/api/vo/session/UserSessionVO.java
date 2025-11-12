@@ -34,6 +34,9 @@ public class UserSessionVO {
     @Schema(description = "刷新Token", example = "refresh_token_123")
     private String refreshToken;
 
+    @Schema(description = "登录地址", example = "内网")
+    private String loginAddress;
+
     @Schema(description = "登录IP", example = "192.168.1.1")
     private String loginIp;
 
