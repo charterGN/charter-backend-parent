@@ -9,6 +9,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -213,6 +214,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public Result<Void> handleAccessDeniedException(AccessDeniedException e, HttpServletRequest request) {
+        log.warn("访问拒绝: {} - {}", e.getMessage(), request.getRequestURI());
+        Result<Void> result = Result.error(ResCodeEnum.PERMISSION_DENIED);
+        return result.requestId(getRequestId(request));
+    }
+
+    /**
+     * 处理访问拒绝异常（没有访问权限）
+     */
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Result<Void> handleAuthorizationDeniedException(AuthorizationDeniedException e, HttpServletRequest request) {
         log.warn("访问拒绝: {} - {}", e.getMessage(), request.getRequestURI());
         Result<Void> result = Result.error(ResCodeEnum.PERMISSION_DENIED);
         return result.requestId(getRequestId(request));
