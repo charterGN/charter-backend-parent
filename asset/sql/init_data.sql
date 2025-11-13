@@ -45,6 +45,8 @@ INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, comp
 INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
 (18, 1, '个人中心', 'personagePage', 2, '/system/personage', 'system/personage/index', 'User', 7, 1, 0, 0, 0, NOW(), NOW(), 0);
 
+-- 插入资源管理菜单
+
 -- 为管理员角色分配菜单权限
 INSERT INTO sys_role_menu (id, role_id, menu_id, create_time, update_time, is_deleted) VALUES
 (1, 1, 1, NOW(), NOW(), 0),
