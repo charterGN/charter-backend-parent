@@ -30,6 +30,7 @@ public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
         return selectList(QueryWrappers.<SysMenuEntity>lambdaQuery()
                 .likeIfPresent(SysMenuEntity::getMenuName, pageRequest.getMenuName())
                 .eqIfPresent(SysMenuEntity::getStatus, pageRequest.getStatus())
+                .orderByDesc(SysMenuEntity::getSortOrder)
                 .orderByDesc(SysMenuEntity::getCreateTime));
     }
 
