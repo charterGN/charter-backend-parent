@@ -3,12 +3,15 @@ package ink.charter.website.domain.admin.core.repository.impl;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ink.charter.website.common.core.common.PageRequest;
 import ink.charter.website.common.core.entity.sys.SysDictTypeEntity;
+import ink.charter.website.common.core.exception.BusinessException;
 import ink.charter.website.domain.admin.api.dto.dict.PageDictTypeDTO;
+import ink.charter.website.domain.admin.api.repository.SysDictDataRepository;
 import ink.charter.website.domain.admin.api.repository.SysDictTypeRepository;
 import ink.charter.website.domain.admin.core.repository.mapper.SysDictTypeMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -24,6 +27,7 @@ import java.util.List;
 public class SysDictTypeRepositoryImpl implements SysDictTypeRepository {
 
     private final SysDictTypeMapper sysDictTypeMapper;
+    private final SysDictDataRepository sysDictDataRepository;
 
     @Override
     public Page<SysDictTypeEntity> listPage(PageDictTypeDTO pageDictTypeDTO) {
@@ -74,32 +78,62 @@ public class SysDictTypeRepositoryImpl implements SysDictTypeRepository {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean deleteById(Long id) {
         if (id == null) {
             return false;
         }
         
         try {
+            // 获取字典类型信息
+            SysDictTypeEntity dictType = getById(id);
+            if (dictType == null) {
+                return false;
+            }
+
+            // 先删除对应的字典数据
+            boolean deleteResult = sysDictDataRepository.deleteByDictType(dictType.getDictType());
+            if (!deleteResult) {
+                throw BusinessException.of("删除关联字典数据失败");
+            }
+
+            // 再删除字典类型
             int result = sysDictTypeMapper.deleteById(id);
             return result > 0;
         } catch (Exception e) {
             log.error("删除字典类型失败", e);
-            return false;
+            throw e;
         }
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean batchDelete(List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
             return false;
         }
         
         try {
+            for (Long id : ids) {
+                // 获取字典类型信息
+                SysDictTypeEntity dictType = getById(id);
+                if (dictType == null) {
+                    continue;
+                }
+
+                // 先删除对应的字典数据
+                boolean deleteResult = sysDictDataRepository.deleteByDictType(dictType.getDictType());
+                if (!deleteResult) {
+                    throw BusinessException.of("删除关联字典数据失败");
+                }
+            }
+
+            // 再删除字典类型
             int result = sysDictTypeMapper.deleteByIds(ids);
             return result > 0;
         } catch (Exception e) {
             log.error("批量删除字典类型失败", e);
-            return false;
+            throw e;
         }
     }
 
