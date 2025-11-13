@@ -33,10 +33,9 @@ public class ResourceServiceImpl implements ResourceService {
     private final ResourceConverter resourceConverter;
 
     @Override
-    public PageResult<ResourceVO> pageResources(PageResourceDTO pageRequest) {
-        PageResult<SysResourceEntity> pageResult = sysResourceRepository.pageResources(pageRequest);
-        List<ResourceVO> voList = resourceConverter.toVOList(pageResult.getRecords());
-        return PageResult.of(voList, pageResult.getTotal());
+    public List<ResourceVO> pageResources(PageResourceDTO pageRequest) {
+        List<SysResourceEntity> pageResult = sysResourceRepository.pageResources(pageRequest);
+        return resourceConverter.toVOList(pageResult);
     }
 
     @Override

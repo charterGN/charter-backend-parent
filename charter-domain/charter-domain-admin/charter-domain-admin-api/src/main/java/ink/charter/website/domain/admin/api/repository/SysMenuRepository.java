@@ -14,12 +14,12 @@ import java.util.List;
 public interface SysMenuRepository {
 
     /**
-     * 分页查询菜单
+     * 条件查询菜单
      *
      * @param pageRequest 分页查询参数
      * @return 分页结果
      */
-    PageResult<SysMenuEntity> pageMenus(PageMenuDTO pageRequest);
+    List<SysMenuEntity> pageMenus(PageMenuDTO pageRequest);
 
     /**
      * 根据ID列表批量查询菜单

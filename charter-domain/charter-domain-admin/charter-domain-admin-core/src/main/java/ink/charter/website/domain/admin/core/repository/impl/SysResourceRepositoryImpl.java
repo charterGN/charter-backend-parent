@@ -28,9 +28,8 @@ public class SysResourceRepositoryImpl implements SysResourceRepository {
     private final SysResourceMapper sysResourceMapper;
 
     @Override
-    public PageResult<SysResourceEntity> pageResources(PageResourceDTO pageRequest) {
-        IPage<SysResourceEntity> result = sysResourceMapper.pageResources(pageRequest);
-        return PageResult.of(result.getRecords(), result.getTotal());
+    public List<SysResourceEntity> pageResources(PageResourceDTO pageRequest) {
+        return sysResourceMapper.pageResources(pageRequest);
     }
 
     @Override

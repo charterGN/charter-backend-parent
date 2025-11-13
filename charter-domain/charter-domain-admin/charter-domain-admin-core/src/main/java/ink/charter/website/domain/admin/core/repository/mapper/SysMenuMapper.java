@@ -21,14 +21,13 @@ import java.util.List;
 public interface SysMenuMapper extends BaseMapper<SysMenuEntity> {
 
     /**
-     * 分页查询菜单
+     * 条件查询菜单
      *
-     * @param pageRequest 分页参数
-     * @return 分页结果
+     * @param pageRequest 参数
+     * @return 结果
      */
-    default IPage<SysMenuEntity> pageMenus(PageMenuDTO pageRequest) {
-        PageRequest page = pageRequest.getPageRequest();
-        return selectPage(new Page<>(page.getPageNo(), page.getPageSize()), QueryWrappers.<SysMenuEntity>lambdaQuery()
+    default List<SysMenuEntity> pageMenus(PageMenuDTO pageRequest) {
+        return selectList(QueryWrappers.<SysMenuEntity>lambdaQuery()
                 .likeIfPresent(SysMenuEntity::getMenuName, pageRequest.getMenuName())
                 .eqIfPresent(SysMenuEntity::getStatus, pageRequest.getStatus())
                 .orderByDesc(SysMenuEntity::getCreateTime));

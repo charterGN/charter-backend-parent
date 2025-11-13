@@ -22,14 +22,13 @@ import java.util.List;
 public interface SysResourceMapper extends BaseMapper<SysResourceEntity> {
 
     /**
-     * 分页查询资源
+     * 条件查询资源
      *
-     * @param pageRequest 分页查询参数
-     * @return 分页结果
+     * @param pageRequest 查询参数
+     * @return 结果
      */
-    default IPage<SysResourceEntity> pageResources(PageResourceDTO pageRequest) {
-        PageRequest page = pageRequest.getPageRequest();
-        return selectPage(new Page<>(page.getPageNo(), page.getPageSize()), QueryWrappers.<SysResourceEntity>lambdaQuery()
+    default List<SysResourceEntity> pageResources(PageResourceDTO pageRequest) {
+        return selectList(QueryWrappers.<SysResourceEntity>lambdaQuery()
             .likeIfPresent(SysResourceEntity::getResourceName, pageRequest.getResourceName())
             .likeIfPresent(SysResourceEntity::getResourceCode, pageRequest.getResourceCode())
             .eqIfPresent(SysResourceEntity::getModule, pageRequest.getModule())

@@ -38,10 +38,9 @@ public class MenuServiceImpl implements MenuService {
     private final MenuConverter menuConverter;
 
     @Override
-    public PageResult<MenuVO> pageMenus(PageMenuDTO pageRequest) {
-        PageResult<SysMenuEntity> pageResult = sysMenuRepository.pageMenus(pageRequest);
-        List<MenuVO> voList = menuConverter.convertToMenuVOList(pageResult.getRecords());
-        return PageResult.of(voList, pageResult.getTotal());
+    public List<MenuVO> pageMenus(PageMenuDTO pageRequest) {
+        List<SysMenuEntity> pageResult = sysMenuRepository.pageMenus(pageRequest);
+        return menuConverter.convertToMenuVOList(pageResult);
     }
 
     /**

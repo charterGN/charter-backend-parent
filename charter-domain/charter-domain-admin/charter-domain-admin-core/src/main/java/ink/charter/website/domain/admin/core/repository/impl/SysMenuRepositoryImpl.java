@@ -26,9 +26,8 @@ public class SysMenuRepositoryImpl implements SysMenuRepository {
     private final SysMenuMapper sysMenuMapper;
 
     @Override
-    public PageResult<SysMenuEntity> pageMenus(PageMenuDTO pageRequest) {
-        IPage<SysMenuEntity> result = sysMenuMapper.pageMenus(pageRequest);
-        return PageResult.of(result.getRecords(), result.getTotal());
+    public List<SysMenuEntity> pageMenus(PageMenuDTO pageRequest) {
+        return sysMenuMapper.pageMenus(pageRequest);
     }
 
     @Override

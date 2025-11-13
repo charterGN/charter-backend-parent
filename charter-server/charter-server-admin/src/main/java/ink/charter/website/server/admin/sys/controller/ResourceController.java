@@ -42,18 +42,18 @@ public class ResourceController {
     private final ResourceConverter resourceConverter;
 
     /**
-     * 分页查询资源列表
+     * 查询资源列表（不用做分页）
      */
     @PostMapping("/page")
-    @Operation(summary = "分页查询资源列表", description = "分页查询资源列表")
+    @Operation(summary = "查询资源列表", description = "条件查询资源列表")
     @PreAuthorize("hasAuthority('sys:resource:page')")
     @OperationLog(
         module = LogConstant.OptModule.RESOURCE,
         type = LogConstant.OptType.SELECT,
-        description = "分页查询资源列表",
+        description = "条件查询资源列表",
         recordParams = false
     )
-    public Result<PageResult<ResourceVO>> pageResources(@RequestBody PageResourceDTO pageRequest) {
+    public Result<List<ResourceVO>> pageResources(@RequestBody PageResourceDTO pageRequest) {
         return Result.success("查询成功", resourceService.pageResources(pageRequest));
     }
 

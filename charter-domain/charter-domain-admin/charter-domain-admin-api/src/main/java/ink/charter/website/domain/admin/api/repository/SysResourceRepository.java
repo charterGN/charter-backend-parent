@@ -15,12 +15,12 @@ import java.util.List;
 public interface SysResourceRepository {
 
     /**
-     * 分页查询资源
+     * 条件查询资源
      *
-     * @param pageRequest 分页查询参数
-     * @return 分页结果
+     * @param pageRequest 查询参数
+     * @return 结果
      */
-    PageResult<SysResourceEntity> pageResources(PageResourceDTO pageRequest);
+    List<SysResourceEntity> pageResources(PageResourceDTO pageRequest);
 
     /**
      * 根据ID查询资源

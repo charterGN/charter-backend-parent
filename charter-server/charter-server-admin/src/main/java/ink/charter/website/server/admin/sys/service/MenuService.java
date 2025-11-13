@@ -17,12 +17,12 @@ import java.util.List;
 public interface MenuService {
 
     /**
-     * 分页查询菜单
+     * 条件查询菜单
      *
-     * @param pageRequest 分页查询参数
-     * @return 分页结果
+     * @param pageRequest 查询参数
+     * @return 结果
      */
-    PageResult<MenuVO> pageMenus(PageMenuDTO pageRequest);
+    List<MenuVO> pageMenus(PageMenuDTO pageRequest);
 
     /**
      * 获取用户菜单列表

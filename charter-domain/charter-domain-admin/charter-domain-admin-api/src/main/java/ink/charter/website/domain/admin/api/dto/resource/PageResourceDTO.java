@@ -16,17 +16,11 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@Schema(name = "PageResourceDTO", description = "分页查询资源请求参数")
+@Schema(name = "PageResourceDTO", description = "查询资源请求参数")
 public class PageResourceDTO implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 分页参数
-     */
-    @Schema(description = "分页参数")
-    private PageRequest pageRequest = new PageRequest();
 
     /**
      * 资源名称

@@ -42,11 +42,10 @@ public class MenuController {
      * 分页查询菜单
      */
     @PostMapping("/page")
-    @Operation(summary = "分页查询菜单", description = "分页查询菜单列表")
+    @Operation(summary = "查询菜单", description = "条件查询菜单列表")
     @PreAuthorize("hasAuthority('sys:menu:page')")
-    public Result<PageResult<MenuVO>> pageMenus(@RequestBody PageMenuDTO pageRequest) {
-        PageResult<MenuVO> result = menuService.pageMenus(pageRequest);
-        return Result.success(result);
+    public Result<List<MenuVO>> pageMenus(@RequestBody PageMenuDTO pageRequest) {
+        return Result.success(menuService.pageMenus(pageRequest));
     }
 
     /**

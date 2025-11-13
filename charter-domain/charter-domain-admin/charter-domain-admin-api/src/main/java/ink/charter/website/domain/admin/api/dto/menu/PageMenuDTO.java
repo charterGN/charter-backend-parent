@@ -38,13 +38,4 @@ public class PageMenuDTO extends PageRequest {
      */
     @Schema(description = "状态（0禁用 1启用）", example = "1")
     private Integer status;
-
-    /**
-     * 获取分页请求参数
-     *
-     * @return 分页请求参数
-     */
-    public PageRequest getPageRequest() {
-        return new PageRequest(this.getPageNo(), this.getPageSize());
-    }
 }
