@@ -1,5 +1,7 @@
 package ink.charter.website.common.core.entity.sys;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import ink.charter.website.common.core.entity.base.BaseEntity;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -33,6 +35,7 @@ public class SysDictDataEntity extends BaseEntity {
     private String dictTag;
 
     @Schema(description = "标签颜色")
+    @TableField(updateStrategy = FieldStrategy.ALWAYS) // 允许更新为null
     private String dictColor;
 
     @Schema(description = "状态（0禁用 1启用）")
