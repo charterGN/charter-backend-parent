@@ -5,7 +5,7 @@ import lombok.Getter;
 
 
 /**
- * 上传模式枚举，后续拓展根据这个策略写即可
+ * 上传模式枚举
  *
  * @author charter
  * @create 2025/07/16
@@ -14,7 +14,30 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UploadModeEnum {
 
-    OSS("oss", "ossUploadStrategyImpl");
+    /**
+     * 阿里云OSS
+     */
+    OSS("oss", "ossUploadStrategyImpl"),
+
+    /**
+     * MinIO
+     */
+    MINIO("minio", "minioUploadStrategyImpl"),
+
+    /**
+     * 华为云OBS
+     */
+    HUAWEI("huawei", "huaweiUploadStrategyImpl"),
+
+    /**
+     * 腾讯云COS
+     */
+    TENCENT("tencent", "tencentUploadStrategyImpl"),
+
+    /**
+     * 七牛云Kodo
+     */
+    QINIU("qiniu", "qiniuUploadStrategyImpl");
 
     private final String mode;
 

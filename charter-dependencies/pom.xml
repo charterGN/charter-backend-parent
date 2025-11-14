@@ -37,6 +37,10 @@
 
         <!-- 第三方服务依赖 -->
         <aliyun-sdk-oss.version>3.18.3</aliyun-sdk-oss.version>
+        <minio.version>8.5.7</minio.version>
+        <huaweicloud-obs.version>3.23.9</huaweicloud-obs.version>
+        <tencent-cos.version>5.6.183</tencent-cos.version>
+        <qiniu-java-sdk.version>7.13.1</qiniu-java-sdk.version>
         <qqwry-java.version>0.8.0</qqwry-java.version>
         
         <!-- JWT相关依赖 -->
@@ -185,11 +189,35 @@
 
 
             <!-- ==================第三方服务依赖================== -->
-            <!-- 阿里云oss依赖 -->
+            <!-- 阿里云OSS -->
             <dependency>
                 <groupId>com.aliyun.oss</groupId>
                 <artifactId>aliyun-sdk-oss</artifactId>
                 <version>${aliyun-sdk-oss.version}</version>
+            </dependency>
+            <!-- MinIO -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+            <!-- 华为云OBS -->
+            <dependency>
+                <groupId>com.huaweicloud</groupId>
+                <artifactId>esdk-obs-java-bundle</artifactId>
+                <version>${huaweicloud-obs.version}</version>
+            </dependency>
+            <!-- 腾讯云COS -->
+            <dependency>
+                <groupId>com.qcloud</groupId>
+                <artifactId>cos_api</artifactId>
+                <version>${tencent-cos.version}</version>
+            </dependency>
+            <!-- 七牛云Kodo -->
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>${qiniu-java-sdk.version}</version>
             </dependency>
             <!-- 纯真IP数据库 -->
             <dependency>

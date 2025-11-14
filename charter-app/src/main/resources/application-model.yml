@@ -99,16 +99,6 @@ springdoc:
       packages-to-scan:
         - ink.charter.website.server.home.controller
 
-# 文件上传相关配置
-upload:
-  mode: oss
-  oss:
-    url: #
-    endpoint: #
-    accessKeyId: #
-    accessKeySecret: #
-    bucketName: #
-
 charter:
   version: 1.0.0
   # 认证相关配置
@@ -130,6 +120,15 @@ charter:
   #        "*.server.admin.*.controller": /api-admin # 管理后台API前缀
   #        "*.server.home.controller": /api-home # 首页API前缀
   #        "*.server.blog.controller": /api-blog # 博客API前缀
+
+  # 文件上传相关配置
+  file:
+    storage-type: oss
+    domain: #
+    endpoint: #
+    access-key-id: #
+    access-key-secret: #
+    bucket-name: #
 
   # 操作日志记录相关配置
   log:

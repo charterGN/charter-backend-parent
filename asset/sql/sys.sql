@@ -229,6 +229,27 @@ CREATE TABLE `sys_files` (
   KEY `idx_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统文件信息表';
 
+-- 文件配置表
+CREATE TABLE IF NOT EXISTS `sys_file_config` (
+  `id` BIGINT NOT NULL COMMENT '主键ID',
+  `config_name` VARCHAR(100) NOT NULL COMMENT '配置名称',
+  `storage_type` VARCHAR(20) NOT NULL COMMENT '存储类型（oss/minio/huawei/tencent/qiniu）',
+  `domain` VARCHAR(255) DEFAULT NULL COMMENT '访问域名',
+  `endpoint` VARCHAR(255) DEFAULT NULL COMMENT '端点地址',
+  `region` VARCHAR(50) DEFAULT NULL COMMENT '区域',
+  `access_key_id` VARCHAR(255) NOT NULL COMMENT '访问密钥ID',
+  `access_key_secret` VARCHAR(255) NOT NULL COMMENT '访问密钥Secret',
+  `bucket_name` VARCHAR(100) NOT NULL COMMENT '存储桶名称',
+  `enabled` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否启用（0否 1是）',
+  `remark` VARCHAR(500) DEFAULT NULL COMMENT '备注',
+  `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
+  PRIMARY KEY (`id`),
+  KEY `idx_storage_type` (`storage_type`),
+  KEY `idx_enabled` (`enabled`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='文件配置表';
+
 -- ========================================
 -- 定时任务相关表
 -- ========================================
