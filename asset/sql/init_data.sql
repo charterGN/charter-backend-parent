@@ -68,6 +68,7 @@ INSERT INTO sys_role_menu (id, role_id, menu_id, create_time, update_time, is_de
 (11, 1, 20, NOW(), NOW(), 0);
 
 -- 插入必要字典类型及数据
+-- 菜单类型及数据
 INSERT INTO `charter_website`.`sys_dict_type` (`id`, `dict_name`, `dict_type`, `status`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
 (1988127433409560577, '菜单类型', 'menu_type', 1, '系统菜单类型', '2025-11-11 14:11:32', '2025-11-11 14:11:32', 0);
 INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
@@ -76,6 +77,19 @@ INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, 
 (1988127616734199809, 'menu_type', '菜单', '2', 'success', '', 1, 2, '', '2025-11-11 14:12:16', '2025-11-11 14:12:16', 0);
 INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
 (1988127656873689089, 'menu_type', '按钮', '3', 'info', '', 1, 3, '', '2025-11-11 14:12:26', '2025-11-12 13:35:10', 0);
+-- 文件存储类型及数据
+INSERT INTO `charter_website`.`sys_dict_type` (`id`, `dict_name`, `dict_type`, `status`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1989249564419796993, '文件存储类型', 'file_storage_type', 1, '系统文件存储类型', '2025-11-14 16:30:29', '2025-11-14 16:30:29', 0);
+INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1989251750650425345, 'file_storage_type', '阿里云OSS', 'oss', 'success', '', 1, 0, '', '2025-11-14 16:39:11', '2025-11-14 16:52:56', 0);
+INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1989251815439839233, 'file_storage_type', 'MinIO', 'minio', 'primary', '', 1, 1, '', '2025-11-14 16:39:26', '2025-11-14 16:52:08', 0);
+INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1989252037083639810, 'file_storage_type', '华为云OBS', 'huawei', 'info', '', 1, 2, '', '2025-11-14 16:40:19', '2025-11-14 16:52:12', 0);
+INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1989252357398441985, 'file_storage_type', '腾讯云COS', 'tencent', 'warning', '', 1, 3, '', '2025-11-14 16:41:35', '2025-11-14 16:52:17', 0);
+INSERT INTO `charter_website`.`sys_dict_data` (`id`, `dict_type`, `dict_label`, `dict_value`, `dict_tag`, `dict_color`, `status`, `sort_order`, `remark`, `create_time`, `update_time`, `is_deleted`) VALUES
+(1989252493096759298, 'file_storage_type', '七牛云', 'qiniu', 'danger', '', 1, 4, '', '2025-11-14 16:42:08', '2025-11-14 16:52:21', 0);
 
 -- 插入必要的资源
 INSERT INTO `charter_website`.`sys_resource` (`id`, `resource_name`, `resource_code`, `module`, `url`, `method`, `description`, `status`, `create_time`, `update_time`, `is_deleted`) VALUES (15983034595414016, '删除用户', 'user:delete', '用户管理', '/api-admin/admin/user/delete', 'POST', '删除指定用户', 1, '2025-11-12 16:27:57', '2025-11-12 16:27:57', 0);
