@@ -42,6 +42,7 @@ public class FilesVO implements Serializable {
     private String fileType;
 
     @Schema(description = "上传用户ID")
+    @JsonSerialize(using = ToStringSerializer.class) // 将Long类型序列化为String，避免前端精度丢失
     private Long uploadUserId;
 
     @Schema(description = "上传用户名")
