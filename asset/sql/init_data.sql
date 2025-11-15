@@ -53,6 +53,10 @@ INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, comp
 INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
 (20, 1, '文件配置', 'fileConfigPage', 2, '/system/fileconfig', 'system/fileconfig/index', 'FolderChecked', 9, 1, 1, 0, 0, NOW(), NOW(), 0);
 
+-- 插入文件管理菜单
+INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
+(21, 1, '文件管理', 'filesPage', 2, '/system/files', 'system/files/index', 'FolderOpened', 10, 1, 1, 0, 0, NOW(), NOW(), 0);
+
 -- 为管理员角色分配菜单权限
 INSERT INTO sys_role_menu (id, role_id, menu_id, create_time, update_time, is_deleted) VALUES
 (1, 1, 1, NOW(), NOW(), 0),
@@ -65,7 +69,8 @@ INSERT INTO sys_role_menu (id, role_id, menu_id, create_time, update_time, is_de
 (8, 1, 17, NOW(), NOW(), 0),
 (9, 1, 18, NOW(), NOW(), 0),
 (10, 1, 19, NOW(), NOW(), 0),
-(11, 1, 20, NOW(), NOW(), 0);
+(11, 1, 20, NOW(), NOW(), 0),
+(12, 1, 21, NOW(), NOW(), 0);
 
 -- 插入必要字典类型及数据
 -- 菜单类型及数据
