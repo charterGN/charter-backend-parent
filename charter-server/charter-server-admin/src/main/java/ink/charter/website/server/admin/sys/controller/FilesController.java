@@ -11,6 +11,7 @@ import ink.charter.website.domain.admin.api.dto.files.UpdateFilesDTO;
 import ink.charter.website.domain.admin.api.vo.files.FilesVO;
 import ink.charter.website.server.admin.sys.converter.FilesConverter;
 import ink.charter.website.server.admin.sys.service.FilesService;
+import ink.charter.website.common.file.service.CharterFileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -39,6 +41,41 @@ public class FilesController {
 
     private final FilesService filesService;
     private final FilesConverter filesConverter;
+    private final CharterFileService charterFileService;
+
+    /**
+     * 上传文件
+     */
+    @PostMapping("/upload")
+    @Operation(summary = "上传文件", description = "上传文件到charter_website路径")
+    @OperationLog(
+        module = LogConstant.OptModule.FILE,
+        type = LogConstant.OptType.INSERT,
+        description = "上传文件"
+    )
+    public Result<FilesVO> uploadFile(
+            @Parameter(description = "文件", required = true)
+            @RequestParam("file") MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return Result.error("文件不能为空");
+        }
+
+        try {
+            // 使用 CharterFileService 上传文件到 charter_website 路径
+            SysFilesEntity fileEntity = charterFileService.uploadFile(file, "charter_website");
+            
+            if (fileEntity == null) {
+                return Result.error("文件上传失败");
+            }
+
+            // 转换为 VO 返回
+            FilesVO filesVO = filesConverter.toVO(fileEntity);
+            return Result.success("文件上传成功", filesVO);
+        } catch (Exception e) {
+            log.error("文件上传失败", e);
+            return Result.error("文件上传失败：" + e.getMessage());
+        }
+    }
 
     /**
      * 分页查询文件
