@@ -8,5 +8,5 @@ package ink.charter.website.common.file.constant;
  */
 public interface SeparatorConstant {
 
-    String FILENAME_SEPARATOR = "<->";
+    String FILENAME_SEPARATOR = "_--_";
 }
