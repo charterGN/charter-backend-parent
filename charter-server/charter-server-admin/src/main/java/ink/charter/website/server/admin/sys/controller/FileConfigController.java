@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,8 @@ public class FileConfigController {
     private final FileConfigService fileConfigService;
     private final FileConfigConverter fileConfigConverter;
 
-    @Operation(summary = "分页查询文件配置")
+    @Operation(summary = "分页查询文件配置", description = "分页查询文件配置")
+    @PreAuthorize("hasAuthority('sys:fileConfig:page')")
     @PostMapping("/page")
     public Result<PageResult<FileConfigVO>> pageFileConfigs(@RequestBody PageFileConfigDTO pageRequest) {
         PageResult<FileConfigVO> pageResult = fileConfigService.pageFileConfigs(pageRequest);
@@ -62,7 +64,8 @@ public class FileConfigController {
         return Result.success(list);
     }
 
-    @Operation(summary = "创建文件配置")
+    @Operation(summary = "创建文件配置", description = "创建系统文件配置")
+    @PreAuthorize("hasAuthority('sys:fileConfig:create')")
     @PostMapping("/create")
     public Result<FileConfigVO> create(@RequestBody @Validated CreateFileConfigDTO createFileConfigDTO) {
         SysFileConfigEntity entity = fileConfigConverter.toEntity(createFileConfigDTO);
@@ -74,7 +77,8 @@ public class FileConfigController {
         return Result.error("创建文件配置失败");
     }
 
-    @Operation(summary = "更新文件配置")
+    @Operation(summary = "更新文件配置", description = "更新系统文件配置")
+    @PreAuthorize("hasAuthority('sys:fileConfig:update')")
     @PostMapping("/update")
     public Result<FileConfigVO> update(@RequestBody @Validated UpdateFileConfigDTO updateFileConfigDTO) {
         SysFileConfigEntity entity = fileConfigConverter.toEntity(updateFileConfigDTO);
@@ -86,7 +90,8 @@ public class FileConfigController {
         return Result.error("更新文件配置失败");
     }
 
-    @Operation(summary = "删除文件配置")
+    @Operation(summary = "删除文件配置", description = "删除系统文件配置")
+    @PreAuthorize("hasAuthority('sys:fileConfig:delete')")
     @PostMapping("/delete/{id}")
     public Result<Void> deleteById(
             @Parameter(description = "配置ID", required = true) @PathVariable Long id) {
@@ -94,14 +99,16 @@ public class FileConfigController {
         return success ? Result.success() : Result.error("删除文件配置失败");
     }
 
-    @Operation(summary = "批量删除文件配置")
+    @Operation(summary = "批量删除文件配置", description = "批量删除系统文件配置")
+    @PreAuthorize("hasAuthority('sys:fileConfig:batch-delete')")
     @PostMapping("/delete/batch")
     public Result<Void> batchDelete(@RequestBody List<Long> ids) {
         boolean success = fileConfigService.batchDelete(ids);
         return success ? Result.success() : Result.error("批量删除文件配置失败");
     }
 
-    @Operation(summary = "更新文件配置启用状态")
+    @Operation(summary = "更新文件配置启用状态", description = "更新系统文件配置启用状态")
+    @PreAuthorize("hasAuthority('sys:fileConfig:update-enabled')")
     @PostMapping("/enabled/{id}/{enabled}")
     public Result<Void> updateEnabled(
             @Parameter(description = "配置ID", required = true) @PathVariable Long id,

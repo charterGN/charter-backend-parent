@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +45,7 @@ public class FilesController {
      */
     @PostMapping("/page")
     @Operation(summary = "分页查询文件", description = "分页查询文件列表")
+    @PreAuthorize("hasAuthority('sys:files:page')")
     @OperationLog(
         module = LogConstant.OptModule.FILE,
         type = LogConstant.OptType.SELECT,
@@ -157,6 +159,7 @@ public class FilesController {
      */
     @PostMapping("/update")
     @Operation(summary = "更新文件", description = "更新文件信息")
+    @PreAuthorize("hasAuthority('sys:files:update')")
     @OperationLog(
         module = LogConstant.OptModule.FILE,
         type = LogConstant.OptType.UPDATE,
@@ -183,6 +186,7 @@ public class FilesController {
      */
     @PostMapping("/delete/{id}")
     @Operation(summary = "删除文件", description = "根据ID删除文件")
+    @PreAuthorize("hasAuthority('sys:files:delete')")
     @OperationLog(
         module = LogConstant.OptModule.FILE,
         type = LogConstant.OptType.DELETE,
@@ -209,6 +213,7 @@ public class FilesController {
      */
     @PostMapping("/delete/batch")
     @Operation(summary = "批量删除文件", description = "批量删除文件")
+    @PreAuthorize("hasAuthority('sys:files:batch-delete')")
     @OperationLog(
         module = LogConstant.OptModule.FILE,
         type = LogConstant.OptType.DELETE,
@@ -232,6 +237,7 @@ public class FilesController {
      */
     @PostMapping("/status/{id}/{status}")
     @Operation(summary = "更新文件状态", description = "更新文件状态")
+    @PreAuthorize("hasAuthority('sys:files:update-status')")
     @OperationLog(
         module = LogConstant.OptModule.FILE,
         type = LogConstant.OptType.UPDATE,
