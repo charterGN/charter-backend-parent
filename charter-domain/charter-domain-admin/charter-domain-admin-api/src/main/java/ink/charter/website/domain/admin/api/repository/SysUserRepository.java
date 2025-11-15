@@ -116,4 +116,12 @@ public interface SysUserRepository {
      * @return 是否删除成功
      */
     boolean batchDeleteUsers(List<Long> userIds);
+
+    /**
+     * 根据用户ID列表批量查询用户
+     *
+     * @param userIds 用户ID列表
+     * @return 用户列表
+     */
+    List<SysUserEntity> getUsersByIds(List<Long> userIds);
 }

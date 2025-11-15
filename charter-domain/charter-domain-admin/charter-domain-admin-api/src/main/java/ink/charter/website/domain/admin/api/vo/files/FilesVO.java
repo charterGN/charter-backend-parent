@@ -44,6 +44,9 @@ public class FilesVO implements Serializable {
     @Schema(description = "上传用户ID")
     private Long uploadUserId;
 
+    @Schema(description = "上传用户名")
+    private String uploadUsername;
+
     @Schema(description = "上传时间")
     private LocalDateTime uploadTime;
 

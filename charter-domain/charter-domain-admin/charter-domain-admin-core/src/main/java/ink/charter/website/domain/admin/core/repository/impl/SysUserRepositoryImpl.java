@@ -166,4 +166,12 @@ public class SysUserRepositoryImpl implements SysUserRepository {
             return false;
         }
     }
+
+    @Override
+    public List<SysUserEntity> getUsersByIds(List<Long> userIds) {
+        if (userIds == null || userIds.isEmpty()) {
+            return List.of();
+        }
+        return sysUserMapper.selectByIds(userIds);
+    }
 }

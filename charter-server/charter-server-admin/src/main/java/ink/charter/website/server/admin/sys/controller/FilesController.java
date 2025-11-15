@@ -63,13 +63,13 @@ public class FilesController {
         try {
             // 使用 CharterFileService 上传文件到 charter_website 路径
             SysFilesEntity fileEntity = charterFileService.uploadFile(file, "charter_website/");
-            
+
             if (fileEntity == null) {
                 return Result.error("文件上传失败");
             }
 
-            // 转换为 VO 返回
-            FilesVO filesVO = filesConverter.toVO(fileEntity);
+            // 通过 FilesService 查询文件信息（会自动填充用户名）
+            FilesVO filesVO = filesService.getById(fileEntity.getId());
             return Result.success("文件上传成功", filesVO);
         } catch (Exception e) {
             log.error("文件上传失败", e);
