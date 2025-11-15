@@ -13,17 +13,16 @@ import java.util.List;
  * @author charter
  * @create 2025/07/17
  */
-public interface FileService {
+public interface CharterFileService {
 
     /**
      * 上传文件
      *
      * @param file 文件
      * @param path 存储路径
-     * @param uploadUserId 上传用户ID
      * @return 文件信息
      */
-    SysFilesEntity uploadFile(MultipartFile file, String path, Long uploadUserId);
+    SysFilesEntity uploadFile(MultipartFile file, String path);
 
     /**
      * 上传文件（流方式）
@@ -31,10 +30,9 @@ public interface FileService {
      * @param fileName 文件名
      * @param inputStream 文件流
      * @param path 存储路径
-     * @param uploadUserId 上传用户ID
      * @return 文件信息
      */
-    SysFilesEntity uploadFile(String fileName, InputStream inputStream, String path, Long uploadUserId);
+    SysFilesEntity uploadFile(String fileName, InputStream inputStream, String path);
 
     /**
      * 根据文件ID获取文件信息
@@ -63,10 +61,9 @@ public interface FileService {
     /**
      * 根据用户ID获取文件列表
      *
-     * @param uploadUserId 上传用户ID
      * @return 文件列表
      */
-    List<SysFilesEntity> getFilesByUserId(Long uploadUserId);
+    List<SysFilesEntity> getFilesByUserId();
 
     /**
      * 根据文件类型获取文件列表

@@ -1,7 +1,7 @@
 package ink.charter.website.common.file.example;
 
 import ink.charter.website.common.core.entity.sys.SysFilesEntity;
-import ink.charter.website.common.file.service.FileService;
+import ink.charter.website.common.file.service.CharterFileService;
 import ink.charter.website.common.file.utils.ChartFileUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FileServiceExample {
 
-    private final FileService fileService;
+    private final CharterFileService charterFileService;
 
     /**
      * 示例1：上传文件

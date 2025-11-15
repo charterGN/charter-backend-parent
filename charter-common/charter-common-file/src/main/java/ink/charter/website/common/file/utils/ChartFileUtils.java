@@ -1,9 +1,8 @@
 package ink.charter.website.common.file.utils;
 
 import cn.hutool.core.util.StrUtil;
-import ink.charter.website.common.auth.utils.SecurityUtils;
 import ink.charter.website.common.core.entity.sys.SysFilesEntity;
-import ink.charter.website.common.file.service.FileService;
+import ink.charter.website.common.file.service.CharterFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,11 +22,11 @@ import java.util.List;
 @Component
 public class ChartFileUtils {
 
-    private static FileService fileService;
+    private static CharterFileService charterFileService;
 
     @Autowired
-    public void setFileService(FileService fileService) {
-        ChartFileUtils.fileService = fileService;
+    public void setFileService(CharterFileService charterFileService) {
+        ChartFileUtils.charterFileService = charterFileService;
     }
 
     /**
@@ -38,8 +37,7 @@ public class ChartFileUtils {
      * @return 文件信息
      */
     public static SysFilesEntity upload(MultipartFile file, String path) {
-        Long currentUserId = SecurityUtils.getCurrentUserId();
-        return fileService.uploadFile(file, path, currentUserId);
+        return charterFileService.uploadFile(file, path);
     }
 
     /**
@@ -61,8 +59,7 @@ public class ChartFileUtils {
      * @return 文件信息
      */
     public static SysFilesEntity upload(String fileName, InputStream inputStream, String path) {
-        Long currentUserId = SecurityUtils.getCurrentUserId();
-        return fileService.uploadFile(fileName, inputStream, path, currentUserId);
+        return charterFileService.uploadFile(fileName, inputStream, path);
     }
 
     /**
@@ -83,7 +80,7 @@ public class ChartFileUtils {
      * @return 文件信息
      */
     public static SysFilesEntity getById(Long fileId) {
-        return fileService.getFileById(fileId);
+        return charterFileService.getFileById(fileId);
     }
 
     /**
@@ -93,7 +90,7 @@ public class ChartFileUtils {
      * @return 文件信息
      */
     public static SysFilesEntity getByMd5(String fileMd5) {
-        return fileService.getFileByMd5(fileMd5);
+        return charterFileService.getFileByMd5(fileMd5);
     }
 
     /**
@@ -103,7 +100,7 @@ public class ChartFileUtils {
      * @return 文件信息
      */
     public static SysFilesEntity getByPath(String filePath) {
-        return fileService.getFileByPath(filePath);
+        return charterFileService.getFileByPath(filePath);
     }
 
     /**
@@ -112,8 +109,7 @@ public class ChartFileUtils {
      * @return 文件列表
      */
     public static List<SysFilesEntity> getCurrentUserFiles() {
-        Long currentUserId = SecurityUtils.getCurrentUserId();
-        return fileService.getFilesByUserId(currentUserId);
+        return charterFileService.getFilesByUserId();
     }
 
     /**
@@ -123,7 +119,7 @@ public class ChartFileUtils {
      * @return 文件列表
      */
     public static List<SysFilesEntity> getByType(String fileType) {
-        return fileService.getFilesByType(fileType);
+        return charterFileService.getFilesByType(fileType);
     }
 
     /**
@@ -133,7 +129,7 @@ public class ChartFileUtils {
      * @return 是否删除成功
      */
     public static Boolean delete(Long fileId) {
-        return fileService.deleteFile(fileId);
+        return charterFileService.deleteFile(fileId);
     }
 
     /**
@@ -143,7 +139,7 @@ public class ChartFileUtils {
      * @return 删除成功的数量
      */
     public static Integer deleteFiles(List<Long> fileIds) {
-        return fileService.deleteFiles(fileIds);
+        return charterFileService.deleteFiles(fileIds);
     }
 
     /**
@@ -153,7 +149,7 @@ public class ChartFileUtils {
      * @return 下载URL
      */
     public static String getDownloadUrl(Long fileId) {
-        return fileService.getFileDownloadUrl(fileId);
+        return charterFileService.getFileDownloadUrl(fileId);
     }
 
     /**
@@ -163,7 +159,7 @@ public class ChartFileUtils {
      * @return 下载URL
      */
     public static String getDownloadUrl(String filePath) {
-        return fileService.getFileDownloadUrl(filePath);
+        return charterFileService.getFileDownloadUrl(filePath);
     }
 
     /**
@@ -173,7 +169,7 @@ public class ChartFileUtils {
      * @return 是否存在
      */
     public static Boolean exists(String fileMd5) {
-        return fileService.existsByMd5(fileMd5);
+        return charterFileService.existsByMd5(fileMd5);
     }
 
     /**
@@ -183,7 +179,7 @@ public class ChartFileUtils {
      * @return MD5值
      */
     public static String calculateMd5(MultipartFile file) {
-        return fileService.calculateFileMd5(file);
+        return charterFileService.calculateFileMd5(file);
     }
 
     /**
@@ -193,7 +189,7 @@ public class ChartFileUtils {
      * @return MD5值
      */
     public static String calculateMd5(InputStream inputStream) {
-        return fileService.calculateFileMd5(inputStream);
+        return charterFileService.calculateFileMd5(inputStream);
     }
 
     /**
@@ -203,7 +199,7 @@ public class ChartFileUtils {
      * @return 文件类型
      */
     public static String getFileType(String fileName) {
-        return fileService.getFileType(fileName);
+        return charterFileService.getFileType(fileName);
     }
 
     /**
@@ -213,7 +209,7 @@ public class ChartFileUtils {
      * @return 是否更新成功
      */
     public static Boolean updateAccessTime(Long fileId) {
-        return fileService.updateFileAccessTime(fileId);
+        return charterFileService.updateFileAccessTime(fileId);
     }
 
     /**

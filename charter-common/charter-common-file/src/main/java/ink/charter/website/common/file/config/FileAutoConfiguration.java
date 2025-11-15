@@ -1,8 +1,8 @@
 package ink.charter.website.common.file.config;
 
 import ink.charter.website.common.file.mapper.SysFilesMapper;
-import ink.charter.website.common.file.service.FileService;
-import ink.charter.website.common.file.service.impl.FileServiceImpl;
+import ink.charter.website.common.file.service.CharterFileService;
+import ink.charter.website.common.file.service.impl.CharterFileServiceImpl;
 import ink.charter.website.common.file.strategy.context.UploadStrategyContext;
 import ink.charter.website.common.file.strategy.impl.*;
 import lombok.extern.slf4j.Slf4j;
@@ -109,8 +109,8 @@ public class FileAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    public FileService fileService(SysFilesMapper sysFilesMapper, UploadStrategyContext uploadStrategyContext) {
+    public CharterFileService fileService(SysFilesMapper sysFilesMapper, UploadStrategyContext uploadStrategyContext) {
         log.info("初始化文件服务");
-        return new FileServiceImpl(sysFilesMapper, uploadStrategyContext);
+        return new CharterFileServiceImpl(sysFilesMapper, uploadStrategyContext);
     }
 }

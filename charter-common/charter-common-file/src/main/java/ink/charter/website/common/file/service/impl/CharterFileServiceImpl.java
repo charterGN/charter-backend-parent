@@ -3,13 +3,14 @@ package ink.charter.website.common.file.service.impl;
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
+import ink.charter.website.common.auth.utils.SecurityUtils;
 import ink.charter.website.common.core.common.enums.ResCodeEnum;
 import ink.charter.website.common.core.entity.sys.SysFilesEntity;
 import ink.charter.website.common.core.enums.FileTypeEnum;
 import ink.charter.website.common.core.enums.StatusEnum;
 import ink.charter.website.common.core.exception.SystemException;
 import ink.charter.website.common.file.mapper.SysFilesMapper;
-import ink.charter.website.common.file.service.FileService;
+import ink.charter.website.common.file.service.CharterFileService;
 import ink.charter.website.common.file.strategy.context.UploadStrategyContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,14 +32,14 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FileServiceImpl implements FileService {
+public class CharterFileServiceImpl implements CharterFileService {
 
     private final SysFilesMapper sysFilesMapper;
     private final UploadStrategyContext uploadStrategyContext;
 
     @Override
     @Transactional
-    public SysFilesEntity uploadFile(MultipartFile file, String path, Long uploadUserId) {
+    public SysFilesEntity uploadFile(MultipartFile file, String path) {
         if (file == null || file.isEmpty()) {
             throw SystemException.of("文件不能为空");
         }
@@ -66,7 +67,7 @@ public class FileServiceImpl implements FileService {
             fileEntity.setFileMd5(fileMd5);
             fileEntity.setFilePath(fileUrl);
             fileEntity.setFileType(getFileType(file.getOriginalFilename()));
-            fileEntity.setUploadUserId(uploadUserId);
+            fileEntity.setUploadUserId(SecurityUtils.getCurrentUserId());
             fileEntity.setUploadTime(LocalDateTime.now());
             fileEntity.setLastAccessTime(LocalDateTime.now());
             fileEntity.setStatus(StatusEnum.ENABLED.getCode());
@@ -86,7 +87,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public SysFilesEntity uploadFile(String fileName, InputStream inputStream, String path, Long uploadUserId) {
+    public SysFilesEntity uploadFile(String fileName, InputStream inputStream, String path) {
         if (StrUtil.isBlank(fileName) || inputStream == null) {
             throw SystemException.of("文件名和文件流不能为空");
         }
@@ -115,7 +116,7 @@ public class FileServiceImpl implements FileService {
             fileEntity.setFileMd5(fileMd5);
             fileEntity.setFilePath(fileUrl);
             fileEntity.setFileType(getFileType(fileName));
-            fileEntity.setUploadUserId(uploadUserId);
+            fileEntity.setUploadUserId(SecurityUtils.getCurrentUserId());
             fileEntity.setUploadTime(LocalDateTime.now());
             fileEntity.setLastAccessTime(LocalDateTime.now());
             fileEntity.setStatus(1);
@@ -158,11 +159,12 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public List<SysFilesEntity> getFilesByUserId(Long uploadUserId) {
-        if (uploadUserId == null) {
+    public List<SysFilesEntity> getFilesByUserId() {
+        Long currentUserId = SecurityUtils.getCurrentUserId();
+        if (currentUserId == null) {
             return List.of();
         }
-        return sysFilesMapper.selectByUserId(uploadUserId);
+        return sysFilesMapper.selectByUserId(currentUserId);
     }
 
     @Override

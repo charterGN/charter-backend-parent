@@ -25,9 +25,9 @@ charter-common-file
 │   ├── SysFilesMapper        # 文件信息Mapper
 │   └── SysFileConfigMapper   # 文件配置Mapper
 ├── service                   # 服务层
-│   ├── FileService           # 文件服务接口
+│   ├── CharterFileService           # 文件服务接口
 │   └── impl
-│       └── FileServiceImpl   # 文件服务实现
+│       └── CharterFileServiceImpl   # 文件服务实现
 ├── strategy                  # 策略模式
 │   ├── UploadStrategy        # 上传策略接口
 │   ├── context
@@ -173,14 +173,14 @@ charter:
 
 ```java
 @Autowired
-private FileService fileService;
+private CharterFileService charterFileService;
 ```
 
 #### 2. 文件上传
 
 ```java
 // 上传文件
-SysFilesEntity file = fileService.uploadFile(multipartFile, "/upload/images/", userId);
+SysFilesEntity file = charterFileService.uploadFile(multipartFile, "/upload/images/", userId);
 
 // 获取文件信息
 Long fileId = file.getId();
@@ -192,38 +192,38 @@ String fileUrl = file.getFilePath(); // 完整访问URL
 
 ```java
 // 根据ID查询
-SysFilesEntity file = fileService.getFileById(fileId);
+SysFilesEntity file = charterFileService.getFileById(fileId);
 
 // 根据MD5查询
-SysFilesEntity file = fileService.getFileByMd5(md5);
+SysFilesEntity file = charterFileService.getFileByMd5(md5);
 
 // 查询用户的所有文件
-List<SysFilesEntity> files = fileService.getFilesByUserId(userId);
+List<SysFilesEntity> files = charterFileService.getFilesByUserId(userId);
 
 // 根据文件类型查询
-List<SysFilesEntity> images = fileService.getFilesByType("image/jpeg");
+List<SysFilesEntity> images = charterFileService.getFilesByType("image/jpeg");
 ```
 
 #### 4. 文件下载
 
 ```java
 // 获取下载URL
-String downloadUrl = fileService.getFileDownloadUrl(fileId);
+String downloadUrl = charterFileService.getFileDownloadUrl(fileId);
 
 // 或根据文件路径获取
 String d
-ownloadUrl = fileService.getFileDownloadUrl(filePath);
+ownloadUrl = charterFileService.getFileDownloadUrl(filePath);
 ```
 
 #### 5. 文件删除
 
 ```java
 // 删除单个文件
-Boolean success = fileService.deleteFile(fileId);
+Boolean success = charterFileService.deleteFile(fileId);
 
 // 批量删除
 List<Long> fileIds = Arrays.asList(1L, 2L, 3L);
-Integer deletedCount = fileService.deleteFiles(fileIds);
+Integer deletedCount = charterFileService.deleteFiles(fileIds);
 ```
 
 #### 6. 文件工具类
@@ -356,7 +356,7 @@ UPDATE sys_file_config SET enabled = 1 WHERE storage_type = 'minio';
 ### Q3: 如何实现文件的权限控制？
 
 **A**: 
-- 在 `FileService` 基础上封装业务层服务
+- 在 `CharterFileService` 基础上封装业务层服务
 - 在业务层实现权限校验逻辑
 - 可以扩展 `sys_files` 表添加权限字段
 
