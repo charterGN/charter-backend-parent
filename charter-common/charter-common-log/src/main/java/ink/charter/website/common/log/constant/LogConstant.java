@@ -67,6 +67,8 @@ public class LogConstant {
         public static final String SYSTEM = "系统管理";
         /** 日志管理 */
         public static final String LOG = "日志管理";
+        /** 文件管理 */
+        public static final String FILE = "文件管理";
         /** 定时任务管理 */
         public static final String JOB = "定时任务管理";
         /** 其他 */

@@ -1,9 +1,11 @@
 package ink.charter.website.common.file.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ink.charter.website.common.core.entity.sys.SysFilesEntity;
+import ink.charter.website.common.mybatis.wrapper.QueryWrappers;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,15 +20,42 @@ import java.util.List;
 public interface SysFilesMapper extends BaseMapper<SysFilesEntity> {
 
     /**
+     * 分页查询文件
+     * @param page 分页参数
+     * @param filename 文件名
+     * @param fileType 文件类型
+     * @param uploadUserId 上传用户ID
+     * @param status 状态
+     * @param uploadTimeStart 上传时间开始
+     * @param uploadTimeEnd 上传时间结束
+     * @return 分页结果
+     */
+    default Page<SysFilesEntity> pageFiles(Page<SysFilesEntity> page, String filename,
+                                           String fileType, Long uploadUserId, Integer status,
+                                           LocalDateTime uploadTimeStart, LocalDateTime uploadTimeEnd) {
+        return selectPage(page, QueryWrappers.<SysFilesEntity>lambdaQuery()
+            .likeIfPresent(SysFilesEntity::getFileName, filename)
+            .eqIfPresent(SysFilesEntity::getFileType, fileType)
+            .eqIfPresent(SysFilesEntity::getUploadUserId, uploadUserId)
+            .eqIfPresent(SysFilesEntity::getStatus, status)
+            .geIfPresent(SysFilesEntity::getUploadTime, uploadTimeStart)
+            .leIfPresent(SysFilesEntity::getUploadTime, uploadTimeEnd)
+            .orderByDesc(SysFilesEntity::getUploadTime));
+    }
+
+    /**
      * 根据MD5查询文件
      *
      * @param fileMd5 文件MD5值
      * @return 文件信息
      */
     default SysFilesEntity selectByMd5(String fileMd5) {
-        return selectOne(Wrappers.<SysFilesEntity>lambdaQuery()
-                .eq(SysFilesEntity::getFileMd5, fileMd5)
-                .eq(SysFilesEntity::getStatus, 1));
+        if (!StringUtils.hasText(fileMd5)) {
+            return null;
+        }
+        return selectOne(QueryWrappers.<SysFilesEntity>lambdaQuery()
+            .eq(SysFilesEntity::getFileMd5, fileMd5)
+            .eq(SysFilesEntity::getStatus, 1));
     }
 
     /**
@@ -36,10 +65,13 @@ public interface SysFilesMapper extends BaseMapper<SysFilesEntity> {
      * @return 文件列表
      */
     default List<SysFilesEntity> selectByUserId(Long uploadUserId) {
-        return selectList(Wrappers.<SysFilesEntity>lambdaQuery()
-                .eq(SysFilesEntity::getUploadUserId, uploadUserId)
-                .eq(SysFilesEntity::getStatus, 1)
-                .orderByDesc(SysFilesEntity::getUploadTime));
+        if (uploadUserId == null) {
+            return List.of();
+        }
+        return selectList(QueryWrappers.<SysFilesEntity>lambdaQuery()
+            .eq(SysFilesEntity::getUploadUserId, uploadUserId)
+            .eq(SysFilesEntity::getStatus, 1)
+            .orderByDesc(SysFilesEntity::getUploadTime));
     }
 
     /**
@@ -49,10 +81,13 @@ public interface SysFilesMapper extends BaseMapper<SysFilesEntity> {
      * @return 文件列表
      */
     default List<SysFilesEntity> selectByFileType(String fileType) {
-        return selectList(Wrappers.<SysFilesEntity>lambdaQuery()
-                .eq(SysFilesEntity::getFileType, fileType)
-                .eq(SysFilesEntity::getStatus, 1)
-                .orderByDesc(SysFilesEntity::getUploadTime));
+        if (!StringUtils.hasText(fileType)) {
+            return List.of();
+        }
+        return selectList(QueryWrappers.<SysFilesEntity>lambdaQuery()
+            .eq(SysFilesEntity::getFileType, fileType)
+            .eq(SysFilesEntity::getStatus, 1)
+            .orderByDesc(SysFilesEntity::getUploadTime));
     }
 
     /**
@@ -76,9 +111,28 @@ public interface SysFilesMapper extends BaseMapper<SysFilesEntity> {
      * @return 文件信息
      */
     default SysFilesEntity selectByFilePath(String filePath) {
-        return selectOne(Wrappers.<SysFilesEntity>lambdaQuery()
-                .eq(SysFilesEntity::getFilePath, filePath)
-                .eq(SysFilesEntity::getStatus, 1));
+        if (!StringUtils.hasText(filePath)) {
+            return null;
+        }
+        return selectOne(QueryWrappers.<SysFilesEntity>lambdaQuery()
+            .eq(SysFilesEntity::getFilePath, filePath)
+            .eq(SysFilesEntity::getStatus, 1));
+    }
+
+    /**
+     * 更新文件状态
+     *
+     * @param id 文件ID
+     * @param status 状态
+     * @return 更新行数
+     */
+    default int updateStatus(Long id, Integer status) {
+        if (id == null || status == null) {
+            return 0;
+        }
+        return update(null, QueryWrappers.<SysFilesEntity>lambdaUpdate()
+            .set(SysFilesEntity::getStatus, status)
+            .eq(SysFilesEntity::getId, id));
     }
 
 }
