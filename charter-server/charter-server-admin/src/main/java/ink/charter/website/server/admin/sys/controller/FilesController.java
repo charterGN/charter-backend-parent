@@ -62,7 +62,7 @@ public class FilesController {
 
         try {
             // 使用 CharterFileService 上传文件到 charter_website 路径
-            SysFilesEntity fileEntity = charterFileService.uploadFile(file, "charter_website");
+            SysFilesEntity fileEntity = charterFileService.uploadFile(file, "charter_website/");
             
             if (fileEntity == null) {
                 return Result.error("文件上传失败");

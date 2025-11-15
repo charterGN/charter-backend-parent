@@ -57,6 +57,9 @@ public class CharterFileServiceImpl implements CharterFileService {
                 return existingFile;
             }
 
+            // 智能添加路径层级“/”
+            path = StrUtil.addSuffixIfNot(path, "/");
+
             // 上传文件到存储服务
             String fileUrl = uploadStrategyContext.executeUploadStrategy(file, path);
             
@@ -104,6 +107,9 @@ public class CharterFileServiceImpl implements CharterFileService {
                 updateFileAccessTime(existingFile.getId());
                 return existingFile;
             }
+
+            // 智能添加路径层级“/”
+            path = StrUtil.addSuffixIfNot(path, "/");
 
             // 重新创建输入流用于上传（因为计算MD5时已经读取过）
             // 注意：这里需要重新获取输入流，实际使用时可能需要调整
