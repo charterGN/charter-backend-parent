@@ -74,11 +74,6 @@ application-prod.properties
 *.env
 .env.*
 
-### 上传文件目录 ###
-uploads/
-files/
-static/uploads/
-
 ### 备份文件 ###
 *.bak
 *.backup
