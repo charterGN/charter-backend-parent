@@ -1,6 +1,5 @@
 package ink.charter.website.common.file.strategy.impl;
 
-import ink.charter.website.common.file.constant.SeparatorConstant;
 import ink.charter.website.common.core.exception.SystemException;
 import ink.charter.website.common.core.common.enums.ResCodeEnum;
 import ink.charter.website.common.file.strategy.UploadStrategy;
@@ -26,7 +25,8 @@ public abstract class AbstractUploadStrategyImpl implements UploadStrategy {
             String md5 = FileUtils.calculateMD5(file);
             String extName = FileUtils.getFileExtensionWithDot(file.getOriginalFilename());
             String mainName = FileUtils.getFileNameWithoutExtension(file.getOriginalFilename());
-            String fileName = mainName + SeparatorConstant.FILENAME_SEPARATOR + md5 + extName;
+            // {md5}/{mainName}.{extName}，用md5作为文件存储上级目录，有效避免重复且上传文件名不改变
+            String fileName = md5 + "/" + mainName + extName;
             if (!exists(path + fileName)) {
                 upload(path, fileName, file.getInputStream());
             }
