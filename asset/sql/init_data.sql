@@ -31,7 +31,7 @@ INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, comp
 INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
 (14, 1, '字典管理', 'dictTypePage', 2, '/system/dict/type', 'system/dict/type', 'WalletFilled', 4, 1, 1, 0, 0, NOW(), NOW(), 0);
 INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
-(15, 14, '字典数据', 'dictDataPage', 2, '/system/dict/data', 'system/dict/data', 'WalletFilled', 1, 1, 0, 0, 0, NOW(), NOW(), 0);
+(15, 14, '字典数据', 'dictDataPage', 2, '/system/dict/data/:dictType', 'system/dict/data', 'WalletFilled', 1, 1, 0, 0, 0, NOW(), NOW(), 0);
 
 -- 插入会话管理菜单
 INSERT INTO sys_menu (id, parent_id, menu_name, menu_code, menu_type, path, component, icon, sort_order, status, visible, cache, external_link, create_time, update_time, is_deleted) VALUES
