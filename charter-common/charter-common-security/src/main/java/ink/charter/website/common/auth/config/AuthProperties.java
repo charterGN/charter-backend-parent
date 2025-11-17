@@ -75,6 +75,7 @@ public class AuthProperties {
          */
         private Long lockTime = 1800L; // 30分钟
 
+        // TODO 验证码功能待后续开发
         /**
          * 是否启用验证码
          */
