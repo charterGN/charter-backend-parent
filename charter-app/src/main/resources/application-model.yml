@@ -110,6 +110,7 @@ charter:
       secret-key: "secretCharterKey"  # 密码解密密钥
     login:
       max-attempts: 5 # 登录失败最大尝试次数
+      enable-captcha: false # 是否启用登录验证码
 
   # Web API前缀配置
   web:
