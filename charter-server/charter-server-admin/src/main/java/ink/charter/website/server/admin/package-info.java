@@ -7,9 +7,9 @@
  * 
  * <h2>主要功能域</h2>
  * <ul>
- *   <li><strong>系统管理（sys）</strong>：用户管理、认证授权、会话管理等核心系统功能</li>
- *   <li><strong>博客管理（blog）</strong>：博客内容管理、分类标签、评论审核等功能</li>
- *   <li><strong>首页管理（home）</strong>：首页内容配置等功能</li>
+ *   <li><strong>系统管理（sys）</strong>：用户管理、认证授权、会话管理等核心系统功能及首页、博客等后台管理功能</li>
+ *   <li><strong>博客管理（blog）</strong>：博客内容功能</li>
+ *   <li><strong>首页管理（home）</strong>：首页内容功能</li>
  * </ul>
  * 
  * <h2>包结构说明</h2>
@@ -18,27 +18,17 @@
  * ├── sys/                    # 系统管理模块
  * │   ├── controller/         # REST API 控制器
  * │   ├── service/            # 业务服务层
- * │   ├── dto/                # 数据传输对象
- * │   │   ├── auth/                    # 认证相关 DTO
- * │   │   └── user/                    # 用户相关 DTO
- * │   ├── vo/                 # 视图对象
- * │   │   ├── auth/                    # 认证相关 VO
- * │   │   ├── session/                 # 会话相关 VO
- * │   │   └── user/                    # 用户相关 VO
+ * │   ├── scanner/            # 资源扫描器
  * │   └── converter/          # 对象转换器
  * │
  * ├── blog/                   # 博客管理模块
  * │   ├── controller/         # 博客管理 REST API
  * │   ├── service/            # 博客业务服务
- * │   ├── dto/                # 博客数据传输对象
- * │   ├── vo/                 # 博客视图对象
  * │   └── converter/          # 博客对象转换器
  * │
  * └── home/                   # 首页管理模块
  *     ├── controller/         # 首页管理 REST API
  *     ├── service/            # 首页业务服务
- *     ├── dto/                # 首页数据传输对象
- *     ├── vo/                 # 首页视图对象
  *     └── converter/          # 首页对象转换器
  * </pre>
  * 
