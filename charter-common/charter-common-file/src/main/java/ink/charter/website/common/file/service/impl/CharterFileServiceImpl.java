@@ -2,13 +2,13 @@ package ink.charter.website.common.file.service.impl;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.crypto.digest.DigestUtil;
 import ink.charter.website.common.auth.utils.SecurityUtils;
 import ink.charter.website.common.core.common.enums.ResCodeEnum;
 import ink.charter.website.common.core.entity.sys.SysFilesEntity;
 import ink.charter.website.common.core.enums.FileTypeEnum;
 import ink.charter.website.common.core.enums.StatusEnum;
 import ink.charter.website.common.core.exception.SystemException;
+import ink.charter.website.common.core.utils.FileUtils;
 import ink.charter.website.common.file.mapper.SysFilesMapper;
 import ink.charter.website.common.file.service.CharterFileService;
 import ink.charter.website.common.file.strategy.context.UploadStrategyContext;
@@ -277,9 +277,9 @@ public class CharterFileServiceImpl implements CharterFileService {
             return null;
         }
         
-        try (InputStream inputStream = file.getInputStream()) {
-            return DigestUtil.md5Hex(inputStream);
-        } catch (IOException e) {
+        try {
+            return FileUtils.calculateMD5(file);
+        } catch (Exception e) {
             log.error("计算文件MD5失败，文件名: {}", file.getOriginalFilename(), e);
             throw SystemException.of("计算文件MD5失败");
         }
@@ -293,7 +293,7 @@ public class CharterFileServiceImpl implements CharterFileService {
         
         try {
             byte[] bytes = IoUtil.readBytes(inputStream);
-            return DigestUtil.md5Hex(bytes);
+            return FileUtils.calculateMD5(bytes);
         } catch (Exception e) {
             log.error("计算文件MD5失败", e);
             throw SystemException.of("计算文件MD5失败");

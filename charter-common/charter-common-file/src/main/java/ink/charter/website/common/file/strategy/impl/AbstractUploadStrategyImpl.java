@@ -1,5 +1,6 @@
 package ink.charter.website.common.file.strategy.impl;
 
+import cn.hutool.core.io.IoUtil;
 import ink.charter.website.common.core.exception.SystemException;
 import ink.charter.website.common.core.common.enums.ResCodeEnum;
 import ink.charter.website.common.file.strategy.UploadStrategy;
@@ -39,8 +40,14 @@ public abstract class AbstractUploadStrategyImpl implements UploadStrategy {
     @Override
     public String uploadFile(String fileName, InputStream inputStream, String path) {
         try {
-            upload(path, fileName, inputStream);
-            return getFileAccessUrl(path + fileName);
+            byte[] bytes = IoUtil.readBytes(inputStream);
+            String md5 = FileUtils.calculateMD5(bytes);
+            // {md5}/{fileName}，用md5作为文件存储上级目录，有效避免重复且上传文件名不改变
+            String uploadName = md5 + "/" + fileName;
+            if (!exists(path + uploadName)) {
+                upload(path, uploadName, inputStream);
+            }
+            return getFileAccessUrl(path + uploadName);
         } catch (Exception e) {
             throw SystemException.of(ResCodeEnum.FILE_UPLOAD_FAILED, e);
         }
