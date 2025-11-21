@@ -1,7 +1,5 @@
 package ink.charter.website.common.rabbitmq.config;
 
-import ink.charter.website.common.rabbitmq.aspect.RabbitConsumerAspect;
-import ink.charter.website.common.rabbitmq.aspect.RabbitProducerAspect;
 import ink.charter.website.common.rabbitmq.service.RabbitMQService;
 import ink.charter.website.common.rabbitmq.service.impl.RabbitMQServiceImpl;
 import ink.charter.website.common.rabbitmq.utils.RabbitMQUtils;
@@ -12,7 +10,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 
@@ -47,25 +44,5 @@ public class RabbitMQAutoConfiguration {
     public RabbitMQUtils rabbitMQUtils() {
         log.info("初始化RabbitMQ工具类");
         return new RabbitMQUtils();
-    }
-
-    /**
-     * 注册生产者切面
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public RabbitProducerAspect rabbitProducerAspect(RabbitMQService rabbitMQService) {
-        log.info("初始化RabbitMQ生产者切面");
-        return new RabbitProducerAspect(rabbitMQService);
-    }
-
-    /**
-     * 注册消费者切面
-     */
-    @Bean
-    @ConditionalOnMissingBean
-    public RabbitConsumerAspect rabbitConsumerAspect(RabbitMQService rabbitMQService, RabbitAdmin rabbitAdmin) {
-        log.info("初始化RabbitMQ消费者切面");
-        return new RabbitConsumerAspect(rabbitMQService, rabbitAdmin);
     }
 }
