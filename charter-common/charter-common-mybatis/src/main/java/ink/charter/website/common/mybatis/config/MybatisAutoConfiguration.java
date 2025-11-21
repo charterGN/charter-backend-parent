@@ -28,7 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ConditionalOnClass(MybatisPlusInterceptor.class)
 @ConditionalOnProperty(prefix = "spring.datasource", name = "url")
 @Import({MybatisPlusConfig.class})
-@MapperScan(value = "ink.charter.website", annotationClass = Mapper.class)
+// @MapperScan(value = "ink.charter.website", annotationClass = Mapper.class) // 不需要这个了，每个mapper有标注注解
 @EnableTransactionManagement(proxyTargetClass = true)   // 开启事务管理
 public class MybatisAutoConfiguration {
 
