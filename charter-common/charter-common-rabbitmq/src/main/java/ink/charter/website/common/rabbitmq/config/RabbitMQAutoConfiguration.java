@@ -26,7 +26,6 @@ import org.springframework.context.annotation.Import;
 @Slf4j
 @AutoConfiguration
 @ConditionalOnClass(RabbitTemplate.class)
-@ConditionalOnProperty(prefix = "charter.rabbitmq", name = "enabled", havingValue = "true", matchIfMissing = true)
 @Import({RabbitMQConfig.class})
 public class RabbitMQAutoConfiguration {
 
@@ -55,7 +54,6 @@ public class RabbitMQAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = "charter.rabbitmq.producer", name = "enabled", havingValue = "true", matchIfMissing = true)
     public RabbitProducerAspect rabbitProducerAspect(RabbitMQService rabbitMQService) {
         log.info("初始化RabbitMQ生产者切面");
         return new RabbitProducerAspect(rabbitMQService);
@@ -66,7 +64,6 @@ public class RabbitMQAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean
-    @ConditionalOnProperty(prefix = "charter.rabbitmq.consumer", name = "enabled", havingValue = "true", matchIfMissing = true)
     public RabbitConsumerAspect rabbitConsumerAspect(RabbitMQService rabbitMQService, RabbitAdmin rabbitAdmin) {
         log.info("初始化RabbitMQ消费者切面");
         return new RabbitConsumerAspect(rabbitMQService, rabbitAdmin);
