@@ -42,7 +42,7 @@ charter-common-file
 ├── enums                     # 枚举类
 │   └── UploadModeEnum        # 上传模式枚举
 └── utils                     # 工具类
-    └── ChartFileUtils        # 文件工具类
+    └── CharterFileUtils        # 文件工具类
 ```
 
 ### 设计模式
@@ -230,17 +230,17 @@ Integer deletedCount = charterFileService.deleteFiles(fileIds);
 
 ```java
 // 使用工具类简化操作
-SysFilesEntity file = ChartFileUtils.upload(multipartFile);
-String downloadUrl = ChartFileUtils.getDownloadUrl(fileId);
-Boolean success = ChartFileUtils.delete(fileId);
+SysFilesEntity file = CharterFileUtils.upload(multipartFile);
+String downloadUrl = CharterFileUtils.getDownloadUrl(fileId);
+Boolean success = CharterFileUtils.delete(fileId);
 
 // 文件类型判断
-Boolean isImage = ChartFileUtils.isImageType(fileType);
-Boolean isVideo = ChartFileUtils.isVideoType(fileType);
-Boolean isDocument = ChartFileUtils.isDocumentType(fileType);
+Boolean isImage = CharterFileUtils.isImageType(fileType);
+Boolean isVideo = CharterFileUtils.isVideoType(fileType);
+Boolean isDocument = CharterFileUtils.isDocumentType(fileType);
 
 // 文件大小格式化
-String sizeStr = ChartFileUtils.formatFileSize(fileSize); // 如：1.5 MB
+String sizeStr = CharterFileUtils.formatFileSize(fileSize); // 如：1.5 MB
 ```
 
 ## 核心功能

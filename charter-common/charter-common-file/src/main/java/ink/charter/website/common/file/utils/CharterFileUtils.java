@@ -20,13 +20,13 @@ import java.util.List;
  */
 @Slf4j
 @Component
-public class ChartFileUtils {
+public class CharterFileUtils {
 
     private static CharterFileService charterFileService;
 
     @Autowired
     public void setFileService(CharterFileService charterFileService) {
-        ChartFileUtils.charterFileService = charterFileService;
+        CharterFileUtils.charterFileService = charterFileService;
     }
 
     /**
