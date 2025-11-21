@@ -135,8 +135,6 @@ charter:
   log:
     enabled: true             # 是否启用操作日志记录
     enable-ip-resolve: true   # 是否启用IP地址解析
-    ip-resolve-timeout: 3000  # IP地址解析超时时间（毫秒）
-    enable-async: true        # 是否启用异步日志
     max-param-length: 2000    # 请求参数最大长度
     max-response-length: 2000 # 响应数据最大长度
     max-error-length: 500     # 错误信息最大长度

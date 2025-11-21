@@ -53,6 +53,12 @@ public class OperationLogAspect {
      */
     @Around("operationLogPointcut()")
     public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        // 判断是否启用日志
+        if (!logProperties.isEnabled()) {
+            // 如果日志功能未启用，直接执行目标方法
+            return joinPoint.proceed();
+        }
+
         long startTime = System.currentTimeMillis();
         
         // 获取注解信息
