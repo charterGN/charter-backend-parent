@@ -9,7 +9,7 @@ import java.util.Map;
  * @author charter
  * @create 2025/11/04
  */
-public interface MailService {
+public interface CharterMailService {
 
     /**
      * 发送简单文本邮件

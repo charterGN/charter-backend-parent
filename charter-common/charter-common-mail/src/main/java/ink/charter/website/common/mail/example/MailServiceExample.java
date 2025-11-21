@@ -1,10 +1,9 @@
 package ink.charter.website.common.mail.example;
 
-import ink.charter.website.common.mail.service.MailService;
-import ink.charter.website.common.mail.utils.MailUtils;
+import ink.charter.website.common.mail.service.CharterMailService;
+import ink.charter.website.common.mail.utils.CharterMailUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.util.HashMap;
@@ -21,7 +20,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MailServiceExample {
 
-    private final MailService mailService;
+    private final CharterMailService charterMailService;
 
     /**
      * 示例1：发送简单文本邮件
@@ -31,7 +30,7 @@ public class MailServiceExample {
         String subject = "欢迎注册";
         String content = "感谢您注册我们的网站！";
         
-        mailService.sendSimpleMail(to, subject, content);
+        charterMailService.sendSimpleMail(to, subject, content);
     }
 
     /**
@@ -43,7 +42,7 @@ public class MailServiceExample {
         String content = "<h1>欢迎注册</h1><p>请点击以下链接激活账号：</p>" +
                         "<a href='https://example.com/activate'>激活链接</a>";
         
-        mailService.sendHtmlMail(to, subject, content);
+        charterMailService.sendHtmlMail(to, subject, content);
     }
 
     /**
@@ -55,7 +54,7 @@ public class MailServiceExample {
         String content = "<h2>月度报告</h2><p>请查看附件中的详细报告。</p>";
         
         File attachment = new File("report.pdf");
-        mailService.sendAttachmentMail(to, subject, content, attachment);
+        charterMailService.sendAttachmentMail(to, subject, content, attachment);
     }
 
     /**
@@ -71,7 +70,7 @@ public class MailServiceExample {
         variables.put("resetLink", "https://example.com/reset?token=xxx");
         variables.put("expireTime", "24小时");
         
-        mailService.sendTemplateMail(to, subject, templateName, variables);
+        charterMailService.sendTemplateMail(to, subject, templateName, variables);
     }
 
     /**
@@ -83,7 +82,7 @@ public class MailServiceExample {
         String content = "您的订单已发货！";
         
         // 异步发送，不阻塞主线程
-        mailService.sendSimpleMailAsync(to, subject, content);
+        charterMailService.sendSimpleMailAsync(to, subject, content);
         log.info("邮件已提交异步发送队列");
     }
 
@@ -92,13 +91,13 @@ public class MailServiceExample {
      */
     public void sendMailWithUtilsExample() {
         // 发送简单邮件
-        MailUtils.sendSimple("user@example.com", "测试邮件", "这是一封测试邮件");
+        CharterMailUtils.sendSimple("user@example.com", "测试邮件", "这是一封测试邮件");
         
         // 发送HTML邮件
-        MailUtils.sendHtml("user@example.com", "HTML邮件", "<h1>测试</h1>");
+        CharterMailUtils.sendHtml("user@example.com", "HTML邮件", "<h1>测试</h1>");
         
         // 异步发送
-        MailUtils.sendSimpleAsync("user@example.com", "异步邮件", "异步发送测试");
+        CharterMailUtils.sendSimpleAsync("user@example.com", "异步邮件", "异步发送测试");
     }
 
     /**
@@ -109,7 +108,7 @@ public class MailServiceExample {
         String subject = "系统维护通知";
         String content = "系统将于今晚22:00进行维护，预计持续2小时。";
         
-        mailService.sendSimpleMail(recipients, subject, content);
+        charterMailService.sendSimpleMail(recipients, subject, content);
     }
 
     /**
@@ -118,9 +117,9 @@ public class MailServiceExample {
     public void validateEmailExample() {
         String email = "user@example.com";
         
-        if (MailUtils.isValidEmail(email)) {
+        if (CharterMailUtils.isValidEmail(email)) {
             log.info("邮箱格式正确: {}", email);
-            mailService.sendSimpleMail(email, "测试", "测试内容");
+            charterMailService.sendSimpleMail(email, "测试", "测试内容");
         } else {
             log.error("邮箱格式错误: {}", email);
         }

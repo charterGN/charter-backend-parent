@@ -1,8 +1,7 @@
 package ink.charter.website.common.mail.service.impl;
 
 import ink.charter.website.common.mail.config.MailProperties;
-import ink.charter.website.common.mail.service.MailService;
-import jakarta.mail.MessagingException;
+import ink.charter.website.common.mail.service.CharterMailService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ import java.util.Map;
  */
 @Slf4j
 @RequiredArgsConstructor
-public class MailServiceImpl implements MailService {
+public class CharterMailServiceImpl implements CharterMailService {
 
     private final JavaMailSender javaMailSender;
     private final SpringTemplateEngine templateEngine;

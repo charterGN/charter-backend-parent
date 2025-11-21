@@ -1,7 +1,6 @@
 package ink.charter.website.common.mail.utils;
 
-import ink.charter.website.common.mail.service.MailService;
-import lombok.RequiredArgsConstructor;
+import ink.charter.website.common.mail.service.CharterMailService;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.File;
@@ -15,64 +14,64 @@ import java.util.Map;
  * @create 2025/11/04
  */
 @Slf4j
-public class MailUtils {
+public class CharterMailUtils {
 
-    private static MailService mailService;
+    private static CharterMailService charterMailService;
 
     /**
      * 设置邮件服务实例（由配置类调用）
      */
-    public static void setMailService(MailService mailService) {
-        MailUtils.mailService = mailService;
+    public static void setMailService(CharterMailService charterMailService) {
+        CharterMailUtils.charterMailService = charterMailService;
     }
 
     /**
      * 发送简单文本邮件
      */
     public static void sendSimple(String to, String subject, String content) {
-        mailService.sendSimpleMail(to, subject, content);
+        charterMailService.sendSimpleMail(to, subject, content);
     }
 
     /**
      * 发送HTML邮件
      */
     public static void sendHtml(String to, String subject, String content) {
-        mailService.sendHtmlMail(to, subject, content);
+        charterMailService.sendHtmlMail(to, subject, content);
     }
 
     /**
      * 发送带附件的邮件
      */
     public static void sendWithAttachment(String to, String subject, String content, File... attachments) {
-        mailService.sendAttachmentMail(to, subject, content, attachments);
+        charterMailService.sendAttachmentMail(to, subject, content, attachments);
     }
 
     /**
      * 发送模板邮件
      */
     public static void sendTemplate(String to, String subject, String templateName, Map<String, Object> variables) {
-        mailService.sendTemplateMail(to, subject, templateName, variables);
+        charterMailService.sendTemplateMail(to, subject, templateName, variables);
     }
 
     /**
      * 异步发送简单文本邮件
      */
     public static void sendSimpleAsync(String to, String subject, String content) {
-        mailService.sendSimpleMailAsync(to, subject, content);
+        charterMailService.sendSimpleMailAsync(to, subject, content);
     }
 
     /**
      * 异步发送HTML邮件
      */
     public static void sendHtmlAsync(String to, String subject, String content) {
-        mailService.sendHtmlMailAsync(to, subject, content);
+        charterMailService.sendHtmlMailAsync(to, subject, content);
     }
 
     /**
      * 异步发送模板邮件
      */
     public static void sendTemplateAsync(String to, String subject, String templateName, Map<String, Object> variables) {
-        mailService.sendTemplateMailAsync(to, subject, templateName, variables);
+        charterMailService.sendTemplateMailAsync(to, subject, templateName, variables);
     }
 
     /**

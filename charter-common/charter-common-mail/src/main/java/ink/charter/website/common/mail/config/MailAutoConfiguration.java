@@ -1,8 +1,8 @@
 package ink.charter.website.common.mail.config;
 
-import ink.charter.website.common.mail.service.MailService;
-import ink.charter.website.common.mail.service.impl.MailServiceImpl;
-import ink.charter.website.common.mail.utils.MailUtils;
+import ink.charter.website.common.mail.service.CharterMailService;
+import ink.charter.website.common.mail.service.impl.CharterMailServiceImpl;
+import ink.charter.website.common.mail.utils.CharterMailUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -82,14 +82,14 @@ public class MailAutoConfiguration {
     @ConditionalOnMissingBean
     @ConditionalOnBean({JavaMailSender.class, SpringTemplateEngine.class})
     @ConditionalOnProperty(prefix = "charter.mail", name = "enabled", havingValue = "true", matchIfMissing = true)
-    public MailService mailService(JavaMailSender javaMailSender, 
-                                   SpringTemplateEngine templateEngine,
-                                   MailProperties mailProperties) {
+    public CharterMailService mailService(JavaMailSender javaMailSender,
+                                          SpringTemplateEngine templateEngine,
+                                          MailProperties mailProperties) {
         log.info("初始化邮件服务");
-        MailServiceImpl mailService = new MailServiceImpl(javaMailSender, templateEngine, mailProperties);
+        CharterMailServiceImpl mailService = new CharterMailServiceImpl(javaMailSender, templateEngine, mailProperties);
 
         log.info("初始化邮件工具类");
-        MailUtils.setMailService(mailService);
+        CharterMailUtils.setMailService(mailService);
 
         return mailService;
     }

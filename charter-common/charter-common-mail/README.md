@@ -70,31 +70,31 @@ charter:
 
 ### 3. 使用邮件服务
 
-#### 方式一：注入 MailService
+#### 方式一：注入 CharterMailService
 
 ```java
 @Service
 @RequiredArgsConstructor
 public class UserService {
     
-    private final MailService mailService;
+    private final CharterMailService charterMailService;
     
     public void sendWelcomeEmail(String email, String username) {
         String subject = "欢迎注册";
         String content = "欢迎 " + username + " 注册我们的网站！";
-        mailService.sendSimpleMail(email, subject, content);
+        charterMailService.sendSimpleMail(email, subject, content);
     }
 }
 ```
 
-#### 方式二：使用 MailUtils 工具类
+#### 方式二：使用 CharterMailUtils 工具类
 
 ```java
 @Service
 public class NotificationService {
     
     public void notifyUser(String email) {
-        MailUtils.sendSimple(email, "系统通知", "您有新的消息");
+        CharterMailUtils.sendSimple(email, "系统通知", "您有新的消息");
     }
 }
 ```
@@ -104,7 +104,7 @@ public class NotificationService {
 ### 1. 发送简单文本邮件
 
 ```java
-mailService.sendSimpleMail(
+charterMailService.sendSimpleMail(
     "user@example.com", 
     "欢迎注册", 
     "感谢您注册我们的网站！"
@@ -115,7 +115,7 @@ mailService.sendSimpleMail(
 
 ```java
 String htmlContent = "<h1>欢迎注册</h1><p>请点击链接激活账号</p>";
-mailService.sendHtmlMail(
+charterMailService.sendHtmlMail(
     "user@example.com", 
     "账号激活", 
     htmlContent
@@ -126,7 +126,7 @@ mailService.sendHtmlMail(
 
 ```java
 File attachment = new File("report.pdf");
-mailService.sendAttachmentMail(
+charterMailService.sendAttachmentMail(
     "user@example.com",
     "月度报告",
     "<h2>请查看附件</h2>",
@@ -142,7 +142,7 @@ variables.put("username", "张三");
 variables.put("resetLink", "https://example.com/reset?token=xxx");
 variables.put("expireTime", "24小时");
 
-mailService.sendTemplateMail(
+charterMailService.sendTemplateMail(
     "user@example.com",
     "密码重置",
     "reset-password",  // 模板名称（不含路径和后缀）
@@ -154,7 +154,7 @@ mailService.sendTemplateMail(
 
 ```java
 // 异步发送，不阻塞主线程
-mailService.sendSimpleMailAsync(
+charterMailService.sendSimpleMailAsync(
     "user@example.com",
     "系统通知",
     "您的订单已发货"
@@ -170,7 +170,7 @@ String[] recipients = {
     "user3@example.com"
 };
 
-mailService.sendSimpleMail(
+charterMailService.sendSimpleMail(
     recipients,
     "系统维护通知",
     "系统将于今晚进行维护"
@@ -216,7 +216,7 @@ Map<String, Object> variables = new HashMap<>();
 variables.put("username", "张三");
 variables.put("message", "您的订单已发货");
 
-mailService.sendTemplateMail(
+charterMailService.sendTemplateMail(
     "user@example.com",
     "订单通知",
     "notification",
@@ -281,8 +281,8 @@ spring:
 ## API文档
 
 详细的API文档请参考：
-- [MailService.java](src/main/java/ink/charter/website/common/mail/service/MailService.java)
-- [MailUtils.java](src/main/java/ink/charter/website/common/mail/utils/MailUtils.java)
+- [CharterMailService.java](src/main/java/ink/charter/website/common/mail/service/CharterMailService.java)
+- [CharterMailUtils.java](src/main/java/ink/charter/website/common/mail/utils/CharterMailUtils.java)
 - [MailServiceExample.java](src/main/java/ink/charter/website/common/mail/example/MailServiceExample.java)
 
 ## 技术栈
