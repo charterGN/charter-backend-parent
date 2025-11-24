@@ -26,9 +26,6 @@ public class HomeWallpaperEntity extends BaseEntity {
     @Schema(description = "壁纸类型（0默认 1每日一图 2随机风景 3随机动漫）")
     private Integer wallpaperType;
 
-    @Schema(description = "关联文件ID（sys_files表）")
-    private Long fileId;
-
     @Schema(description = "壁纸URL（外链或本地路径）")
     private String fileUrl;
 

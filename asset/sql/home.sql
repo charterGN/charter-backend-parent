@@ -34,7 +34,6 @@ CREATE TABLE `home_wallpaper` (
   `id` BIGINT NOT NULL COMMENT '壁纸ID',
   `wallpaper_name` VARCHAR(100) NOT NULL COMMENT '壁纸名称',
   `wallpaper_type` TINYINT NOT NULL COMMENT '壁纸类型（0默认 1每日一图 2随机风景 3随机动漫）',
-  `file_id` BIGINT COMMENT '关联文件ID（sys_files表）',
   `file_url` VARCHAR(500) COMMENT '壁纸URL（外链或本地路径）',
   `thumbnail_url` VARCHAR(500) COMMENT '缩略图URL',
   `from_source` VARCHAR(100) COMMENT '壁纸来源（bing/unsplash/pixiv等）',

@@ -27,10 +27,6 @@ public class HomeWallpaperVO {
     @Schema(description = "壁纸类型（0默认 1每日一图 2随机风景 3随机动漫）")
     private Integer wallpaperType;
 
-    @Schema(description = "关联文件ID")
-    @JsonSerialize(using = ToStringSerializer.class)
-    private Long fileId;
-
     @Schema(description = "壁纸URL")
     private String fileUrl;
 
@@ -61,12 +57,6 @@ public class HomeWallpaperVO {
 
     @Schema(description = "是否默认壁纸（0否 1是）")
     private Integer isDefault;
-
-    @Schema(description = "浏览次数")
-    private Integer viewCount;
-
-    @Schema(description = "下载次数")
-    private Integer downloadCount;
 
     @Schema(description = "状态（0禁用 1启用）")
     private Integer status;
