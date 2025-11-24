@@ -112,14 +112,12 @@ CREATE TABLE `home_hitokoto` (
   `uuid` VARCHAR(36) COMMENT 'UUID（对接Hitokoto API）',
   `view_count` INT DEFAULT 0 COMMENT '展示次数',
   `like_count` INT DEFAULT 0 COMMENT '点赞次数',
-  `status` TINYINT NOT NULL DEFAULT 1 COMMENT '状态（0禁用 1启用）',
   `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
   KEY `idx_type` (`type`),
   KEY `idx_length` (`length`),
-  KEY `idx_status` (`status`),
   KEY `idx_view_count` (`view_count`),
   KEY `idx_create_time` (`create_time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='门户一言库表';

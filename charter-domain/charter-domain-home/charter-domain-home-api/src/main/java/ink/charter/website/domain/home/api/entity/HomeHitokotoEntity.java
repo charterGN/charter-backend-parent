@@ -46,7 +46,4 @@ public class HomeHitokotoEntity extends BaseEntity {
 
     @Schema(description = "点赞次数")
     private Integer likeCount;
-
-    @Schema(description = "状态（0禁用 1启用）")
-    private Integer status;
 }
