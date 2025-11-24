@@ -51,7 +51,6 @@ CREATE TABLE `home_wallpaper` (
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
   KEY `idx_wallpaper_type` (`wallpaper_type`),
-  KEY `idx_file_id` (`file_id`),
   KEY `idx_is_default` (`is_default`),
   KEY `idx_status` (`status`),
   KEY `idx_sort_order` (`sort_order`),
@@ -75,7 +74,6 @@ CREATE TABLE `home_site_link` (
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
-  KEY `idx_category` (`category`),
   KEY `idx_status` (`status`),
   KEY `idx_sort_order` (`sort_order`),
   KEY `idx_create_time` (`create_time`)
@@ -114,6 +112,7 @@ CREATE TABLE `home_hitokoto` (
   `uuid` VARCHAR(36) COMMENT 'UUID（对接Hitokoto API）',
   `view_count` INT DEFAULT 0 COMMENT '展示次数',
   `like_count` INT DEFAULT 0 COMMENT '点赞次数',
+  `status` TINYINT NOT NULL DEFAULT 1 COMMENT '状态（0禁用 1启用）',
   `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
