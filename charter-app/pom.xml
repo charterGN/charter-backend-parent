@@ -43,6 +43,11 @@
             <artifactId>charter-domain-admin-core</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-domain-home-core</artifactId>
+            <version>${revision}</version>
+        </dependency>
     </dependencies>
 
     <build>

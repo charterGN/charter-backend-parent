@@ -5,18 +5,17 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ink.charter</groupId>
-        <artifactId>charter-server</artifactId>
+        <artifactId>charter-domain-home</artifactId>
         <version>${revision}</version>
-        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>charter-server-home</artifactId>
+    <artifactId>charter-domain-home-core</artifactId>
     <packaging>jar</packaging>
 
-    <description>网站首页相关服务</description>
+    <description>个人网站门户相关domain层core模块</description>
 
     <dependencies>
-        <!-- ==================本项目领域api模块相关依赖================== -->
+        <!-- ==================本项目领域api相关依赖================== -->
         <dependency>
             <groupId>ink.charter</groupId>
             <artifactId>charter-domain-home-api</artifactId>
@@ -31,12 +30,37 @@
         </dependency>
         <dependency>
             <groupId>ink.charter</groupId>
+            <artifactId>charter-common-job</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-log</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-mybatis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-redis</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
             <artifactId>charter-common-security</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>ink.charter</groupId>
             <artifactId>charter-common-web</artifactId>
+            <version>${revision}</version>
+        </dependency>
+        <dependency>
+            <groupId>ink.charter</groupId>
+            <artifactId>charter-common-mail</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>
