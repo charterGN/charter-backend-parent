@@ -29,7 +29,8 @@ public final class SecurityWhitelistConfig {
      * 公开接口
      */
     private static final String[] PUBLIC_WHITELIST = {
-            "/*/public/**"
+            "/*/public/**",
+            "/api-home/home/**" // 门户相关接口
     };
 
     /**
