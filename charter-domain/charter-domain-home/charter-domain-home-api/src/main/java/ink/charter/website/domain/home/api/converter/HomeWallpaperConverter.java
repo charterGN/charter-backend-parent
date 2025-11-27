@@ -1,4 +1,4 @@
-package ink.charter.website.server.home.converter;
+package ink.charter.website.domain.home.api.converter;
 
 import ink.charter.website.domain.home.api.entity.HomeWallpaperEntity;
 import ink.charter.website.domain.home.api.vo.HomeWallpaperVO;
