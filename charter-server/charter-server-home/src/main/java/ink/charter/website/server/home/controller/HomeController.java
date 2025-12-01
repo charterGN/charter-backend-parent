@@ -1,6 +1,7 @@
 package ink.charter.website.server.home.controller;
 
 import ink.charter.website.common.core.common.Result;
+import ink.charter.website.common.core.utils.IpUtils;
 import ink.charter.website.domain.home.api.converter.*;
 import ink.charter.website.domain.home.api.dto.CreateVisitLogDTO;
 import ink.charter.website.domain.home.api.entity.*;
@@ -9,6 +10,7 @@ import ink.charter.website.server.home.service.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
@@ -220,9 +222,14 @@ public class HomeController {
      */
     @PostMapping("/visit-log")
     @Operation(summary = "记录访问日志", description = "记录用户访问信息")
-    public Result<Long> createVisitLog(@RequestBody @Validated CreateVisitLogDTO dto) {
+    public Result<String> createVisitLog(@RequestBody @Validated CreateVisitLogDTO dto, HttpServletRequest request) {
+        // 从请求中获取真实IP地址
+        String clientIp = IpUtils.getClientIp(request);
+        dto.setVisitIp(clientIp);
+        
         Long id = visitLogService.create(dto);
-        return Result.success("记录成功", id);
+        // 将Long类型ID转换为String返回，避免前端精度丢失
+        return Result.success("记录成功", String.valueOf(id));
     }
 
     /**
@@ -231,9 +238,11 @@ public class HomeController {
     @PutMapping("/visit-log/{id}/duration")
     @Operation(summary = "更新访问停留时长", description = "更新访问日志的停留时长")
     public Result<Void> updateVisitDuration(
-            @Parameter(description = "日志ID", required = true) @PathVariable Long id,
+            @Parameter(description = "日志ID", required = true) @PathVariable String id,
             @Parameter(description = "停留时长（秒）", required = true) @RequestParam Integer stayDuration) {
-        boolean success = visitLogService.updateStayDuration(id, stayDuration);
+        // 将String类型ID转换为Long
+        Long logId = Long.valueOf(id);
+        boolean success = visitLogService.updateStayDuration(logId, stayDuration);
         if (success) {
             return Result.success("更新成功");
         }
