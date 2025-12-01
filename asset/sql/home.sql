@@ -142,6 +142,8 @@ CREATE TABLE `home_visit_log` (
   `session_id` VARCHAR(128) COMMENT '会话ID',
   `is_new_visitor` TINYINT DEFAULT 1 COMMENT '是否新访客（0否 1是）',
   `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `is_deleted` TINYINT(1) NOT NULL DEFAULT 0 COMMENT '逻辑删除（0未删除 1已删除）',
   PRIMARY KEY (`id`),
   KEY `idx_visit_ip` (`visit_ip`),
   KEY `idx_visit_time` (`visit_time`),

@@ -9,10 +9,17 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ========================================
+-- 创建数据库： `charter_website`
+-- ========================================
+CREATE DATABASE IF NOT EXISTS `charter_website` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+USE `charter_website`;
+
+-- ========================================
 -- 用户管理相关表
 -- ========================================
 
 -- 用户表
+DROP TABLE IF EXISTS `sys_user`;
 CREATE TABLE `sys_user` (
   `id` BIGINT NOT NULL COMMENT '用户ID',
   `username` VARCHAR(50) NOT NULL COMMENT '用户名',
@@ -37,6 +44,7 @@ CREATE TABLE `sys_user` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统用户表';
 
 -- 角色表
+DROP TABLE IF EXISTS `sys_role`;
 CREATE TABLE `sys_role` (
   `id` BIGINT NOT NULL COMMENT '角色ID',
   `role_name` VARCHAR(50) NOT NULL COMMENT '角色名称',
@@ -54,6 +62,7 @@ CREATE TABLE `sys_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统角色表';
 
 -- 菜单表
+DROP TABLE IF EXISTS `sys_menu`;
 CREATE TABLE `sys_menu` (
   `id` BIGINT NOT NULL COMMENT '菜单ID',
   `parent_id` BIGINT DEFAULT 0 COMMENT '父菜单ID（0为顶级菜单）',
@@ -79,6 +88,7 @@ CREATE TABLE `sys_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统菜单表';
 
 -- 资源表
+DROP TABLE IF EXISTS `sys_resource`;
 CREATE TABLE `sys_resource` (
   `id` BIGINT NOT NULL COMMENT '资源ID',
   `resource_name` VARCHAR(100) NOT NULL COMMENT '资源名称',
@@ -103,6 +113,7 @@ CREATE TABLE `sys_resource` (
 -- ========================================
 
 -- 用户角色关联表
+DROP TABLE IF EXISTS `sys_user_role`;
 CREATE TABLE `sys_user_role` (
   `id` BIGINT NOT NULL COMMENT '关联ID',
   `user_id` BIGINT NOT NULL COMMENT '用户ID',
@@ -117,6 +128,7 @@ CREATE TABLE `sys_user_role` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户角色关联表';
 
 -- 角色菜单关联表
+DROP TABLE IF EXISTS `sys_role_menu`;
 CREATE TABLE `sys_role_menu` (
   `id` BIGINT NOT NULL COMMENT '关联ID',
   `role_id` BIGINT NOT NULL COMMENT '角色ID',
@@ -131,6 +143,7 @@ CREATE TABLE `sys_role_menu` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色菜单关联表';
 
 -- 角色资源关联表
+DROP TABLE IF EXISTS `sys_role_resource`;
 CREATE TABLE `sys_role_resource` (
   `id` BIGINT NOT NULL COMMENT '关联ID',
   `role_id` BIGINT NOT NULL COMMENT '角色ID',
@@ -149,6 +162,7 @@ CREATE TABLE `sys_role_resource` (
 -- ========================================
 
 -- 用户会话表
+DROP TABLE IF EXISTS `sys_user_session`;
 CREATE TABLE `sys_user_session` (
   `id` BIGINT NOT NULL COMMENT '会话ID',
   `user_id` BIGINT NOT NULL COMMENT '用户ID',
@@ -173,6 +187,7 @@ CREATE TABLE `sys_user_session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户会话表';
 
 -- 系统操作日志表
+DROP TABLE IF EXISTS `sys_opt_log`;
 CREATE TABLE `sys_opt_log` (
   `id` BIGINT NOT NULL COMMENT '主键ID',
   `opt_website` VARCHAR(100) COMMENT '操作网站',
@@ -206,6 +221,7 @@ CREATE TABLE `sys_opt_log` (
 -- ========================================
 
 -- 文件信息表
+DROP TABLE IF EXISTS `sys_files`;
 CREATE TABLE `sys_files` (
   `id` BIGINT NOT NULL COMMENT '文件ID',
   `file_name` VARCHAR(255) NOT NULL COMMENT '文件名称',
@@ -230,7 +246,8 @@ CREATE TABLE `sys_files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='系统文件信息表';
 
 -- 文件配置表
-CREATE TABLE IF NOT EXISTS `sys_file_config` (
+DROP TABLE IF EXISTS `sys_file_config`;
+CREATE TABLE `sys_file_config` (
   `id` BIGINT NOT NULL COMMENT '主键ID',
   `config_name` VARCHAR(100) NOT NULL COMMENT '配置名称',
   `storage_type` VARCHAR(20) NOT NULL COMMENT '存储类型（oss/minio/huawei/tencent/qiniu）',
@@ -255,6 +272,7 @@ CREATE TABLE IF NOT EXISTS `sys_file_config` (
 -- ========================================
 
 -- 定时任务配置表
+DROP TABLE IF EXISTS `sys_job`;
 CREATE TABLE `sys_job` (
   `id` BIGINT NOT NULL COMMENT '任务ID',
   `job_name` VARCHAR(100) NOT NULL COMMENT '任务名称',
@@ -279,6 +297,7 @@ CREATE TABLE `sys_job` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='定时任务配置表';
 
 -- 任务执行日志表
+DROP TABLE IF EXISTS `sys_job_log`;
 CREATE TABLE `sys_job_log` (
   `id` BIGINT NOT NULL COMMENT '日志ID',
   `job_id` BIGINT NOT NULL COMMENT '任务ID',
@@ -303,6 +322,7 @@ CREATE TABLE `sys_job_log` (
 -- ========================================
 
 -- 字典类型表
+DROP TABLE IF EXISTS `sys_dict_type`;
 CREATE TABLE `sys_dict_type` (
   `id` BIGINT NOT NULL COMMENT '字典类型ID',
   `dict_name` VARCHAR(100) NOT NULL COMMENT '字典名称',
@@ -319,6 +339,7 @@ CREATE TABLE `sys_dict_type` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='字典类型表';
 
 -- 字典数据表
+DROP TABLE IF EXISTS `sys_dict_data`;
 CREATE TABLE `sys_dict_data` (
   `id` BIGINT NOT NULL COMMENT '字典数据ID',
   `dict_type` VARCHAR(100) NOT NULL COMMENT '字典类型',
