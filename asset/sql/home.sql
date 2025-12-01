@@ -9,6 +9,7 @@
 -- ========================================
 
 -- 1. 站点配置表
+DROP TABLE IF EXISTS `home_site_config`;
 CREATE TABLE `home_site_config` (
   `id` BIGINT NOT NULL COMMENT '配置ID',
   `config_key` VARCHAR(100) NOT NULL COMMENT '配置键（唯一标识）',
@@ -30,6 +31,7 @@ CREATE TABLE `home_site_config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='门户站点配置表';
 
 -- 2. 壁纸管理表
+DROP TABLE IF EXISTS `home_wallpaper`;
 CREATE TABLE `home_wallpaper` (
   `id` BIGINT NOT NULL COMMENT '壁纸ID',
   `wallpaper_name` VARCHAR(100) NOT NULL COMMENT '壁纸名称',
@@ -58,6 +60,7 @@ CREATE TABLE `home_wallpaper` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='门户壁纸管理表';
 
 -- 3. 网站链接表
+DROP TABLE IF EXISTS `home_site_link`;
 CREATE TABLE `home_site_link` (
   `id` BIGINT NOT NULL COMMENT '链接ID',
   `link_name` VARCHAR(100) NOT NULL COMMENT '链接名称',
@@ -80,6 +83,7 @@ CREATE TABLE `home_site_link` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='门户网站链接表';
 
 -- 4. 社交链接表
+DROP TABLE IF EXISTS `home_social_link`;
 CREATE TABLE `home_social_link` (
   `id` BIGINT NOT NULL COMMENT '社交链接ID',
   `platform_name` VARCHAR(50) NOT NULL COMMENT '平台名称（Github/QQ/微信等）',
@@ -101,6 +105,7 @@ CREATE TABLE `home_social_link` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='门户社交链接表';
 
 -- 5. 一言库表
+DROP TABLE IF EXISTS `home_hitokoto`;
 CREATE TABLE `home_hitokoto` (
   `id` BIGINT NOT NULL COMMENT '一言ID',
   `hitokoto` VARCHAR(500) NOT NULL COMMENT '一言内容',
@@ -123,6 +128,7 @@ CREATE TABLE `home_hitokoto` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='门户一言库表';
 
 -- 6. 访问日志表
+DROP TABLE IF EXISTS `home_visit_log`;
 CREATE TABLE `home_visit_log` (
   `id` BIGINT NOT NULL COMMENT '日志ID',
   `visit_ip` VARCHAR(50) NOT NULL COMMENT '访问IP',
