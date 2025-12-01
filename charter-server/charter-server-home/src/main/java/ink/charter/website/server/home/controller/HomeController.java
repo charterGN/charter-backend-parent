@@ -227,6 +227,10 @@ public class HomeController {
         String clientIp = IpUtils.getClientIp(request);
         dto.setVisitIp(clientIp);
         
+        // 从请求中获取或创建Session ID
+        String sessionId = request.getSession().getId();
+        dto.setSessionId(sessionId);
+        
         Long id = visitLogService.create(dto);
         // 将Long类型ID转换为String返回，避免前端精度丢失
         return Result.success("记录成功", String.valueOf(id));
@@ -235,7 +239,7 @@ public class HomeController {
     /**
      * 更新访问停留时长
      */
-    @PutMapping("/visit-log/{id}/duration")
+    @PostMapping("/visit-log/{id}/duration")
     @Operation(summary = "更新访问停留时长", description = "更新访问日志的停留时长")
     public Result<Void> updateVisitDuration(
             @Parameter(description = "日志ID", required = true) @PathVariable String id,
