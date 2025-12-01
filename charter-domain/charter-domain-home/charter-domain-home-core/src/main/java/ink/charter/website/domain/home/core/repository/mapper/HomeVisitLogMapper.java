@@ -29,4 +29,19 @@ public interface HomeVisitLogMapper extends BaseMapper<HomeVisitLogEntity> {
             .set(HomeVisitLogEntity::getStayDuration, stayDuration)
             .eq(HomeVisitLogEntity::getId, id));
     }
+
+    /**
+     * 检查IP是否存在访问记录
+     *
+     * @param visitIp 访问IP
+     * @return 是否存在
+     */
+    default boolean existsByIp(String visitIp) {
+        if (visitIp == null || visitIp.isEmpty()) {
+            return false;
+        }
+        return exists(QueryWrappers.<HomeVisitLogEntity>lambdaQuery()
+            .eq(HomeVisitLogEntity::getVisitIp, visitIp)
+            .eq(HomeVisitLogEntity::getIsDeleted, 0));
+    }
 }

@@ -48,8 +48,8 @@ public class HomeVisitLogServiceImpl implements HomeVisitLogService {
             parseUserAgent(entity, dto.getUserAgent());
         }
         
-        // 判断是否为新访客（简单实现，可以根据session或cookie优化）
-        entity.setIsNewVisitor(1);
+        // 判断是否为新访客（根据IP判断）
+        entity.setIsNewVisitor(isNewVisitor(dto.getVisitIp()));
         
         visitLogRepository.create(entity);
         return entity.getId();
@@ -61,10 +61,34 @@ public class HomeVisitLogServiceImpl implements HomeVisitLogService {
     }
 
     /**
+     * 判断是否为新访客
+     * 根据IP地址判断，如果该IP之前没有访问记录则为新访客
+     *
+     * @param visitIp 访问IP
+     * @return 是否为新访客（1是 0否）
+     */
+    private Integer isNewVisitor(String visitIp) {
+        // IP为空，默认为新访客
+        if (!StringUtils.hasText(visitIp)) {
+            return 1;
+        }
+        
+        // 检查该IP是否存在访问记录
+        boolean exists = visitLogRepository.existsByIp(visitIp);
+        return exists ? 0 : 1;
+    }
+
+    /**
      * 解析IP地址信息
      */
     private void parseIpInfo(HomeVisitLogEntity entity, String ip) {
         try {
+            // 判断是否为内网IP
+            if (IpUtils.isInternalIp(ip)) {
+                entity.setVisitAddress("内网");
+                return;
+            }
+            
             // 使用纯真IP数据库解析地址
             IPZone ipZone = IpUtils.getIpLocationDetail(ip);
             if (ipZone != null) {

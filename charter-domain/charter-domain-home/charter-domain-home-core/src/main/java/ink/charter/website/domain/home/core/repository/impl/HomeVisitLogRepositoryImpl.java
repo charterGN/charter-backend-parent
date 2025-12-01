@@ -45,4 +45,17 @@ public class HomeVisitLogRepositoryImpl implements HomeVisitLogRepository {
             return false;
         }
     }
+
+    @Override
+    public boolean existsByIp(String visitIp) {
+        if (visitIp == null || visitIp.isEmpty()) {
+            return false;
+        }
+        try {
+            return visitLogMapper.existsByIp(visitIp);
+        } catch (Exception e) {
+            log.error("检查IP是否存在失败: {}", visitIp, e);
+            return false;
+        }
+    }
 }

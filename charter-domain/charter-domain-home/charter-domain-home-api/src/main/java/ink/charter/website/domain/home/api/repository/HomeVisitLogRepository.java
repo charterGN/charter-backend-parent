@@ -26,4 +26,12 @@ public interface HomeVisitLogRepository {
      * @return 是否成功
      */
     boolean updateStayDuration(Long id, Integer stayDuration);
+
+    /**
+     * 检查IP是否存在访问记录
+     *
+     * @param visitIp 访问IP
+     * @return 是否存在
+     */
+    boolean existsByIp(String visitIp);
 }
